@@ -29,7 +29,7 @@ body{background:var(--bg);color:var(--ink);font:14px/1.45 "Barlow",system-ui,san
 .app{max-width:1680px;margin:0 auto;padding-inline:16px;padding-block:14px 32px;display:flex;flex-direction:column;gap:14px}
 
 /* header */
-.top{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.top{display:flex;align-items:center;gap:10px;flex-wrap:nowrap}.top .brand{flex:1;min-width:0}
 .brand{display:flex;align-items:baseline;gap:10px;margin-right:auto}
 .brand h1{font:700 22px/1 var(--disp);white-space:nowrap;letter-spacing:.16em;margin:0;text-transform:uppercase}
 .brand h1 span{display:inline-block;width:10px;height:10px;border-radius:2px;margin-left:3px;vertical-align:2px}
@@ -230,6 +230,8 @@ select{width:100%;font:600 11px var(--disp);letter-spacing:.08em;text-transform:
 .s-name{flex:1 1 160px;font:600 14px "Barlow",sans-serif;color:var(--ink);background:#101216;border:1px solid #383e49;border-radius:6px;padding:6px 8px;min-width:0}
 .swave{height:130px;touch-action:none;cursor:pointer}
 .sinfo{font:500 11px var(--mono);color:var(--dim);font-variant-numeric:tabular-nums}
+.syncst{font:600 10px var(--mono);color:var(--faint);text-align:center;padding:0 4px 4px;min-height:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
+.syncst.ok{color:var(--dc)}.syncst.warn{color:#f2a33a}.deck.no-readouts .syncst{display:none}
 .sassign{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.sassign .k-lab{margin-left:6px}
 .cgrid.three{grid-template-columns:repeat(3,minmax(0,1fr))}.cgrid.three .btn:last-child{grid-column:auto}
 .k-lab svg{vertical-align:-2px}
@@ -424,7 +426,7 @@ body.helpmode .app .btn:hover,body.helpmode .app .kwrap:hover,body.helpmode .app
 .fxempty{color:var(--dim);font-size:15px;text-align:center;padding:30px 10px;border:1px dashed var(--line);border-radius:12px;margin:0}
 .fxchooser{display:flex;flex-direction:column;gap:12px}
 @media (max-width:560px){.fxc-row{grid-template-columns:70px minmax(0,1fr) 70px}.fxc-top{flex-wrap:wrap}}
-.chip-fx{--dc:var(--e)}.deck.no-effects .chip-fx{display:none!important}
+.chip-fx{--dc:var(--e)}.deck.no-mix .chip-mix{display:none!important}.mixsheet .fader.h{width:100%}.deck.no-effects .chip-fx{display:none!important}
 .fxpad.snd{border-bottom:2px solid #ffd24a}.fxpad.running{background:color-mix(in srgb,var(--dc) 35%,#22262e);box-shadow:0 0 12px color-mix(in srgb,var(--dc) 45%,transparent)}
 
 /* easier, bigger controls */
@@ -464,6 +466,57 @@ select{min-height:42px;font-size:13px}
 @media (prefers-reduced-motion:reduce){.padediting .fxpad,.sfxediting .sfx{animation:none}}
 @media (prefers-reduced-motion:reduce){.btn.rec.on{animation:none}}
 @media (max-width:420px){.brand h1{font-size:19px;letter-spacing:.1em}.readouts b{font-size:13px}.platter{width:min(100%,140px)}}
+.modesw{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.modebtn{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;padding:14px 16px;border-radius:12px;border:2px solid var(--line);background:var(--panel2);color:var(--ink);cursor:pointer;font:inherit}
+.modebtn b{font:700 17px var(--disp);letter-spacing:.04em}.modebtn span{font-size:13px;color:var(--dim);line-height:1.35}
+.modebtn.on{border-color:var(--e);background:color-mix(in srgb,var(--e) 16%,var(--panel2))}.modebtn.on b{color:var(--e)}
+.mpane{display:flex;flex-direction:column;gap:10px}.mpane[hidden]{display:none!important}
+.actcard{flex:1 1 220px;display:flex!important;flex-direction:column;align-items:flex-start!important;justify-content:center;gap:4px;min-height:74px;padding:12px 16px!important;text-align:left;border-radius:12px;text-transform:none;letter-spacing:0;white-space:normal;height:auto}
+.actcard b{font:700 15px var(--disp);letter-spacing:.05em;text-transform:uppercase}.actcard span{font:400 14px/1.35 "Barlow",system-ui,sans-serif;text-transform:none;letter-spacing:0;color:var(--dim)}
+.actcard.primary span{color:inherit;opacity:.8}.actcard input{display:none}
+.sechead{font:700 13px var(--disp);letter-spacing:.14em;text-transform:uppercase;color:var(--ink);margin-top:6px;padding-top:10px;border-top:1px solid var(--line)}
+.fhint{margin:0}.hint.note{background:var(--panel2);border-left:3px solid #ffd24a;padding:8px 12px;border-radius:6px;margin:0}
+.dkbtn.on{background:var(--dc);color:#0a0c0f}
+.rec-big{font:700 36px var(--mono,monospace);text-align:center;padding:10px}
+.tabintro-box{align-items:center;gap:12px;background:var(--panel2);border:1px solid var(--line);border-left:3px solid var(--e);border-radius:10px;padding:10px 14px}.tabintro-box .btn{flex:none}
+.tabintro{flex:1;margin:0;font-size:14px;color:var(--dim);line-height:1.45}
+@media (max-width:760px){.mrow2 .mbtns{flex-wrap:wrap;justify-content:flex-start;gap:6px}.mrow2 .mbtns .k-lab{flex-basis:100%}.mrow2 .mbtns .btn{flex:1}.mrow2 .minfo b{white-space:normal;overflow-wrap:anywhere}}
+@media (max-width:560px){.modesw{grid-template-columns:1fr}.modebtn{padding:12px 14px}}
+.mixer .xf{display:none!important}
+.recbig{display:flex;align-items:center;gap:16px;width:100%;min-height:78px;margin-top:4px;padding:14px 20px;border-radius:16px;border:2px solid var(--rec);background:color-mix(in srgb,var(--rec) 22%,var(--panel));color:var(--ink);cursor:pointer;text-align:left;font:inherit}
+.recbig .rb-dot{flex:none;width:44px;height:44px;border-radius:50%;background:var(--rec);box-shadow:0 0 0 5px color-mix(in srgb,var(--rec) 30%,transparent)}
+.recbig .rb-t{display:flex;flex-direction:column;gap:2px}.recbig b{font:700 18px var(--disp);letter-spacing:.08em;text-transform:uppercase}.recbig small{color:var(--dim);font-size:13px}
+.recbig.on{background:var(--rec)}.recbig.on .rb-dot{background:#fff;animation:pulse 1s infinite}.recbig.on small{color:#fff}
+.recmain{display:flex;flex-direction:column;align-items:center;gap:10px;padding:16px 0}
+.recgo{width:150px;height:150px;border-radius:50%;border:6px solid color-mix(in srgb,var(--rec) 45%,#fff);background:var(--rec);cursor:pointer;display:grid;place-items:center;box-shadow:0 0 30px color-mix(in srgb,var(--rec) 50%,transparent)}
+.recgo .rg-in{width:56px;height:56px;border-radius:50%;background:#fff}.recgo.on .rg-in{border-radius:8px;width:48px;height:48px}.recgo.on{animation:pulse 1.2s infinite}.recgo[disabled]{opacity:.4}
+.recstate{font:600 15px var(--disp);letter-spacing:.06em;text-align:center;color:var(--dim)}.recstate.on{color:var(--rec)}
+.rectime{font:700 44px var(--mono,monospace)}
+.recstats{display:flex;flex-direction:column;gap:6px}.reclvl{height:16px;border-radius:8px;background:var(--lcd,#06070a);overflow:hidden;border:1px solid var(--line)}.reclvl i{display:block;height:100%;width:0;background:#4be08a;transition:width .05s}.reclvl.hot i{background:var(--rec)}
+.reclist{display:flex;flex-direction:column;gap:10px}.recitem{display:flex;flex-direction:column;gap:8px;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px}.recitem audio{width:100%}.ri-top{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+a.bigact{white-space:normal;text-align:center;line-height:1.3;padding:8px 14px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+.keyguide{display:flex;flex-direction:column;gap:10px;background:var(--panel2);border:1px solid var(--e);border-radius:12px;padding:14px}.keyguide[hidden]{display:none!important}
+.kg-title{font:700 16px var(--disp);letter-spacing:.05em;color:var(--e)}.kg-ok{display:flex;align-items:center;justify-content:space-between;gap:10px;color:#4be08a;font-weight:600}
+.kg-link{align-self:flex-start;margin-top:6px;text-decoration:none;min-height:40px;display:inline-flex;align-items:center;--dc:var(--e)}
+.guide li .kg-link{grid-column:2}.keyguide .guide li{background:var(--panel)}.bigsel{min-height:50px;font-size:16px;padding:0 12px;border-radius:10px;width:100%}
+.bigsearch{display:flex;gap:8px}.bigsearch .bigin{flex:1;min-width:0}.bigsearch .bigact{flex:none;min-width:110px}
+.coach{position:fixed;left:50%;transform:translateX(-50%);top:8px;width:min(560px,calc(100% - 16px));z-index:40;background:var(--panel);border:2px solid var(--e);border-radius:14px;padding:10px 14px;box-shadow:0 10px 40px #000a;display:flex;flex-direction:column;gap:6px}
+.co-head{display:flex;align-items:center;gap:8px}.co-l{font:700 12px var(--disp);letter-spacing:.1em;text-transform:uppercase;color:var(--e);flex:1}.co-n{font-size:12px;color:var(--dim)}
+.co-t{font-size:17px}.co-d{margin:0;color:var(--ink);font-size:14px;line-height:1.45}
+.co-count{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.co-who{font-size:12px;color:var(--dim);flex-basis:100%}
+.co-bars{display:flex;gap:3px}.co-bars i{width:26px;height:22px;border-radius:4px;background:var(--panel2);border:1px solid var(--line);font:700 11px var(--mono,monospace);font-style:normal;display:grid;place-items:center;color:var(--dim)}
+.co-bars i:first-child{border-color:var(--e)}.co-bars i.on{background:var(--e);color:#0a0c0f}
+.co-dots{display:flex;gap:4px}.co-dots i{width:12px;height:12px;border-radius:50%;background:var(--panel2);border:1px solid var(--line)}.co-dots i.on{background:#fff}
+.co-foot{display:flex;align-items:center;gap:6px}.co-ok{flex:1;color:#4be08a;font-weight:700}
+.coach.mini .co-d,.coach.mini .co-foot{display:none}
+@media (max-width:560px){.co-bars i{width:22px;height:20px}.co-d{font-size:13px}}
+.lessons{display:flex;flex-direction:column;gap:8px}.lessons .bigact{flex:none}.lesson{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;padding:14px 16px;border-radius:12px;border:2px solid var(--line);background:var(--panel2);color:var(--ink);cursor:pointer;font:inherit}
+.lesson b{font:700 16px var(--disp);letter-spacing:.04em;color:var(--e)}.lesson span{color:var(--dim);font-size:14px}.lesson:hover{border-color:var(--e)}
+.gloss{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0}.gloss dt{font-weight:700}.gloss dd{margin:0;color:var(--dim)}
+@media (max-width:560px){.gloss{grid-template-columns:1fr}.gloss dd{margin-bottom:6px}}
+.bpmin{max-width:140px}.btn.play.waiting{animation:pulse .5s infinite;background:color-mix(in srgb,var(--dc) 40%,var(--panel2))}.qbtns .btn.on{background:var(--dc);color:#0a0c0f}.keyval{font:700 15px var(--mono,monospace)}.klbtn.on{background:var(--dc);color:#0a0c0f}
+.tp-tabs{margin-bottom:4px}.tp-body{display:flex;flex-direction:column;gap:10px}.trackpick .pk-items{max-height:none}
+.drumgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:6px}
 </style>
 </head>
 <body>
@@ -471,10 +524,7 @@ select{min-height:42px;font-size:13px}
   <header class="top">
     <div class="brand">
       <h1>Quad Deck<span style="background:var(--a)"></span><span style="background:var(--b)"></span><span style="background:var(--c)"></span><span style="background:var(--d)"></span></h1>
-      <small>4-channel DJ mixer</small>
     </div>
-    <span class="hint" id="hint">Keys 1–4 play decks. Space starts the sequencer.</span>
-    <label class="btn" style="--dc:var(--a)">Load up to 4 tracks<input type="file" id="multi" accept="audio/*" multiple></label>
     <button class="btn" id="install" hidden>Install app</button>
   </header>
 
@@ -498,6 +548,7 @@ select{min-height:42px;font-size:13px}
   <p class="foot">The demo loops, drum machine, synths and all 29 sound effects are generated in your browser, so everything works offline. The microphone channel works in the installed app, where the browser can ask for mic access. Swap any pad for your own recording with <b>Use my own sound</b> or by dropping a file on the pad. <b>Load your own audio</b> (MP3, WAV, M4A, OGG, FLAC) with each deck's Load button, the button above, or by dropping files onto a deck. Knobs: drag up or down, scroll, or use arrow keys. Double-click a knob or fader to reset it. Hold Shift while dragging for fine control. Roll and Censor work while held; the track keeps its place underneath and picks up where it would have been.</p>
 </div>
 
+<script src="beatsync.js"></script>
 <script>
 'use strict';
 const $=(s,r=document)=>r.querySelector(s);
@@ -532,11 +583,13 @@ const frac=x=>((x%1)+1)%1;
 const clock={bpm:124,aT:0,aB:0,leader:'int',listeners:[],
   beatAt(t){return this.aB+(t-this.aT)*this.bpm/60;},
   timeAt(b){return this.aT+(b-this.aB)*60/this.bpm;},
-  setBpm(b,fromLeader=false){b=clamp(Math.round(b*100)/100,40,250);if(Math.abs(b-this.bpm)<1e-4)return;const now=ctx.currentTime;this.aB=this.beatAt(now);this.aT=now;this.bpm=b;
+  setBpm(b,fromLeader=false){b=clamp(fromLeader?Math.round(b*1e4)/1e4:Math.round(b*100)/100,40,250);if(Math.abs(b-this.bpm)<(fromLeader?1e-3:1e-4))return;const now=ctx.currentTime;this.aB=this.beatAt(now);this.aT=now;this.bpm=b;
     if(!fromLeader&&this.leader!=='int')this.setLeader('int');this.listeners.forEach(f=>f(b));},
   setLeader(l){this.leader=l;this.listeners.forEach(f=>f(this.bpm));},
-  follow(){if(this.leader==='int')return;const d=decks[this.leader];if(!d||!d.playing||d.ramp||d.rev||d.slip||!d.bpm)return;
-    this.setBpm(d.effBpm(),true);const now=ctx.currentTime;let diff=frac((d.pos()-d.grid)/d.beatLen())-frac(this.beatAt(now));if(diff>.5)diff-=1;if(diff<-.5)diff+=1;
+  follow(){if(this.leader==='int')return;const d=decks[this.leader];if(!d||!d.playing||d.ramp||d.rev||d.slip||!d.bpm||(d.waiting&&d.waiting()))return;
+    this.setBpm(d.beatRate(true)*60,true);const now=ctx.currentTime,db=d.beatPos(),cb=this.beatAt(now);let diff;
+    if(typeof seq!=='undefined'&&!seq.playing){const B=seq.bpb||4;diff=((db-cb)%B+B)%B;if(diff>B/2)diff-=B;}
+    else{diff=frac(db)-frac(cb);if(diff>.5)diff-=1;if(diff<-.5)diff+=1;}
     if(Math.abs(diff)>.004)this.aB+=diff;}};
 
 /* ---------- headphone cue ---------- */
@@ -817,19 +870,10 @@ class FxSlot{
     this.onBtn.classList.toggle('on',!!(this.on&&this.fx));}
 }
 
-/* ---------- analysis ---------- */
-function analyze(buf){
-  const sr=buf.sampleRate,d=buf.getChannelData(0),hop=Math.round(sr/200);
-  const n=Math.floor(Math.min(d.length,sr*90)/hop);const env=new Float32Array(n);
-  let prev=0,lp=0;
-  for(let i=0;i<n;i++){let e=0;const b=i*hop;for(let j=0;j<hop;j++){lp+=(d[b+j]-lp)*.02;e+=lp*lp;}e=Math.sqrt(e/hop);env[i]=Math.max(0,e-prev);prev=e;}
-  const ac=[];let best=-1,bl=100;
-  for(let lag=60;lag<=200;lag++){let s=0;for(let i=0;i+lag<n;i++)s+=env[i]*env[i+lag];ac[lag]=s;if(s>best){best=s;bl=lag;}}
-  let lag=bl;if(ac[bl-1]!=null&&ac[bl+1]!=null){const a=ac[bl-1],b=ac[bl],c=ac[bl+1],den=a-2*b+c;if(den)lag=bl+.5*(a-c)/den;}
-  let bpm=12000/lag;while(bpm<80)bpm*=2;while(bpm>170)bpm/=2;bpm=Math.round(bpm*10)/10;
-  const bf=12000/bpm;let bp=0,bs=-1;for(let ph=0;ph<bf;ph++){let s=0;for(let k=ph;k<n;k+=bf)s+=env[Math.round(k)]||0;if(s>bs){bs=s;bp=ph;}}
-  return {bpm,grid:bp/200};
-}
+/* ---------- analysis: see beatsync.js (worker onset analysis, DP beat tracking, HMM downbeats, live kick check) ---------- */
+const bxOf=a=>({conf:a.conf,beats:a.beats,bi:a.bi||0,phr:a.phr||0,bias:a.bias,lc:a.lc,lc0:a.lc0||0,kickHz:a.kickHz,stats:a.stats});
+const QNAME={phrase:'next phrase',bar:'next bar',beat:'next beat',off:'right away'};
+const quantLead=()=>Math.max(.05,(ctx.baseLatency||0)+256/ctx.sampleRate);/* safety buffer: never schedule inside the render quantum */
 function peaks(buf,n){
   const c0=buf.getChannelData(0),c1=buf.numberOfChannels>1?buf.getChannelData(1):c0;
   const step=buf.length/n,pk=new Float32Array(n),rm=new Float32Array(n);
@@ -843,7 +887,8 @@ const COLORS=['var(--a)','var(--b)','var(--c)','var(--d)','var(--e)'];
 const HOTC=['#ff5a5a','#4be08a','#5a8cff','#ffd24a'];
 const dpr=()=>Math.min(2,window.devicePixelRatio||1);
 const decks=[];
-let xfPos=.5,xf2Pos=.5,xfSharp=false;
+let xfPos=.5,xf2Pos=.5,xfSharp=false;let quantMode=(()=>{try{return localStorage.getItem('quaddeck.quant')||'bar';}catch(e){return 'bar';}})();
+function setQuant(m){quantMode=m;try{localStorage.setItem('quaddeck.quant',m);}catch(e){}document.querySelectorAll('.qbtns .btn').forEach(b=>b.classList.toggle('on',b.dataset.q===m));}
 
 /* ---------- Sound Color FX: one knob per channel, one type for the whole mixer ---------- */
 const COLOR_FX=[['filter','Filter'],['space','Space'],['dubecho','Dub echo'],['sweep','Sweep'],['noise','Noise'],['crush','Crush'],['pitch','Pitch']];
@@ -881,7 +926,8 @@ function setColorType(t){colorType=t;decks.forEach(d=>d.buildColor());if(seqCh)s
 class Deck{
   constructor(i){
     Object.assign(this,{buffer:null,src:null,playing:false,offset:0,lastT:0,tempo:0,range:8,bend:1,bpm:0,grid:0,cue:0,
-      hot:[null,null,null,null],loop:null,delMode:false,taps:[],rev:false,ramp:null,srcRate:1,slip:null,pads:[]});
+      hot:[null,null,null,null],loop:null,delMode:false,taps:[],rev:false,ramp:null,srcRate:1,slip:null,pads:[],
+      bx:null,gOff:0,segs:[],jump:null,syncErr:null,analyzing:false,sc:new BeatSync.PhaseController(),lt:new BeatSync.LiveTracker()});
     this.initChannel(i,'ABCD'[i]);this.setChain([]);
     this.buildDeck();this.buildStrip();
   }
@@ -909,28 +955,84 @@ this.slots[0].out.connect(this.slots[1].inp);this.slots[1].out.connect(this.fxOu
   curRate(){return (1+this.tempo/100)*this.bend;}
   get dur(){return this.buffer?this.buffer.duration:0;}
   beatLen(){return 60/(this.bpm||120);}
-  beatPhase(n){if(!this.bpm)return 0;const b=(this.pos()-this.grid)/this.beatLen()/n;return ((b%1)+1)%1;}
+  beatPhase(n){if(!this.bpm)return 0;return frac(this.beatPos()/n);}
+  /* beat model: constant grid or analysed beat map, plus the live trim (gOff). Beat 0 is a downbeat. */
+  bm(){const x=this.bx;return {bpm:this.bpm||120,grid:this.grid,beats:x&&x.beats,bi:x&&x.bi||0,off:this.gOff||0};}
+  beatAt(p){return BeatSync.beatAt(this.bm(),p);}
+  posAtBeat(b){return BeatSync.posAtBeat(this.bm(),b);}
+  beatPos(){return this.beatAt(this.pos());}
+  periodAt(p){return BeatSync.period(this.bm(),p);}
+  beatRate(base){return (base?(1+this.tempo/100):this.srcRate)/this.periodAt(this.pos());}/* beats per second of context time */
+  phrOff(){return this.bx&&this.bx.phr||0;}
+  anaConf(){const x=this.bx;return x?(x.conf??1):0;}
+  localConf(){const x=this.bx;if(!x||!x.lc)return this.anaConf();const i=Math.floor(this.beatPos())-x.lc0;return i>=0&&i<x.lc.length?x.lc[i]/255:0;}
+  seg(){if(this.rev||this.ramp){this.segs=[];return;}this.segs.push({t0:this.lastT,p0:this.offset,r:this.srcRate});if(this.segs.length>12)this.segs.shift();}
+  posAt(t){/* track position that was (or will be) playing at context time t */if(!this.playing||this.rev||this.ramp||this.slip)return null;const S=this.segs;
+    for(let k=S.length-1;k>=0;k--)if(S[k].t0<=t+1e-9){const p=S[k].p0+S[k].r*(t-S[k].t0);return (this.loop&&p>=this.loop.end)||p>=this.dur?null:p;}return null;}
+  commitJump(){const j=this.jump;this.jump=null;this.offset=j.to;this.lastT=j.t;this.seg();}
+  dropJump(){const j=this.jump;if(!j)return;this.jump=null;try{j.old.onended=null;j.old.stop();}catch(e){}}
   adv(dt){const r=this.ramp;if(!r)return this.srcRate*dt;if(dt<r.T)return r.r0*dt+(r.r1-r.r0)*dt*dt/(2*r.T);return r.r0*r.T+(r.r1-r.r0)*r.T/2+r.r1*(dt-r.T);}
-  pos(){if(!this.playing)return this.offset;let p=this.offset+(this.rev?-1:1)*this.adv(ctx.currentTime-this.lastT);
+  pos(){if(this.jump&&ctx.currentTime>=this.jump.t)this.commitJump();if(!this.playing||ctx.currentTime<this.lastT)return this.offset;let p=this.offset+(this.rev?-1:1)*this.adv(ctx.currentTime-this.lastT);
     if(!this.rev&&this.loop&&p>=this.loop.end){const L=this.loop.end-this.loop.start;p=this.loop.start+((p-this.loop.start)%L);}
     else if(!this.rev&&!this.loop&&this.repeat&&this.dur&&p>=this.dur)p=p%this.dur;return clamp(p,0,this.dur);}
-  anchor(){this.offset=this.pos();this.lastT=ctx.currentTime;}
+  anchor(){if(ctx.currentTime<this.lastT)return;this.offset=this.pos();this.lastT=ctx.currentTime;}
+  waiting(){return this.playing&&ctx.currentTime<this.lastT-.005;}
   revBuf(){if(this._rb&&this._rbSrc===this.buffer)return this._rb;const b=this.buffer,r=ctx.createBuffer(b.numberOfChannels,b.length,b.sampleRate);
     for(let c=0;c<b.numberOfChannels;c++){const s=b.getChannelData(c),d=r.getChannelData(c);for(let k=0,n=s.length;k<n;k++)d[k]=s[n-1-k];}this._rb=r;this._rbSrc=b;return r;}
-  startSource(rate){const s=ctx.createBufferSource();s.buffer=this.rev?this.revBuf():this.buffer;s.playbackRate.value=rate;this.srcRate=rate;
+  makeSrc(rate){const s=ctx.createBufferSource();s.buffer=this.rev?this.revBuf():this.buffer;s.playbackRate.value=rate;
     if(!this.rev&&this.loop){s.loop=true;s.loopStart=this.loop.start;s.loopEnd=this.loop.end;}else if(!this.rev&&this.repeat){s.loop=true;s.loopStart=0;s.loopEnd=this.dur;}
-    s.connect(this.trim);s.start(0,this.rev?Math.max(0,this.dur-this.offset):this.offset);this.lastT=ctx.currentTime;
-    s.onended=()=>{if(this.src===s){this.offset=this.pos();this.src=null;this.playing=false;this.ramp=null;}};this.src=s;this.playing=true;}
-  play(){if(!this.buffer||this.playing)return;resume();
-    if(!this.rev&&this.offset>=this.dur-.01)this.offset=0;if(this.rev&&this.offset<=.01)this.rev=false;this.startSource(this.curRate());}
-  pause(){if(!this.playing)return;this.offset=this.pos();clearTimeout(this.rampTimer);this.ramp=null;const s=this.src;this.src=null;this.playing=false;try{s.stop();}catch(e){}}
-  toggle(){if(this.slip)return;this.playing?this.pause():this.play();}
+    if(!this.kn){this.kn=makeKeyNode();this.kn.output.connect(this.trim);this.keyLock=!!this.keyLock;this.key=this.key||0;this.applyKey();this.attachKickTap();}
+    s.connect(this.kn.input);s.onended=()=>{if(this.src===s){this.offset=this.pos();this.src=null;this.playing=false;this.ramp=null;this.dropJump();}};return s;}
+  startSource(rate,when=0){this.dropJump();const s=this.makeSrc(rate);this.srcRate=rate;s.start(when||0,this.rev?Math.max(0,this.dur-this.offset):this.offset);
+    this.lastT=Math.max(ctx.currentTime,when||0);this.src=s;this.playing=true;this.segs=[];this.seg();}
+  /* seamless re-position at context time `when`: the new source starts and the old one stops on the same sample frame */
+  schedJump(when,to){if(!this.src||this.jump||this.rev||this.ramp||this.slip||this.loop||!this.buffer)return false;to=clamp(to,0,this.dur-.05);
+    const old=this.src,s=this.makeSrc(this.srcRate);s.start(when,to);old.onended=null;try{old.stop(when);}catch(e){}this.src=s;this.jump={t:when,to,old};return true;}
+  attachKickTap(){if(this.kt||this._ktp||!this.kn)return;this._ktp=true;
+    BeatSync.ensureWorklet(ctx).then(ok=>{if(!ok||this.kt)return;try{this.kt=BeatSync.createKickTap(ctx,t=>this.onKick(t));this.kn.input.connect(this.kt);}catch(e){}});}
+  /* live layer: a kick heard at context time t -> residual against our grid */
+  onKick(t){const x=this.bx;if(!x||x.bias==null||!this.bpm||!this.playing||this.rev||this.ramp||this.slip||this.jump||(this.kn&&this.kn.get()!==1))return;
+    const p=this.posAt(t);if(p==null)return;const q=p-x.bias*this.srcRate,b=this.beatAt(q),k=Math.round(b),r=(b-k)*this.periodAt(q);if(Math.abs(r)<.045)this.lt.observe(k,r);}
+  liveTick(){if(!this.bpm||!this.playing||this.waiting()||this.rev||this.slip||this.ramp)return;
+    const tr=this.lt.beat(Math.floor(this.beatPos()),this.anaConf(),this.localConf());if(tr)this.gOff=clamp(this.gOff+tr,-.04,.04);}
+  refDeck(){const l=clock.leader;if(l!=='int'&&l!==this.i){const L=decks[l];if(L&&L.playing&&L.bpm&&!L.waiting())return L;}
+    return decks.find(d=>d!==this&&d.playing&&d.bpm&&!d.syncOn&&!d.drumLoop&&!d.waiting())||decks.find(d=>d!==this&&d.playing&&d.bpm&&!d.waiting())||null;}
+  play(opts={}){if(!this.buffer||this.playing)return;resume();
+    const L=opts.quant!==false&&!this._pj&&!this.rev&&!this.slip&&this.bpm&&quantMode!=='off'?this.refDeck():null;
+    if(L){/* quantized start: wait for the leader's next beat / bar / phrase boundary and start on the same frame */
+      if(this.syncOn)this.matchTempo(L);const Q=quantMode==='phrase'?16:quantMode==='bar'?4:1;
+      let ob=Math.round(this.beatAt(this.offset)),so=this.posAtBeat(ob);while(so<0){ob++;so=this.posAtBeat(ob);}
+      const now=ctx.currentTime,lb=L.beatPos(),bps=L.beatRate();let k=Math.ceil(lb+quantLead()*bps);
+      if(Q>1){const want=BeatSync.mod(ob-(Q===16?this.phrOff():0),Q);while(BeatSync.mod(k-(Q===16?L.phrOff():0),Q)!==want)k++;}
+      this.offset=so;this.sc.reset();this.startSource(this.curRate(),now+(k-lb)/bps);return;}
+    this.startSource(this.curRate());
+    if(this.i<4&&!decks.some(x=>x!==this&&x.playing&&!x.waiting())&&clock.leader!==this.i)clock.setLeader(this.i);
+    if(this.syncOn&&opts.quant!==false&&!this._pj){const R=this.refDeck();if(R)this.lockPhase(R);}}
+  /* phase error in beats (positive: this deck is behind), wrapped to +/-Q/2 */
+  phaseErr(L,Q=1){const lb=L?L.beatPos():clock.beatAt(ctx.currentTime);let e=(lb-(Q===16&&L?L.phrOff():0))-(this.beatPos()-(Q===16?this.phrOff():0));return e-Q*Math.round(e/Q);}
+  lockPhase(L){if(!this.playing||this.rev||this.slip||this.ramp||this.waiting()||!this.bpm)return;const Q=quantMode==='phrase'?16:quantMode==='bar'?4:1;
+    const e=this.phaseErr(L,Q),lbps=L?L.beatRate():clock.bpm/60;this.sc.reset();
+    if(Math.abs(e)<.5&&Math.abs(e)/lbps<this.sc.jumpTh*.8)return;/* small: the phase loop pulls it in with a micro pitch-bend */
+    this.alignAt(L,Q,e);}
+  /* re-align on the leader's next beat with a sample-accurate jump (no stutter, no gap) */
+  alignAt(L,Q,e){const now=ctx.currentTime,lb=L?L.beatPos():clock.beatAt(now),lbps=L?L.beatRate():clock.bpm/60;
+    const k=Math.ceil(lb+quantLead()*lbps),T=now+(k-lb)/lbps,mT=this.beatPos()+(T-now)*this.beatRate();
+    const c=k-(Q===16&&L?L.phrOff():0)+(Q===16?this.phrOff():0);let f=c+Q*Math.round((mT-c)/Q),to=this.posAtBeat(f),n=0;
+    while(to<0&&n++<64){f+=Q;to=this.posAtBeat(f);}if(to<0||to>this.dur-.1)return false;
+    if(this.schedJump(T,to))return true;
+    /* loop active or source busy: fall back to an immediate aligned seek */
+    this._pj=true;try{const t=this.posAtBeat(this.beatPos()+e);if(t>=0&&t<this.dur)this.seek(t);}finally{this._pj=false;}return true;}
+  pause(){if(!this.playing)return;if(this.i<4&&clock.leader===this.i&&!this._pj){const o=decks.find(x=>x!==this&&x.playing&&!x.waiting());if(o)setTimeout(()=>{if(!this.playing)clock.setLeader(o.i);},0);}this.offset=this.pos();this.dropJump();clearTimeout(this.rampTimer);this.ramp=null;const s=this.src;this.src=null;this.playing=false;if(this.syncOn&&!this.bh&&!this.slip)this.bend=1;try{s.stop();}catch(e){}}
+  toggle(){if(this.cueHold){this.cueHold=false;return;}if(this.slip)return;this.playing?this.pause():this.play();}
   seek(t){if(!this.buffer)return;t=clamp(t,0,this.dur-.01);const was=this.playing&&!this.ramp;if(this.playing)this.pause();
-    if(this.loop&&(t<this.loop.start-.001||t>this.loop.end))this.loop=null;this.offset=t;if(was)this.play();}
-  applyRate(){if(this.playing&&!this.ramp){this.anchor();this.srcRate=this.curRate();this.src.playbackRate.setValueAtTime(this.srcRate,ctx.currentTime);}}
-  setTempo(t){this.tempo=t;this.applyRate();this.slots.forEach(s=>s.refresh());}
+    if(this.loop&&(t<this.loop.start-.001||t>this.loop.end))this.loop=null;this.offset=t;if(was)this.play({quant:false});}
+  applyRate(){if(this.playing&&!this.ramp){this.anchor();this.srcRate=this.curRate();const t=ctx.currentTime;this.src.playbackRate.setValueAtTime(this.srcRate,t);if(this.jump)this.jump.old.playbackRate.setValueAtTime(this.srcRate,t);this.seg();}}
+  setTempo(t){this.tempo=t;this.applyRate();this.applyKey();this.slots.forEach(s=>s.refresh());}
+  applyKey(){if(!this.kn)return;const r=Math.pow(2,(this.key||0)/12)*(this.keyLock?1/(1+this.tempo/100):1);this.kn.set(r);}
+  setKeyLock(on){this.keyLock=!!on;this.applyKey();if(this.klBtn){this.klBtn.classList.toggle('on',this.keyLock);this.klBtn.textContent='Key lock: '+(this.keyLock?'ON':'off');}}
+  setKey(st){this.key=clamp(Math.round(st),-12,12);this.applyKey();if(this.keyF)this.keyF.set(this.key,false);if(this.keyVal)this.keyVal.textContent=(this.key>0?'+':'')+this.key+(Math.abs(this.key)===1?' semitone':' semitones');}
   /* turntable tricks */
-  rampTo(r0,r1,T,done){const now=ctx.currentTime,pr=this.src.playbackRate;this.ramp={T,r0,r1};pr.cancelScheduledValues(now);pr.setValueAtTime(r0,now);pr.linearRampToValueAtTime(r1,now+T);
+  rampTo(r0,r1,T,done){const now=ctx.currentTime,pr=this.src.playbackRate;this.ramp={T,r0,r1};this.segs=[];pr.cancelScheduledValues(now);pr.setValueAtTime(r0,now);pr.linearRampToValueAtTime(r1,now+T);
     clearTimeout(this.rampTimer);this.rampTimer=setTimeout(()=>{this.pause();if(done)done();},T*1000);}
   brake(){if(!this.playing||this.ramp||this.slip)return;this.trick='brake';this.anchor();this.rampTo(this.srcRate,.001,1.4);}
   spinback(){if(!this.playing||this.ramp||this.slip)return;this.trick='spin';const p=this.pos();this.pause();this.offset=p;this.loop=null;const wasRev=this.rev;this.rev=!wasRev;
@@ -953,21 +1055,34 @@ this.slots[0].out.connect(this.slots[1].inp);this.slots[1].out.connect(this.fxOu
   toggleRepeat(){if(!this.buffer)return;this.anchor();this.repeat=!this.repeat;this.srcLoop();toast(this.repeat?'Deck '+this.id+' repeats: the track loops from the end back to the start':'Deck '+this.id+' plays once');}
   slipEnd(){if(!this.slip)return;const s=this.slip;this.slip=null;this.bend=1;this.pause();this.loop=null;this.rev=s.dir<0;
     this.offset=clamp(s.p+s.dir*(ctx.currentTime-s.t)*s.r,0,this.dur-.01);this.startSource(this.curRate());}
-  setBuffer(buf,{name,bpm,grid,demo,sampleId=null}){this.sampleId=sampleId;this.pendingSample=null;this.demo=!!demo;this.syncOn=false;this.bend=1;
+  setBuffer(buf,{name,bpm,grid,demo,sampleId=null,bx=null}){this.sampleId=sampleId;this.pendingSample=null;this.demo=!!demo;this.syncOn=false;this.bend=1;
+    this.bx=bx;this.gOff=0;this.lt.reset();this.sc.reset();this.analyzing=false;this.taps=[];this.syncErr=null;
     this.slip=null;this.pause();this.rev=false;this.buffer=buf;this.offset=0;this.cue=0;this.hot=[null,null,null,null];this.loop=null;this.bpm=bpm;this.grid=grid||0;
     this.over=peaks(buf,1200);this.zoom=peaks(buf,Math.ceil(buf.duration*150));this.overCache=null;
     this.name=name;this.nameEl.textContent=name;this.stripName.textContent=name;
-    this.metaEl.textContent=(demo?'DEMO LOOP · ':'')+fmt(buf.duration).replace(/\.\d$/,'')+' · '+bpm.toFixed(1)+' BPM';
+    this.updateMeta();
     this.setTempo(0);this.pitchF.set(0,false);
   }
   async loadFile(file){
     if(!file)return;this.metaEl.textContent='Reading '+file.name+'…';
-    try{const ab=await file.arrayBuffer(),bytes=ab.slice(0);const buf=await ctx.decodeAudioData(ab);this.metaEl.textContent='Analyzing tempo…';
-      await new Promise(r=>setTimeout(r,20));const a=analyze(buf),nm=file.name.replace(/\.[^.]+$/,'');
-      const ls=addSample(buf,nm,{bytes,mime:file.type,meta:{bpm:a.bpm,grid:a.grid}});this.setBuffer(buf,{name:nm,bpm:a.bpm,grid:a.grid,sampleId:ls.id});toast('Deck '+this.id+': '+file.name+' loaded');}
+    try{const ab=await file.arrayBuffer(),bytes=ab.slice(0);const buf=await ctx.decodeAudioData(ab);this.metaEl.textContent='Analyzing beats…';
+      const a=await BeatSync.analyzeBuffer(buf),nm=file.name.replace(/\.[^.]+$/,''),bx=bxOf(a);
+      const ls=addSample(buf,nm,{bytes,mime:file.type,meta:{bpm:a.bpm,grid:a.grid,bx,av:BeatSync.VERSION}});this.setBuffer(buf,{name:nm,bpm:a.bpm,grid:a.grid,sampleId:ls.id,bx});toast('Deck '+this.id+': '+file.name+' loaded');}
     catch(e){this.metaEl.textContent=this.buffer?(this.bpm.toFixed(1)+' BPM'):'';toast("Deck "+this.id+" couldn't read that file. Try MP3, WAV, M4A or OGG.");}
   }
   cuePress(){if(!this.buffer||this.slip)return;if(this.playing){this.pause();this.offset=this.cue;this.loop=null;}else{this.cue=this.offset;}}
+  cueDown(){if(!this.buffer||this.slip)return;if(this.playing){this.pause();this.offset=this.cue;this.loop=null;return;}
+    if(Math.abs(this.offset-this.cue)<.02){this.cueHold=true;this.play({quant:false});}else{this.cue=this.offset;}}
+  mixSheet(){const A=n=>AUTO.get(this.id+' '+n);const lin=(n,mn,mx)=>mn+(A(n)?A(n).get():.5)*(mx-mn);const put=(n,v,mn,mx)=>{const c=A(n);if(c)c.set((v-mn)/(mx-mn));};
+    const vol=Fader({vertical:false,min:0,max:1,value:lin('volume',0,1),def:.8,label:'Deck '+this.id+' volume',onChange:v=>put('volume',v,0,1)});
+    const k=(n,l,mn,mx)=>Knob({label:l,min:mn,max:mx,value:lin(n,mn,mx),def:0,bipolar:true,onChange:v=>put(n,v,mn,mx)});
+    const bassOff=h('button',{class:'btn kill'+(this.kill.lo?' on':''),type:'button',onclick:()=>{this.killBtns.lo.click();bassOff.classList.toggle('on',this.kill.lo);}},'Bass off');
+    return h('div',{class:'sh-body deck-sheet mixsheet'},
+      h('div',{class:'k-lab',text:'Volume (how loud this deck is)'}),vol.el,
+      h('div',{class:'isorow'},k('High','Treble',-26,6).el,k('Mid','Middle',-26,6).el,k('Low','Bass',-26,6).el,k('color/filter','Filter',-1,1).el),
+      h('div',{class:'row'},bassOff),
+      h('p',{class:'hint',text:'Middle position = normal. Turn a knob left to take that sound away, right to add a little. Filter left = muffled, right = thin. Bass swap: turn the new song’s Bass all the way left, bring it in, then at the next phrase turn the old song’s Bass down and the new song’s Bass back to the middle.'}));}
+  cueUp(){if(this.cueHold){this.cueHold=false;if(this.playing){this.pause();this.offset=this.cue;}}}
   hotPress(k){if(!this.buffer||this.slip)return;if(this.delMode){this.hot[k]=null;return;}
     if(this.hot[k]==null)this.hot[k]=this.pos();else{this.seek(this.hot[k]);if(!this.playing)this.play();}}
   setLoop(beats){if(!this.buffer||this.slip||this.ramp)return;if(this.rev)this.revToggle();
@@ -979,30 +1094,79 @@ this.slots[0].out.connect(this.slots[1].inp);this.slots[1].out.connect(this.fxOu
     if(this.offset>end||this.offset<st)this.seek(st);}
   exitLoop(){if(!this.loop)return;this.anchor();this.loop=null;this.srcLoop();}
   jump(beats){if(this.buffer&&!this.slip)this.seek(this.pos()+beats*this.beatLen());}
-  tap(){const t=performance.now();if(this.taps.length&&t-this.taps[this.taps.length-1]>2000)this.taps=[];this.taps.push(t);if(this.taps.length>8)this.taps.shift();
-    if(this.taps.length>=4){let s=0;for(let k=1;k<this.taps.length;k++)s+=this.taps[k]-this.taps[k-1];const bpm=60000/(s/(this.taps.length-1));
-      this.bpm=Math.round(bpm/(1+this.tempo/100)*10)/10;this.metaEl.textContent=this.metaEl.textContent.replace(/[\d.]+ BPM/,this.bpm.toFixed(1)+' BPM');this.slots.forEach(s=>s.refresh());}}
-  sync(){if(this.syncOn){this.syncOn=false;this.bend=1;this.applyRate();return;}
-    if(!this.bpm){toast('Load a track first');return;}
+  /* tap tempo (fallback when detection is unsure): least-squares over the taps. While the deck plays,
+     each tap is mapped to the track position you were hearing (output latency included), so it sets the phase too. */
+  tap(){const now=performance.now();if(this.taps.length&&now-this.taps[this.taps.length-1].w>2000)this.taps=[];
+    let p=null;if(this.playing&&!this.waiting()&&!this.ramp&&!this.rev&&!this.slip){let tc=null;
+      try{const ts=ctx.getOutputTimestamp&&ctx.getOutputTimestamp();if(ts&&ts.contextTime>0&&ts.performanceTime>0)tc=ts.contextTime+(now-ts.performanceTime)/1000;}catch(e){}
+      if(tc==null)tc=ctx.currentTime-(ctx.outputLatency||ctx.baseLatency||0);p=this.posAt(tc);}
+    this.taps.push({w:now,p});if(this.taps.length>16)this.taps.shift();
+    const f=BeatSync.tapFit(this.taps);if(!f)return;const P=f.pos&&f.pos.sl>.2?f.pos.sl:f.period*this.curRate();if(!(P>.25&&P<1.5))return;
+    this.bpm=Math.round(60/P*100)/100;const x=this.bx=Object.assign({},this.bx||{},{beats:null,bi:0,lc:null,tap:true,synth:false});x.conf=Math.max(x.conf||0,.6);
+    if(f.pos&&this.taps.length>=6&&f.pos.rms<.03){const t0=f.pos.ic,Pb=60/this.bpm;let g=t0+Pb*Math.round((this.grid-t0)/Pb);const B4=4*Pb;this.grid=g-B4*Math.floor(g/B4);this.gOff=0;this.lt.reset();
+      if(this.taps.length===8)toast('Deck '+this.id+': '+this.bpm.toFixed(2)+' BPM, beat grid set from your taps');}
+    this.updateMeta();this.slots.forEach(s=>s.refresh());this.saveGrid();}
+  sync(){if(this.syncOn){this.syncOn=false;this.bend=1;this.applyRate();this.sc.reset();this.syncErr=null;return;}
+    if(!this.bpm){toast(this.analyzing?'Still analyzing the beats, one moment':'Load a track first');return;}
     if(clock.leader===this.i){toast('Deck '+this.id+' leads the master clock, so the others sync to it');return;}
     if(clock.leader==='int'){const o=decks.find(x=>x!==this&&x.playing&&x.bpm&&!x.syncOn);if(o){clock.setLeader(o.i);clock.follow();toast('Syncing to deck '+o.id);}}
-    this.syncOn=true;this.matchTempo();if(this.playing&&!this.rev&&!this.slip&&!this.ramp)this.phaseJump();}
-  matchTempo(){let t=(clock.bpm/this.bpm-1)*100;if(Math.abs(t)>this.range)this.setRange([8,16,50].find(r=>r>=Math.abs(t))||50);t=clamp(t,-this.range,this.range);
-    if(Math.abs(t-this.tempo)>.004){this.setTempo(Math.round(t*1000)/1000);this.pitchF.set(t,false);}}
-  phaseErr(){let e=frac(clock.beatAt(ctx.currentTime))-frac((this.pos()-this.grid)/this.beatLen());if(e>.5)e-=1;if(e<-.5)e+=1;return e;}
-  phaseJump(){this.seek(this.pos()+this.phaseErr()*this.beatLen());}
-  syncTick(){if(!this.syncOn||!this.playing||this.ramp||this.rev||this.slip||this.bh||this.bendBack||!this.bpm||clock.leader===this.i)return;this.matchTempo();
-    if(performance.now()<(this.nudgeUntil||0))return;const e=this.phaseErr();if(Math.abs(e)>.3){this.phaseJump();return;}
-    const nb=Math.abs(e)<.006?1:1+clamp(e*1.2,-.04,.04);if(Math.abs(nb-this.bend)>.0015){this.bend=nb;this.applyRate();}}
-  scaleBpm(f){if(!this.bpm)return;this.bpm=Math.round(this.bpm*f*10)/10;this.updateMeta();this.slots.forEach(s=>s.refresh());const smp=sampleById(this.sampleId);if(smp){smp.bpm=this.bpm;saveMeta(smp);}toast('Deck '+this.id+' BPM set to '+this.bpm.toFixed(1));}
-  updateMeta(){if(!this.buffer)return;this.metaEl.textContent=(this.demo?'DEMO LOOP · ':'')+fmt(this.buffer.duration).replace(/\.\d$/,'')+' · '+this.bpm.toFixed(1)+' BPM';}
+    this.syncOn=true;const L=this.refDeck();this.matchTempo(L);if(this.anaConf()<.4)toast('Deck '+this.id+': beat detection is unsure on this song. Tap along to set the BPM.');
+    if(this.playing&&!this.rev&&!this.slip&&!this.ramp&&!this.waiting())this.lockPhase(L);}
+  /* tempo layer: our rate = leader's beats per second x our local beat length (fractional, beat-map aware) */
+  matchTempo(L=this.refDeck()){if(!this.bpm)return;const lbps=L?L.beatRate(true):clock.bpm/60,rate=lbps*this.periodAt(this.pos());
+    let t=(rate-1)*100;if(Math.abs(t)>this.range)this.setRange([8,16,50].find(r=>r>=Math.abs(t))||50);t=clamp(t,-this.range,this.range);
+    if(Math.abs(t-this.tempo)>1e-4){this.setTempo(t);this.pitchF.set(t,false);}}
+  /* phase layer: continuous PI loop on the exact position difference -> micro pitch-bend; big errors -> quantized jump */
+  syncTick(){if(!this.syncOn||!this.playing||this.waiting()||this.ramp||this.rev||this.slip||this.bh||this.bendBack||!this.bpm||clock.leader===this.i||this.jump){this.sc.reset();if(!this.syncOn||!this.playing)this.syncErr=null;return;}
+    const L=this.refDeck();if(L&&(L.ramp||L.rev||L.slip||L.bh||L.jump))return;
+    this.matchTempo(L);if(performance.now()<(this.nudgeUntil||0)){this.sc.reset();return;}
+    const now=ctx.currentTime,e=this.phaseErr(L,1),es=e/(L?L.beatRate(true):clock.bpm/60);this.syncErr=this.syncErr==null?es:this.syncErr+(es-this.syncErr)*.2;
+    const r=this.sc.update(es,now);if(r.jump){if(!this.alignAt(L,1,e))this.sc.reset();return;}
+    if(Math.abs(r.bend-this.bend)>2e-5){this.bend=r.bend;this.applyRate();}}
+  saveGrid(){this.overCache=null;const smp=sampleById(this.sampleId);if(smp){smp.bpm=this.bpm;smp.grid=this.grid;smp.bx=this.bx;smp.av=BeatSync.VERSION;smp.gm=1;saveMeta(smp);}}
+  moveGrid(dt){if(!this.bpm)return;const x=this.bx;if(x&&x.beats)x.beats=Float64Array.from(x.beats,t=>t+dt);this.grid=this.grid+dt;this.saveGrid();toast('Deck '+this.id+' grid moved '+(dt>0?'later':'earlier')+' by '+Math.abs(dt*1000)+' ms');}
+  gridHere(){if(!this.bpm)return;const p=this.pos(),x=this.bx;this.gOff=0;
+    if(x&&x.beats){const j=Math.round(this.beatAt(p))+(x.bi||0),k=clamp(j,0,x.beats.length-1);x.bi=((k%4)+4)%4;this.grid=x.beats[x.bi];}
+    else{const B4=4*this.beatLen();this.grid=p-B4*Math.floor(p/B4);}
+    if(x)x.phr=0;this.saveGrid();toast('Deck '+this.id+': a new bar starts here');}
+  async reanalyze(){if(!this.buffer||this.analyzing)return;const buf=this.buffer;this.analyzing=true;this.updateMeta();
+    try{const a=await BeatSync.analyzeBuffer(buf);if(this.buffer!==buf)return;this.analyzing=false;this.applyAnalysis(a);this.saveGrid();const smp=sampleById(this.sampleId);if(smp){smp.gm=0;saveMeta(smp);}
+      toast('Deck '+this.id+': '+a.bpm.toFixed(2)+' BPM · confidence '+Math.round(a.conf*100)+'%'+(a.beats?' · variable tempo':''));}
+    catch(e){this.analyzing=false;this.updateMeta();toast('Deck '+this.id+': analysis failed');}}
+  scaleBpm(f){if(!this.bpm)return;if(this.bx&&this.bx.beats)this.bx=Object.assign({},this.bx,{beats:null,bi:0});this.bpm=Math.round(this.bpm*f*1000)/1000;this.updateMeta();this.slots.forEach(s=>s.refresh());this.saveGrid();toast('Deck '+this.id+' BPM set to '+this.bpm.toFixed(2));}
+  updateMeta(){if(!this.buffer)return;this.metaEl.textContent=(this.demo?'DEMO LOOP · ':'')+fmt(this.buffer.duration).replace(/\.\d$/,'')+' · '+(this.bpm?(+this.bpm.toFixed(2))+' BPM':'')+(this.analyzing?' · analyzing beats…':'');}
+  renderTrackPick(file){const tab=this._tpTab||'mine';const body=this.trackBody;const set=t=>{this._tpTab=t;this.renderTrackPick(file);};
+    const tabs=h('div',{class:'mtabs tp-tabs'},...[['mine','🎵 My songs'],['online','🌐 Online'],['drums','🥁 Built-in drums']].map(([k,l])=>{const b=h('button',{class:'mtab'+(k===tab?' on':''),type:'button'},l);b.addEventListener('click',()=>set(k));return b;}));
+    let content;
+    if(tab==='mine'){const list=userSamples().filter(sm=>sm.kind!=='sound');
+      content=h('div',{class:'tp-body'},h('label',{class:'btn actcard primary'},h('b',{text:'Load a song from this device'}),h('span',{text:'Pick a music file on this phone or computer. It is also saved in Music.'}),file),
+        list.length?h('div',{class:'pk-items'},...list.slice().reverse().map(sm=>{const on=this.sampleId===sm.id;const b=h('button',{class:'pk-item'+(on?' on':''),type:'button'},h('span',{class:'pk-n',text:sm.name}),h('span',{class:'pk-d',text:fmt(sm.end-sm.start).replace(/\.\d$/,'')+(sm.bpm?' · '+Math.round(sm.bpm)+' BPM':'')+(sm.kind==='beat'?' · only beat':sm.kind==='vocal'?' · singing':'')}),h('span',{class:'pk-st',text:on?'On deck':'Load'}));
+          b.addEventListener('click',()=>{this.loadSample(sm);if(openSheetRef)openSheetRef.close();});return b;})):h('p',{class:'hint',text:'No songs in Music yet. Load one from this device, or look in Online or Built-in drums.'}));}
+    else if(tab==='online'){content=h('div',{class:'tp-body'},h('p',{class:'hint big',text:'Search free music on the internet. In the results, tap '+this.id+' next to a song to put it on this deck. It is saved in Music too.'}),
+        BTN('Search free music online',()=>{if(openSheetRef)openSheetRef.close();openFinder();},'bigact primary'));}
+    else{const tgt=drumTarget(this);const vs=this._dVar||'full';
+      const vbtns=h('div',{class:'mtabs'},...DRUM_VARIANTS.map(([k,l])=>{const b=h('button',{class:'mtab'+(k===vs?' on':''),type:'button'},l);b.addEventListener('click',()=>{this._dVar=k;this.renderTrackPick(file);});return b;}));
+      content=h('div',{class:'tp-body'},h('p',{class:'hint big',text:'Drum loops made inside the app. They play at '+tgt.bpm.toFixed(1)+' BPM'+(tgt.from?' to match Deck '+tgt.from.id:' (the master tempo)')+', repeat forever and stay in time. Great under a song, or when you have no drums of your own.'}),
+        h('div',{class:'k-lab',text:'What to play'}),vbtns,h('p',{class:'hint',text:(DRUM_VARIANTS.find(v=>v[0]===vs)||[])[2]||''}),
+        ...DRUM_GROUPS.map(g=>h('div',{class:'pk-cat'},h('div',{class:'sfx-gname',text:g}),h('div',{class:'pk-items drumgrid'},...DRUM_STYLES.filter(s=>s.g===g).map(s=>{const b=h('button',{class:'pk-item',type:'button'},h('span',{class:'pk-n',text:s.name}),h('span',{class:'pk-d',text:s.d}),h('span',{class:'pk-st',text:'Load'}));
+          b.addEventListener('click',async()=>{b.querySelector('.pk-st').textContent='…';await loadDrums(this,s.id,vs);if(openSheetRef)openSheetRef.close();});return b;})))));}
+    body.replaceChildren(tabs,content);}
   loadSample(s,{quiet=false}={}){const plain=s.start===0&&Math.abs(s.end-s.buffer.duration)<1e-6&&!s.tune&&!s.gain;const r=plain?{buf:s.buffer,loop:s.loop?{start:s.ls,end:s.le}:null}:renderSample(s);
-    let bpm=s.bpm,grid=s.grid;if(!bpm){const a=analyze(r.buf);bpm=a.bpm;grid=a.grid;s.bpm=bpm;s.grid=grid;saveMeta(s);}
-    this.setBuffer(r.buf,{name:s.name,bpm,grid:plain?grid||0:0,demo:s.id.startsWith('demo'),sampleId:s.id});if(r.loop)this.loop={start:r.loop.start,end:r.loop.end,beats:-1};if(!quiet)toast(s.name+' loaded on deck '+this.id);}
+    const synth=s.builtin||s.id.startsWith('demo')||s.id.startsWith('drum:'),fresh=synth||(s.bpm&&plain&&(s.av===BeatSync.VERSION||s.gm));
+    this.setBuffer(r.buf,{name:s.name,bpm:s.bpm||0,grid:plain?s.grid||0:0,demo:s.id.startsWith('demo'),sampleId:s.id,bx:synth?{conf:1,synth:true}:plain?s.bx||null:null});
+    this.drumLoop=s.id.startsWith('drum:');if(r.loop)this.loop={start:r.loop.start,end:r.loop.end,beats:-1};if(!quiet)toast(s.name+' loaded on deck '+this.id);
+    if(!fresh)this.analyzeLater(s,r.buf,plain);}
+  /* analyse in the worker; the deck plays on the stored (or no) grid meanwhile and updates when the result arrives */
+  analyzeLater(s,buf,plain){this.analyzing=true;this.updateMeta();
+    BeatSync.analyzeBuffer(buf).then(a=>{if(s.gm&&plain){if(this.buffer===buf){this.analyzing=false;this.updateMeta();}return;}/* grid edited by hand meanwhile */
+      if(plain){s.bpm=a.bpm;s.grid=a.grid;s.bx=bxOf(a);s.av=BeatSync.VERSION;s.gm=0;saveMeta(s);}else if(!s.bpm){s.bpm=a.bpm;saveMeta(s);}
+      if(this.buffer===buf){this.analyzing=false;this.applyAnalysis(a);}},()=>{if(this.buffer===buf){this.analyzing=false;this.updateMeta();}});}
+  applyAnalysis(a){this.bpm=a.bpm;this.grid=a.grid;this.bx=bxOf(a);this.gOff=0;this.lt.reset();this.sc.reset();this.updateMeta();this.slots.forEach(s=>s.refresh());
+    if(this.syncOn&&this.playing){const L=this.refDeck();if(L)this.lockPhase(L);}}
   setAssign(a){this.assign=a;if(this.asgBtns)this.asgBtns.forEach(b=>b.classList.toggle('on',b.dataset.a===a));this.applyXf();}
   setKills(k){['lo','mid','hi'].forEach(b=>{this.kill[b]=!!k[b];if(this.killBtns&&this.killBtns[b])this.killBtns[b].classList.toggle('on',this.kill[b]);});this.applyEq();}
   setRange(r){this.range=r;this.rangeBtn.textContent='±'+r+'%';const f=this.pitchF;const cur=clamp(this.tempo,-r,r);
-    const nf=Fader({min:-r,max:r,value:cur,def:0,label:'Deck '+this.id+' tempo',tall:true,onChange:v=>{this.syncOn=false;this.bend=1;this.setTempo(Math.round(v*100)/100);}});
+    const nf=Fader({min:-r,max:r,value:cur,def:0,label:'Deck '+this.id+' tempo',tall:true,onChange:v=>{this.syncOn=false;this.bend=1;this.setTempo(Math.round(v*100)/100);if(!this._fining&&this.fineF){this._fineBase=null;this.fineF.set(0,false);}}});
     f.el.replaceWith(nf.el);this.pitchF=nf;this.setTempo(cur);}
   nudge(amount){if(!this.buffer||this.ramp||this.slip)return;this.nudgeUntil=performance.now()+400;
     if(this.playing){this.bend=clamp(1+amount,.6,1.6);this.applyRate();clearTimeout(this.bendT);this.bendT=setTimeout(()=>{this.bend=1;this.applyRate();},90);}
@@ -1020,7 +1184,9 @@ this.slots[0].out.connect(this.slots[1].inp);this.slots[1].out.connect(this.fxOu
     this.spin=h('div',{class:'spin'},h('div',{class:'mark'}));this.hub=h('div',{class:'hub',text:this.id});
     this.platter=h('div',{class:'platter','aria-label':'Deck '+this.id+' jog wheel, drag to nudge'},this.spin,this.hub);
     this.playBtn=B('▶ Play',()=>this.toggle(),'play');
-    this.cueBtn=B('Cue',()=>this.cuePress(),'cue');
+    this.cueBtn=B('Cue',e=>{if(e&&e.detail===0)this.cuePress();},'cue');
+    this.cueBtn.addEventListener('pointerdown',e=>{if(helpMode||e.button>0)return;e.preventDefault();this.cueBtn.setPointerCapture&&this.cueBtn.setPointerCapture(e.pointerId);this.cueDown();});
+    ['pointerup','pointercancel'].forEach(ev=>this.cueBtn.addEventListener(ev,()=>this.cueUp()));
     this.syncBtn=B('Sync',()=>this.sync(),'syncb');
     const tapBtn=B('Tap',()=>this.tap(),'tapb',{title:'Tap along to set BPM'});
     this.hotBtns=HOTC.map((c,k)=>B(String(k+1),()=>this.hotPress(k),'hc',{style:'--hcol:'+c,title:'Hot cue '+(k+1)}));
@@ -1043,6 +1209,15 @@ this.slots[0].out.connect(this.slots[1].inp);this.slots[1].out.connect(this.fxOu
     this.tempoInfo=h('p',{class:'sinfo'});
     this.tempoBody=h('div',{class:'sh-body deck-sheet tempo-sheet'},h('div',{class:'shrow top'},h('div',{class:'pitch-col'},this.rangeBtn,this.pitchF.el,B('0',()=>{this.pitchF.set(0);},'sm',{title:'Reset tempo'})),
       h('div',{class:'shcol'},h('p',{class:'hint',text:'Slide up to play this song faster, down for slower. 0 puts it back to normal. Moving it turns Sync off.'}),this.tempoInfo,
+        h('div',{class:'k-lab',text:'Exact BPM'}),h('div',{class:'shrow'},this.bpmIn=h('input',{type:'number',class:'bigin bpmin',step:'0.1',min:'40',max:'250','aria-label':'Type the BPM you want',onchange:e=>{const v=+e.target.value;if(!this.bpm||!(v>0))return;let t=(v/this.bpm-1)*100;if(Math.abs(t)>this.range)this.setRange([8,16,50].find(r=>r>=Math.abs(t))||50);t=clamp(t,-this.range,this.range);this.syncOn=false;this.pitchF.set(t);}}),h('span',{class:'hint',text:'Type a BPM and press Enter.'})),
+        h('div',{class:'k-lab',text:'Fine tempo (tiny steps)'}),(this.fineF=Fader({vertical:false,min:-.5,max:.5,value:0,def:0,label:'Fine tempo',onChange:v=>{if(this._fineBase==null)this._fineBase=this.tempo;this._fining=true;this.pitchF.set(clamp(this._fineBase+v,-this.range,this.range));this._fining=false;}})).el,
+        h('div',{class:'k-lab',text:'Key lock (also called Master Tempo)'}),h('div',{class:'shrow'},this.klBtn=B('Key lock: off',()=>this.setKeyLock(!this.keyLock),'klbtn')),
+        h('p',{class:'hint',text:'ON: change the tempo and the song keeps its normal pitch (voices don’t sound like chipmunks). OFF: faster also sounds higher, like a real record.'}),
+        h('div',{class:'k-lab',text:'Key (pitch only, the speed stays the same)'}),(this.keyF=Fader({vertical:false,min:-12,max:12,value:0,def:0,label:'Key',onChange:v=>this.setKey(v)})).el,
+        h('div',{class:'shrow'},this.keyVal=h('b',{class:'keyval',text:'0 semitones'}),B('Key back to 0',()=>this.setKey(0),'sm')),
+        h('div',{class:'k-lab',text:'Quantize: Play and Sync land on…'}),h('div',{class:'shrow qbtns'},...[['phrase','Next phrase'],['bar','Next bar'],['beat','Next beat'],['off','Right away']].map(([q,l])=>B(l,()=>setQuant(q),'sm'+(quantMode===q?' on':''),{'data-q':q}))),
+        h('p',{class:'hint',text:'When another song is playing, Play waits and starts exactly on its boundary. Next phrase: the start of its next 4-bar phrase. Next bar (best for most mixes): the “1” of its next bar. Next beat: its next beat. Right away: starts now, and Sync lines it up on the next beat.'}),
+        h('div',{class:'k-lab',text:'Beat grid (if the beats don’t line up)'}),h('div',{class:'shrow'},B('◀ Earlier',()=>this.moveGrid(-.005),'sm',{title:'Move the beat grid 5 ms earlier'}),B('Later ▶',()=>this.moveGrid(.005),'sm',{title:'Move the beat grid 5 ms later'}),B('Beat 1 is here',()=>this.gridHere(),'sm',{title:'Tell the app the song’s bar starts right where it is now'}),B('Analyze again',()=>this.reanalyze(),'sm')),
         h('div',{class:'k-lab',text:'Nudge (hold)'}),h('div',{class:'shrow'},nudge('◀ Slower',.96),nudge('Faster ▶',1.04)),
         h('div',{class:'k-lab',text:'Wrong BPM?'}),h('div',{class:'shrow'},tapBtn,h('div',{class:'bpmfix'},B('½',()=>this.scaleBpm(.5),'sm halfx',{title:'Halve the BPM'}),B('×2',()=>this.scaleBpm(2),'sm halfx',{title:'Double the BPM'}))))));
     const J=(n,l)=>B(l,()=>this.jump(n),'',{title:'Jump '+Math.abs(n)+' beats '+(n<0?'back':'forward')});
@@ -1052,21 +1227,20 @@ this.slots[0].out.connect(this.slots[1].inp);this.slots[1].out.connect(this.fxOu
       h('div',{class:'k-lab',text:'Whole song'}),h('div',{class:'row'},this.repeatBtn));
     this.hotBody=h('div',{class:'sh-body deck-sheet'},h('p',{class:'hint',text:'Tap an empty number to save the spot where the song is now. Tap it again later to jump right back there. Tap Del, then a number, to clear it.'}),h('div',{class:'row','data-h':'hot'},...this.hotBtns,this.delBtn));
     this.binList=h('div',{class:'pk-items'});
-    this.trackBody=h('div',{class:'sh-body deck-sheet'},h('div',{class:'shrow'},h('label',{class:'btn'},'Load a song',file),h('span',{class:'hint',text:'or pick one from your Bin:'})),this.binList);
-    const openTrack=a=>openSheet(a,'Deck '+this.id+' · Song',this.trackBody,{color:col,onOpen:()=>this.binList.replaceChildren(...(userSamples().filter(sm=>sm.buffer.duration>4).length?[]:[h('p',{class:'hint',text:'Nothing in My music yet. Tap “Load a song” to pick one from this device.'})]),...userSamples().filter(sm=>sm.buffer.duration>4).map(sm=>{const on=sm.id===this.sampleId;
-      const b=h('button',{class:'pk-item'+(on?' on':''),type:'button'},h('span',{class:'pk-n',text:sm.name}),h('span',{class:'pk-d',text:fmt(sm.end-sm.start).replace(/\.\d$/,'')+(sm.bpm?' · '+Math.round(sm.bpm)+' BPM':'')}),h('span',{class:'pk-st',text:on?'On deck':'Load'}));
-      b.addEventListener('click',()=>{this.loadSample(sm);if(openSheetRef)openSheetRef.close();});return b;}))});
+    this.trackBody=h('div',{class:'sh-body deck-sheet trackpick'});
+    const openTrack=a=>openSheet(a,'Deck '+this.id+' · Pick a song',this.trackBody,{color:col,onOpen:()=>this.renderTrackPick(file)});
     this.trackBtn=h('button',{class:'track trackbtn',type:'button',title:'Tap to load a song'},this.nameEl,this.metaEl);this.trackBtn.addEventListener('click',()=>openTrack(this.trackBtn));
-    this.tempoChip=chip('Tempo',{cls:'chip-tempo',help:'Speed of this song: tempo fader, nudge and BPM fixes.',onOpen:a=>openSheet(a,'Deck '+this.id+' · Tempo',this.tempoBody,{color:col})});
+    this.tempoChip=chip('Tempo',{cls:'chip-tempo',help:'Speed of this song: tempo fader, nudge and BPM fixes.',onOpen:a=>openSheet(a,'Deck '+this.id+' · Tempo',this.tempoBody,{color:col,onOpen:()=>{this._fineBase=null;if(this.fineF)this.fineF.set(0,false);}})});
     this.loopChip=chip('Loop',{cls:'chip-loop',help:'Loops, beat jumps and Repeat for this song.',onOpen:a=>openSheet(a,'Deck '+this.id+' · Loop',this.loopBody,{color:col})});
     this.hotChip=chip('Cues',{cls:'chip-hot',help:'Four hot cues: saved spots you can jump back to.',onOpen:a=>openSheet(a,'Deck '+this.id+' · Hot cues',this.hotBody,{color:col})});
     this.el=h('section',{class:'panel deck',style:'--dc:'+col,'aria-label':'Deck '+this.id},
       h('div',{class:'deck-head'},h('div',{class:'deck-id',text:this.id}),this.trackBtn,B('⚙',()=>openDeckCustomizer(this),'sm cust',{title:'Choose what this deck shows','aria-label':'Customize deck '+this.id})),
       this.cvZ,this.cvO,
-      h('div',{class:'readouts lcd'},rd('ELAPSED',this.rEl),rd('REMAIN',this.rRem),rd('BPM',this.rBpm),rd('PITCH',this.rPitch)),
+      h('div',{class:'readouts lcd'},rd('ELAPSED',this.rEl),rd('REMAIN',this.rRem),rd('BPM',this.rBpm),rd('TEMPO',this.rPitch)),
+      this.syncSt=h('div',{class:'syncst',title:'Beat sync status. LIVE: kicks heard now confirm the grid. GRID: using the analysed grid. HOLD: no drums right now, the grid carries on. TAP: detection is unsure, tap along to set the BPM. Δ: how far this deck is from the beat it syncs to.'}),
       h('div',{class:'deck-mid'},this.platter),
       h('div',{class:'chips'},this.tempoChip,this.loopChip,this.hotChip),
-      h('div',{class:'chips'},this.fxChipD=chip('Effects',{cls:'chip-fx',help:'Opens the full-screen effects mixer for this deck: reverb, echo, flanger and 30 more, each with its own controls.',onOpen:()=>openDeckFx(this)})),
+      h('div',{class:'chips'},this.mixChip=chip('Volume & EQ',{cls:'chip-mix',help:'This deck’s volume, bass, middle, treble and filter. The same knobs as in the Mixer, so you can mix without leaving the deck.',onOpen:a=>openSheet(a,'Deck '+this.id+' · Volume & EQ',this.mixSheet(),{color:col})}),this.fxChipD=chip('Effects',{cls:'chip-fx',help:'Opens the full-screen effects mixer for this deck: reverb, echo, flanger and 30 more, each with its own controls.',onOpen:()=>openDeckFx(this)})),
       h('div',{class:'row mainrow'},this.cueBtn,this.playBtn,this.syncBtn),
       h('div',{class:'padsec','data-h':'pads'},h('div',{class:'padhead'},h('span',{class:'tag',text:'QUICK FX · one tap'}),this.padEditBtn=B('Remove',()=>this.setPadEdit(!this.padEdit),'sm',{title:'Tap, then tap pads to remove them'}),B('+ Add',()=>openPadPicker(this),'sm addpad',{title:'Choose effects for this deck'})),
         this.padGrid=h('div',{class:'padgrid'}),this.padEmpty=h('p',{class:'hint padempty',text:'No quick effects yet. Tap + Add: one-tap effects like Roll to stop, Echo out, Brake, and sound drops like “3, 2, 1, go”.'})));
@@ -1117,10 +1291,10 @@ this.slots[0].out.connect(this.slots[1].inp);this.slots[1].out.connect(this.fxOu
     this.fxChip=chip('FX',{help:'Effects for this channel: two slots and presets.',onOpen:a=>openSheet(a,this.id+' · Effects',this.fxBody,{color:col})});
     this.chChip=chip('Channel',{help:'Trim, compressor, band kills and crossfader side for this channel.',onOpen:a=>openSheet(a,this.id+' · Channel',this.chBody,{color:col})});
     const el=h('div',{class:'strip',style:'--dc:'+col},
-      h('div',{class:'strip-id',text:this.id}),this.stripName,
+      h('div',{class:'strip-id',text:this.id==='SEQ'?'BEAT':this.id}),this.stripName,
       h('div',{class:'eqcol'},eqK('hi','High').el,eqK('mid','Mid').el,eqK('lo','Low').el),h('div',{class:'colorknob'},this.colorK.el),
       h('div',{class:'fader-row'},this.meter,fader.el),
-      h('div',{class:'chips col'},...(this.i<4?[]:[this.fxChip]),this.chChip),this.cueBtnEl());
+      h('div',{class:'chips col'},this.chChip),this.cueBtnEl());
     $('#strips').append(el);
   }
   tick(){this.stripChips();
@@ -1130,22 +1304,31 @@ this.slots[0].out.connect(this.slots[1].inp);this.slots[1].out.connect(this.fxOu
     this.rPitch.textContent=(this.tempo>=0?'+':'')+this.tempo.toFixed(2)+'%';
     this.spin.style.transform=`rotate(${(p*200)%360}deg)`;
     this.platter.classList.toggle('playing',this.playing);
-    if(this.bpm){const b=Math.floor((p-this.grid)/this.beatLen());this.hub.textContent=b>=0?((Math.floor(b/4)+1)+'.'+(b%4+1)):this.id;}
-    this.playBtn.textContent=this.playing&&!this.ramp?'Pause':'▶ Play';this.playBtn.classList.toggle('on',this.playing);
+    if(this.bpm){const b=Math.floor(this.beatAt(p));this.hub.textContent=b>=0?((Math.floor(b/4)+1)+'.'+(b%4+1)):this.id;}
+    const wt=this.waiting();this.playBtn.textContent=wt?'⏳ On the '+(QNAME[quantMode]||'next beat')+'…':this.playing&&!this.ramp?'Pause':'▶ Play';this.playBtn.classList.toggle('on',this.playing);this.playBtn.classList.toggle('waiting',wt);
     this.cueBtn.classList.toggle('on',!this.playing&&!!this.buffer&&Math.abs(this.offset-this.cue)<.01);
     this.hotBtns.forEach((b,k)=>{b.classList.toggle('set',this.hot[k]!=null);});
     this.delBtn.classList.toggle('on',this.delMode);
     this.loopBtns.forEach(b=>b.classList.toggle('on',!!this.loop&&this.loop.beats===+b.dataset.b));this.deckChips();
-    this.holdTick();this.syncTick();this.syncBtn.classList.toggle('on',!!this.syncOn);this.repeatBtn.classList.toggle('on',!!this.repeat);
+    this.holdTick();this.liveTick();this.syncTick();this.statusTick();this.syncBtn.classList.toggle('on',!!this.syncOn);this.repeatBtn.classList.toggle('on',!!this.repeat);
     this.revBtn.classList.toggle('on',this.rev&&!this.slip&&!this.ramp);
     this.brakeBtn.classList.toggle('on',(!!this.ramp&&this.trick==='brake')||!!this.bh);this.spinBtn.classList.toggle('on',!!this.ramp&&this.trick==='spin');
     this.drawZoom(p);this.drawOver(p);drawMeter(this.meter,[this.an],this,[this.anBuf]);
   }
+  statusTick(){const el=this.syncSt;if(!el)return;const now=performance.now();if(now-(this._stT||0)<150)return;this._stT=now;let t='',cls='syncst';
+    if(this.buffer){if(this.analyzing&&!this.bpm)t='Analyzing beats…';else if(!this.bpm)t='No beat grid · tap along to set BPM';
+      else{const x=this.bx||{},conf=this.anaConf(),on=this.playing&&!this.waiting(),m=x.synth?'EXACT':on?this.lt.mode:(conf>=.4?'GRID':'TAP');
+        const P=[m==='EXACT'?'GRID exact':m==='LIVE'?'LIVE '+Math.round(this.lt.conf*100)+'%':m==='GRID'?'GRID '+Math.round(conf*100)+'%':m==='HOLD'?'HOLD · no drums':'TAP BPM?'];
+        if(this.analyzing)P.push('analyzing…');if(x.beats)P.push('var. tempo');if(x.tap)P.push('tapped');
+        if(this.syncOn&&this.syncErr!=null&&clock.leader!==this.i)P.push('Δ '+(this.syncErr>=0?'+':'−')+Math.abs(this.syncErr*1000).toFixed(1)+' ms');
+        if(this.waiting())P.push('starts on '+(QNAME[quantMode]||'beat'));
+        t=P.join(' · ');cls+=m==='TAP'?' warn':m==='LIVE'||m==='EXACT'?' ok':'';}}
+    if(el.textContent!==t)el.textContent=t;if(el.className!==cls)el.className=cls;}
   drawZoom(p){const cv=this.cvZ,g=cv.getContext('2d'),W=cv.width,H=cv.height;if(!W)return;g.clearRect(0,0,W,H);
     if(!this.buffer){g.fillStyle='#555d6b';g.font=`${12*dpr()}px Barlow,sans-serif`;g.textAlign='center';g.fillText('Drop an audio file here',W/2,H/2);return;}
     const win=6,start=p-win/2,pxs=W/win,mid=H/2;
     if(this.loop){g.fillStyle=this.col+'26';g.fillRect((this.loop.start-start)*pxs,0,(this.loop.end-this.loop.start)*pxs,H);}
-    if(this.bpm){const b=this.beatLen();let k=Math.ceil((start-this.grid)/b);for(let t=this.grid+k*b;t<start+win;t+=b,k++){const x=(t-start)*pxs;g.fillStyle=k%4===0?'#ffffff40':'#ffffff14';g.fillRect(x,0,k%4===0?2:1,H);}}
+    if(this.bpm){const ph=this.phrOff();let k=Math.ceil(this.beatAt(start)),n=0;for(let t=this.posAtBeat(k);t<start+win&&n<400;k++,n++,t=this.posAtBeat(k)){const x=(t-start)*pxs,bar=BeatSync.mod(k,4)===0,phr=BeatSync.mod(k-ph,16)===0;g.fillStyle=phr?'#ffffff70':bar?'#ffffff40':'#ffffff14';g.fillRect(x,0,phr?3:bar?2:1,H);}}
     const {pk,rm}=this.zoom,step=Math.max(1,Math.round(dpr()*1.5));
     for(let x=0;x<W;x+=step){const t=start+x/pxs;if(t<0||t>=this.dur)continue;const i=Math.floor(t*150),a=pk[i]*mid*.95,r=Math.min(a,rm[i]*mid*1.6);
       const past=this.rev?t>p:t<p;g.fillStyle=past?this.col+'66':this.col+'99';g.fillRect(x,mid-a,step,a*2);g.fillStyle=past?'#ffffff55':'#ffffffcc';g.fillRect(x,mid-r,step,r*2);}
@@ -1171,7 +1354,7 @@ function drawMeter(cv,ans,state,bufs){const W=cv.width,H=cv.height;if(!W)return;
     const N=18,sh=H/N;for(let i=0;i<N;i++){const on=(i+1)/N<=state.mv[k]+.001;g.fillStyle=on?(i>=16?'#ff4d4d':i>=12?'#f2c23a':'#4be08a'):'#15181d';g.fillRect(k*cw+1,H-(i+1)*sh+1,cw-2,sh-2);}});}
 
 /* ---------- master strip ---------- */
-let recorder=null,recChunks=[],recStart=0;
+let recorder=null,recChunks=[],recStart=0;const mixRecs=[];
 const masterBufs=[new Float32Array(1024),new Float32Array(1024)],masterState={};
 const isAudio=f=>f.type.startsWith('audio')||/\.(mp3|wav|m4a|aac|ogg|flac|opus|webm|aif|aiff)$/i.test(f.name);
 function buildMaster(){
@@ -1192,11 +1375,12 @@ function buildMaster(){
     recorder.ondataavailable=e=>{if(e.data.size)recChunks.push(e.data);};
     recorder.onstop=()=>{masterOut.disconnect(dest);const type=recorder.mimeType||mime||'audio/webm';const blob=new Blob(recChunks,{type});const url=URL.createObjectURL(blob);
       const ext=type.includes('mp4')?'m4a':type.includes('ogg')?'ogg':'webm';const stamp=new Date().toISOString().slice(0,16).replace(/[:T]/g,'-');
+      const recItem={stamp,ext,url,wurl:null,dur:(performance.now()-recStart)/1000,size:blob.size};mixRecs.unshift(recItem);if(ui.recUpdate)ui.recUpdate();
       out.replaceChildren(h('audio',{controls:'',src:url}),h('a',{href:url,download:`quad-deck-mix-${stamp}.${ext}`},'Save mix ('+ext.toUpperCase()+')'),h('span',{class:'hint',text:'Making WAV…'}));
-      blob.arrayBuffer().then(ab=>ctx.decodeAudioData(ab)).then(buf=>{const wurl=URL.createObjectURL(encodeWAV(buf));out.lastChild.replaceWith(h('a',{href:wurl,download:`quad-deck-mix-${stamp}.wav`},'Save mix (WAV)'));
+      blob.arrayBuffer().then(ab=>ctx.decodeAudioData(ab)).then(buf=>{const wurl=URL.createObjectURL(encodeWAV(buf));recItem.wurl=wurl;if(ui.recUpdate)ui.recUpdate();out.lastChild.replaceWith(h('a',{href:wurl,download:`quad-deck-mix-${stamp}.wav`},'Save mix (WAV)'));
         blob.arrayBuffer().then(b2=>addSample(buf,'Mix '+stamp.slice(11),{bytes:b2,mime:type}));}).catch(()=>{out.lastChild.textContent='WAV export is not available in this browser';});
-      recorder=null;recBtn.classList.remove('on');recBtn.textContent='● Rec';toast('Mix recorded');};
-    recorder.start(1000);recStart=performance.now();recBtn.classList.add('on');recBtn.textContent='■ Stop';}},'● Rec');
+      recorder=null;recBtn.classList.remove('on');recBtn.textContent='● Rec';toast('Recording finished');if(ui.recUpdate)ui.recUpdate();};
+    recorder.start(1000);recStart=performance.now();recBtn.classList.add('on');recBtn.textContent='■ Stop';if(ui.recUpdate)ui.recUpdate();}},'● Rec');
   window.recBtnRef=recBtn;
   const modeBtns=[['off','Off'],['split','Split'],['device','Output']].map(([m,l])=>{const b=BTN(l,async()=>{const ok=await setCueMode(m);routeMetro();modeBtns.forEach(x=>x.classList.toggle('on',x.dataset.m===cue.mode));},'sm'+(m==='off'?' on':''),
     {'data-m':m,title:{off:'Headphone cue off',split:'Left ear: cue. Right ear: master. Use a headphone splitter cable on one output.',device:'Send the cue mix to a second audio output, such as USB headphones'}[m]});return b;});
@@ -1210,8 +1394,7 @@ function buildMaster(){
     h('div',{class:'strip-id',text:'MASTER'}),
     h('div',{class:'fader-row'},meter,vol.el),
     h('div',{class:'row',style:'justify-content:center;align-items:center'},limBtn),
-    h('div',{class:'row',style:'justify-content:center;align-items:center'},recBtn,recTime),out,
-    h('div',{class:'chips col'},isoChip,colorChip,phonesChip));
+    h('div',{class:'chips col'},isoChip,phonesChip));
   const isoBody=h('div',{class:'sh-body master-sheet'},h('p',{class:'hint',text:'A strong EQ on the whole mix. Turn a knob all the way left, or tap Kill, to remove that band completely.'}),h('div',{class:'isorow'},...['hi','mid','lo'].map(b=>{
       const lab={hi:'High',mid:'Mid',lo:'Low'}[b];let val=0,killed=false;const ap=()=>{isoState[b]=killed||val<=-25.5?'cut':val<-3?'low':'';iso[b].gain.setTargetAtTime(killed||val<=-25.5?0:Math.pow(10,val/20),ctx.currentTime,.01);};
       const k=Knob({label:lab,auto:'Master iso '+lab,min:-26,max:6,value:0,def:0,bipolar:true,small:true,onChange:v=>{val=v;ap();}});
@@ -1374,9 +1557,79 @@ async function trigger(k){resume();const el=padEls[k];el.classList.add('loading'
   s.onended=()=>{const set=active.get(k);set.delete(o);if(!set.size)el.classList.remove('on');};}
 function padApply(k,tc=.03){const m=padMods[k]||{pitch:0,cut:20000},now=ctx.currentTime;(active.get(k)||[]).forEach(o=>{o.src.playbackRate.setTargetAtTime(Math.pow(2,m.pitch/12),now,tc);o.flt.frequency.setTargetAtTime(m.cut,now,tc);});}
 function stopAll(){active.forEach(set=>{set.forEach(o=>{try{o.src.stop()}catch(e){}});});}
-async function loadCustom(k,file){try{const ab=await file.arrayBuffer(),bytes=ab.slice(0);const buf=await ctx.decodeAudioData(ab);const smp=addSample(buf,file.name.replace(/\.[^.]+$/,''),{bytes,mime:file.type});setPadSample(k,smp);toast('Pad now plays '+file.name+'. It is saved in your Bin.');}
+async function loadCustom(k,file){try{const ab=await file.arrayBuffer(),bytes=ab.slice(0);const buf=await ctx.decodeAudioData(ab);const smp=addSample(buf,file.name.replace(/\.[^.]+$/,''),{bytes,mime:file.type});setPadSample(k,smp);toast('Pad now plays '+file.name+'. It is saved in Music.');}
   catch(e){toast("Couldn't read that file. Try MP3, WAV, M4A or OGG.");}}
 /* ---------- demo loops (synthesized) ---------- */
+/* ---------- key shifter: key lock and key change, independent of tempo ---------- */
+function makeKeyNode(){const G=v=>{const g=ctx.createGain();g.gain.value=v;return g;};const inp=G(1),out=G(1),dry=G(1),wet=G(0);inp.connect(dry);dry.connect(out);wet.connect(out);
+  const W=.06,dA=ctx.createDelay(1),dB=ctx.createDelay(1),gA=G(0),gB=G(0),sp=ctx.createChannelSplitter(4),wA=G(W),wB=G(W);
+  sp.connect(wA,0);sp.connect(wB,1);wA.connect(dA.delayTime);wB.connect(dB.delayTime);sp.connect(gA.gain,2);sp.connect(gB.gain,3);
+  inp.connect(dA);dA.connect(gA);gA.connect(wet);inp.connect(dB);dB.connect(gB);gB.connect(wet);
+  const bufs={};const mk=up=>{if(bufs[up])return bufs[up];const sr=8000,b=ctx.createBuffer(4,sr,sr),c=[0,1,2,3].map(k=>b.getChannelData(k));
+    for(let k=0;k<sr;k++){const x=k/sr,xb=(x+.5)%1,r=v=>up?1-v:v;c[0][k]=r(x);c[1][k]=r(xb);c[2][k]=Math.sin(Math.PI*x)**2;c[3][k]=Math.sin(Math.PI*xb)**2;}return bufs[up]=b;};
+  let src=null,dir=null,cur=1;
+  function set(ratio){const t=ctx.currentTime;if(Math.abs(ratio-1)<.0005){dry.gain.setTargetAtTime(1,t,.02);wet.gain.setTargetAtTime(0,t,.02);if(src){const s=src;src=null;setTimeout(()=>{try{s.stop();}catch(e){}},200);}cur=1;return;}
+    const up=ratio>1,f=Math.max(1e-4,Math.abs(1-ratio)/W);
+    if(dir!==up||!src){if(src){try{src.stop();}catch(e){}}src=ctx.createBufferSource();src.buffer=mk(up);src.loop=true;src.connect(sp);src.start();dir=up;}
+    src.playbackRate.setTargetAtTime(f,t,.02);dry.gain.setTargetAtTime(0,t,.02);wet.gain.setTargetAtTime(1,t,.02);cur=ratio;}
+  return {input:inp,output:out,set,get:()=>cur};}
+/* ---------- built-in drum loops: every style, rendered at the song's tempo ---------- */
+const DRUM_GROUPS=['Disco & funk','House & dance','Hip-hop & R&B','Latin & world','Rock, pop & more'];
+const DS=(id,name,g,d,sw,parts)=>({id,name,g,d,sw,parts});
+const DRUM_STYLES=[
+  DS('disco','Disco','Disco & funk','Four-on-the-floor kick, open hats, tambourine',0,{kick:'X...X...X...X...',clap:'....X.......X...',ohat:'..x...x...x...x.',chat:'o...o...o...o...',tamb:'o.x.o.x.o.x.o.x.'}),
+  DS('disco2','Disco (busy)','Disco & funk','Disco with 16th hats and congas',0,{kick:'X...X...X...X...',snare:'....X.......X..o',ohat:'..x...x...x...x.',chat:'xoooxoooxoooxooo',conga:'...x..x....x.x..',tamb:'..o...o...o...o.'}),
+  DS('nudisco','Nu-disco','Disco & funk','Modern disco with shaker',.05,{kick:'X...X...X...X...',clap:'....X.......X...',ohat:'..x...x...x...x.',shaker:'oxoxoxoxoxoxoxox',conga:'......x.......x.'}),
+  DS('funk','Funk','Disco & funk','Syncopated kick and ghost snares',.1,{kick:'X..x..X...X..x..',snare:'....X..o.o..X..o',chat:'xoxoxoxoxoxoxoxo'}),
+  DS('boogie','Boogie / 80s','Disco & funk','Electro-funk groove with clap',.08,{kick909:'X.....x.X.......',clap:'....X.......X...',chat:'x.x.x.x.x.x.x.x.',cowbell:'..........x.....'}),
+  DS('house','House','House & dance','Classic house: kick, clap, open hats',0,{kick909:'X...X...X...X...',clap:'....X.......X...',ohat:'..X...X...X...X.',chat:'x...x...x...x...',shaker:'.o.o.o.o.o.o.o.o'}),
+  DS('deep','Deep house','House & dance','Soft kick, rimshots, swing',.15,{kick:'X...X...X...X...',rim:'...x..x....x..x.',ohat:'..x...x...x...x.',shaker:'oooooooooooooooo'}),
+  DS('techhouse','Tech house','House & dance','Tight hats and percussion',.05,{kick909:'X...X...X...X...',clap:'....X.......X...',ohat:'..X...X...X...X.',hat909:'xoxoxoxoxoxoxoxo',perc:'.....x.....x..x.'}),
+  DS('techno','Techno','House & dance','Driving kick and ride',0,{kick909:'X...X...X...X...',hat909:'..X...X...X...X.',ride:'x.x.x.x.x.x.x.x.',clap:'....o.......o...',perc:'...x......x.....'}),
+  DS('trance','Trance','House & dance','Big four-on-the-floor with 16th hats',0,{kick909:'X...X...X...X...',clap:'....X.......X...',ohat:'..X...X...X...X.',chat:'oxoooxoooxoooxoo'}),
+  DS('electro','Electro','House & dance','Broken kick, snappy snare',0,{kick909:'X......X..X.....',snare909:'....X.......X...',chat:'x.x.x.x.x.x.x.x.'}),
+  DS('garage','UK garage (2-step)','House & dance','Skippy kick, big swing',.25,{kick:'X.........X.....',snare909:'....X.......X...',chat:'..x...x.x.x...x.',rim:'.......x......x.'}),
+  DS('breaks','Breakbeat','House & dance','Classic broken beat',.08,{kick:'X.........X.X...',snare:'....X..o.o..X...',chat:'x.x.x.x.x.x.x.x.'}),
+  DS('dnb','Drum & bass feel','House & dance','Fast two-step drums',0,{kick:'X.........X.....',snare:'....X.......X...',chat:'xoxoxoxoxoxoxoxo',ride:'x...x...x...x...'}),
+  DS('dubstep','Dubstep (half-time)','House & dance','Heavy half-time: snare on 3',0,{kick:'X.........x.....',snare:'........X.......',chat:'x.x.x.x.x.x.x.x.'}),
+  DS('jersey','Jersey club','House & dance','Bouncy kick pattern',0,{kick:'X..X..X...X.X.X.',clap:'....X.......X...',chat:'x.x.x.x.x.x.x.x.'}),
+  DS('boombap','Boom bap','Hip-hop & R&B','Classic 90s hip-hop',.2,{kick:'X......X.X......',snare:'....X.......X...',chat:'x.x.x.x.x.x.x.x.'}),
+  DS('trap','Trap','Hip-hop & R&B','808 kick, hi-hat rolls, snare on 3',0,{boom:'X......X..X.....',clap:'........X.......',chat:'x.x.x.x.x.x.rrrr'}),
+  DS('lofi','Lo-fi','Hip-hop & R&B','Lazy, swung and soft',.28,{kick:'X......x..X.....',snare:'....X.......X...',chat:'o.o.o.o.o.o.o.o.',rim:'...........o....'}),
+  DS('rnb','R&B','Hip-hop & R&B','Smooth kick and finger snaps',.12,{kick:'X..x......X.....',snap:'....X.......X...',chat:'oooooooooooooooo'}),
+  DS('drill','Drill','Hip-hop & R&B','Sliding 808 kick, off-beat snares',0,{boom:'X.....X.........',snare:'......X.......X.',chat:'x..x..x.x..x..x.'}),
+  DS('oldschool','Old school hip-hop','Hip-hop & R&B','Drum machine beat with cowbell',.1,{kick909:'X.....X...X.....',clap:'....X.......X...',chat:'x.x.x.x.x.x.x.x.',cowbell:'x.......x.......'}),
+  DS('reggaeton','Reggaeton','Latin & world','Dembow rhythm',0,{kick:'X...X...X...X...',snare:'...X..X....X..X.',chat:'x.x.x.x.x.x.x.x.'}),
+  DS('dancehall','Dancehall','Latin & world','Island bounce',0,{kick:'X..X....X..X....',rim:'....X.......X...',chat:'x.x.x.x.x.x.x.x.'}),
+  DS('afrobeats','Afrobeats','Latin & world','Rolling kick, rimshots, shaker',.1,{kick:'X.....X...X.....',rim:'...X..X....X..X.',shaker:'oxoxoxoxoxoxoxox',conga:'..x.....x.x.....'}),
+  DS('amapiano','Amapiano','Latin & world','Shaker groove with log-drum style kick',.1,{kick:'X...X...X...X...',shaker:'oxoxoxoxoxoxoxox',rim:'..x...x..x....x.',perc:'.......x.......x'}),
+  DS('salsa','Latin / salsa','Latin & world','Clave, congas and cowbell',0,{clave:'X..X...X..X.X...',conga:'..x.X...x.x.X...',cowbell:'X.x.X.x.X.x.X.x.',kick:'X.....X.X.....X.'}),
+  DS('samba','Samba','Latin & world','Busy Brazilian groove',0,{kick:'X..xX..xX..xX..x',tamb:'xoxoxoxoxoxoxoxo',clave:'..x..x...x..x...'}),
+  DS('moombah','Moombahton','Latin & world','Slow dembow with big kick',0,{kick909:'X...X...X...X...',snare:'...X..X....X..X.',ohat:'..x...x...x...x.'}),
+  DS('baile','Baile funk','Latin & world','Rio funk beat',0,{kick:'X..X..X...X.X...',snare:'....X..X....X..X',chat:'x.x.x.x.x.x.x.x.'}),
+  DS('rock','Rock','Rock, pop & more','Kick, snare, eighth hats',0,{kick:'X.......X.X.....',snare:'....X.......X...',chat:'x.x.x.x.x.x.x.x.'}),
+  DS('pop','Pop','Rock, pop & more','Simple four-on-the-floor pop beat',0,{kick:'X...X...X...X...',clap:'....X.......X...',chat:'x.x.x.x.x.x.x.x.'}),
+  DS('halfpop','Pop ballad','Rock, pop & more','Slow and open',0,{kick:'X.......X.......',snare:'........X.......',chat:'x...x...x...x...'}),
+  DS('kick4','Just a kick','Rock, pop & more','Only a steady kick on every beat',0,{kick:'X...X...X...X...'}),
+  DS('perc','Only percussion','Rock, pop & more','Shaker, conga and tambourine, no drums',.05,{shaker:'oxoxoxoxoxoxoxox',conga:'..x...x.x...x...',tamb:'....x.......x...'})];
+const DRUM_VARIANTS=[['full','Full drums','Everything: kick, snare and hats.'],['nokick','No kick','Leaves out the kick, so it sits nicely on top of a song that already has one.'],['kick','Only kick','Just the kick drum.'],['tops','Hats & percussion','Only the high sounds: hats, shakers, congas.']];
+const KICKS=['kick','kick909','boom'],SNARES=['snare','snare909','clap','snap','rim'];
+function drumTarget(deck){const from=decks.find(d=>d!==deck&&d.playing&&d.bpm&&!d.drumLoop)||decks.find(d=>d!==deck&&d.buffer&&d.bpm&&!d.demo&&!d.drumLoop);return {bpm:from?from.effBpm():clock.bpm,from};}
+async function renderDrumLoop(st,variant,bpm,bars=4){const sr=44100,spb=60/bpm,step=spb/4,n=Math.round(bars*4*spb*sr),oc=new OfflineAudioContext(2,n+Math.round(2*sr),sr),mix=oc.createGain();mix.gain.value=.8;mix.connect(oc.destination);
+  const off=.01;for(const [v,pat] of Object.entries(st.parts)){if(!DRUMS[v])continue;const isK=KICKS.includes(v),isS=SNARES.includes(v);
+    if(variant==='nokick'&&isK)continue;if(variant==='kick'&&!isK)continue;if(variant==='tops'&&(isK||isS))continue;
+    for(let b=0;b<bars;b++)for(let k=0;k<16;k++){const c=pat[k%pat.length];const t=off+(b*16+k)*step+(k%2?st.sw*step:0);
+      if(c==='r'){DRUMS[v].play(oc,mix,t,.6);DRUMS[v].play(oc,mix,t+step/2,.5);}else{const vel={X:1,x:.7,o:.4}[c];if(vel)DRUMS[v].play(oc,mix,t,vel);}}}
+  const buf=await oc.startRendering();const out=ctx.createBuffer(2,n,sr),o0=Math.round(off*sr);
+  for(let c=0;c<2;c++){const s=buf.getChannelData(c),d=out.getChannelData(c);for(let i=0;i<n;i++)d[i]=s[i+o0]||0;for(let i=0;i+n+o0<s.length&&i<n;i++)d[i]+=s[i+n+o0];}
+  let pk=0;for(let c=0;c<2;c++){const d=out.getChannelData(c);for(let i=0;i<d.length;i++){const v=Math.abs(d[i]);if(v>pk)pk=v;}}if(pk>.85){const g=.85/pk;for(let c=0;c<2;c++){const d=out.getChannelData(c);for(let i=0;i<d.length;i++)d[i]*=g;}}
+  return out;}
+async function makeDrumSample(sid,variant,bpm){const st=DRUM_STYLES.find(s=>s.id===sid)||DRUM_STYLES[0];bpm=Math.round(bpm*100)/100;const id='drum:'+st.id+':'+variant+':'+bpm;const ex=sampleById(id);if(ex)return ex;
+  const buf=await renderDrumLoop(st,variant,bpm);const vl=DRUM_VARIANTS.find(v=>v[0]===variant);
+  return addSample(buf,st.name+' drums'+(variant!=='full'?' · '+vl[1].toLowerCase():''),{builtin:true,persist:false,id,meta:{kind:'beat',bpm,grid:0}});}
+async function loadDrums(deck,sid,variant){resume();const tgt=drumTarget(deck);const s=await makeDrumSample(sid,variant,tgt.bpm);deck.loadSample(s,{quiet:true});deck.repeat=true;
+  if(tgt.from&&tgt.from.playing){deck.sync();}
+  toast(s.name+' on deck '+deck.id+' at '+tgt.bpm.toFixed(1)+' BPM.'+(tgt.from&&tgt.from.playing?' Press Play: it starts in time with deck '+tgt.from.id+'.':' Press Play.'));}
 async function renderDemo(kind){
   const bpm={house:124,techno:130,breaks:94,deep:118}[kind],beat=60/bpm,bars=8,sr=44100,dur=bars*4*beat;
   const oc=new OfflineAudioContext(2,Math.ceil(dur*sr),sr);const out=oc.createGain();out.gain.value=.75;out.connect(oc.destination);
@@ -1602,7 +1855,7 @@ function buildTransport(){
   const leader=h('select',{id:'clock-leader','aria-label':'Clock leader',onchange:e=>{const v=e.target.value;clock.setLeader(v==='int'?'int':+v);}},
     opt('int','Internal clock',true),...[0,1,2,3].map(i=>opt(i,'Follow deck '+'ABCD'[i])));
   const leds=h('div',{class:'leds','aria-hidden':'true'});const pos=h('span',{class:'tpos',text:'1.1'});
-  const play=BTN('▶ Sequencer',()=>seq.playing?seqStop():seqStart(),'seqplay',{title:'Start or stop the sequencer and piano roll (Space)'});
+  const play=BTN('▶ My beat',()=>seq.playing?seqStop():seqStart(),'seqplay',{title:'Start or stop the sequencer and piano roll (Space)'});
   const metro=BTN('Click',()=>{seq.metro=!seq.metro;metro.classList.toggle('on',seq.metro);},'',{title:'Metronome. Goes to the headphones when a cue mode is on.'});
   const syncAll=BTN('Sync decks',()=>{const d=decks.filter(d=>d.buffer&&d.playing&&clock.leader!==d.i);d.forEach(x=>x.sync());toast(d.length?'Synced '+d.length+' deck'+(d.length>1?'s':'')+' to '+clock.bpm.toFixed(1)+' BPM':'Start a deck, then sync it to the clock');},'',{title:'Match every playing deck to the master clock'});
   const rec=BTN('● Rec mix',()=>window.recBtnRef&&window.recBtnRef.click(),'rec',{title:'Record everything you hear: decks, sequencer, mic and sound FX'});
@@ -1612,15 +1865,21 @@ function buildTransport(){
     bpmSlider.el,h('div',{class:'shrow'},tap),h('label',{class:'mini'},'Who sets the tempo',leader),h('div',{class:'shrow'},syncAll,metro));
   const tempoChip=chip('Tempo',{help:'The tempo of the whole session: BPM, tap tempo, which deck leads, sync all decks and the click.',onOpen:a=>openSheet(a,'Master tempo',tempoBody)});
   const el=h('section',{class:'panel transport','aria-label':'Master clock and transport'},
-    h('div',{class:'tgroup'},tempoChip),h('div',{class:'tgroup'},leds,pos),h('div',{class:'tgroup'},play,rec));
+    h('div',{class:'tgroup'},tempoChip),h('div',{class:'tgroup'},leds,pos),h('div',{class:'tgroup'},play));
   const tchip=()=>tempoChip.val(clock.bpm.toFixed(1)+' BPM'+(clock.leader!=='int'?' · deck '+'ABCD'[clock.leader]:''));tchip();
   $('.top').after(el);
   const renderLeds=()=>{leds.replaceChildren(...[...Array(seq.bpb)].map((_,k)=>h('i',{class:k===0?'bar':''})));};renderLeds();ui.renderLeds=renderLeds;
   clock.listeners.push(b=>{if(document.activeElement!==bpmIn)bpmIn.value=b.toFixed(1);leader.value=String(clock.leader);tchip();bpmSlider.set(b,false);if(seqCh)seqCh.slots.forEach(s=>s.refresh());});
-  ui.seqState=()=>{play.classList.toggle('on',seq.playing);play.textContent=seq.playing?'■ Stop':'▶ Sequencer';if(ui.cplay){ui.cplay.classList.toggle('on',seq.playing);ui.cplay.textContent=seq.playing?'■ Stop':'▶ Play';}};
+  ui.seqState=()=>{play.classList.toggle('on',seq.playing);play.textContent=seq.playing?'■ Stop beat':'▶ My beat';if(ui.cplay){ui.cplay.classList.toggle('on',seq.playing);ui.cplay.textContent=seq.playing?'■ Stop':'▶ Play';}};
   let lastLed=-1;
-  return ()=>{clock.follow();const b=clock.beatAt(ctx.currentTime)-(seq.playing?seq.startBeat:0);const bi=Math.floor(b);if(bi!==lastLed){lastLed=bi;const k=((bi%seq.bpb)+seq.bpb)%seq.bpb;
-    [...leds.children].forEach((x,j)=>x.classList.toggle('lit',j===k));pos.textContent=(seq.playing&&b>=0?(Math.floor(bi/seq.bpb)%seq.bars+1):Math.floor(bi/seq.bpb)%99+1)+'.'+(k+1);}};
+  const ledsOff=(txt,key)=>{if(lastLed===key)return;lastLed=key;[...leds.children].forEach(x=>x.classList.remove('lit'));pos.textContent=txt;};
+  return ()=>{clock.follow();let b=null,src=null;
+    if(seq.playing){b=clock.beatAt(ctx.currentTime)-seq.startBeat;}
+    else{const Ld=clock.leader!=='int'?decks[clock.leader]:null;src=Ld&&Ld.playing&&!Ld.waiting()&&Ld.bpm?Ld:decks.find(d=>d.playing&&d.bpm&&!d.waiting());if(src)b=src.beatPos();}
+    if(b==null){ledsOff('■ stopped','off');return;}
+    if(b<0){ledsOff('intro…','pre');return;}
+    const bi=Math.floor(b),key=(src?src.id:'S')+bi;if(key!==lastLed){lastLed=key;const k=((bi%seq.bpb)+seq.bpb)%seq.bpb;
+    [...leds.children].forEach((x,j)=>x.classList.toggle('lit',j===k));pos.textContent=(src?src.id+' ':'')+(seq.playing?(Math.floor(bi/seq.bpb)%seq.bars+1):Math.floor(bi/seq.bpb)+1)+'.'+(k+1);}};
 }
 
 /* ---------- composer ---------- */
@@ -1635,10 +1894,10 @@ function buildComposer(){
   const quant=h('select',{id:'c-quant','aria-label':'Start on',onchange:e=>seq.quant=e.target.value},opt('bar','Start on next bar',true),opt('beat','Start on next beat'));
   const swing=Knob({label:'Swing',auto:'SEQ swing',min:0,max:1,value:seq.swing,def:0,small:true,title:'Global swing: delays every second step',onChange:v=>{seq.swing=v;swing.label.textContent='Swing '+Math.round(50+v*25)+'%';dirty();}});
   swing.label.textContent='Swing '+Math.round(50+seq.swing*25)+'%';
-  const bounceLib=BTN('Bounce to Bin',async()=>{const buf=await bounce(1);const smp=addSample(buf,'My beat '+clock.bpm.toFixed(0)+' BPM',{meta:{kind:'beat',bpm:clock.bpm,grid:0,loop:true,le:buf.duration}});toast('Your beat is in My music. Tap A, B, C or D there to play it on a deck.');},'',{title:'Render the beat to audio and keep it in your Bin'});
+  const bounceLib=BTN('Save beat to My songs',async()=>{const buf=await bounce(1);const smp=addSample(buf,'My beat '+clock.bpm.toFixed(0)+' BPM',{meta:{kind:'beat',bpm:clock.bpm,grid:0,loop:true,le:buf.duration}});toast('Your beat is in My music. Tap A, B, C or D there to play it on a deck.');},'',{title:'Render the beat to audio and keep it in Music'});
   const expLen=h('select',{id:'c-exp','aria-label':'Export length'},...[1,2,4,8].map(n=>opt(n,'×'+n+' ('+n*seq.bars+' bars)',n===2)));
   const bounceWav=BTN('Export beat',async()=>{const n=+expLen.value,buf=await bounce(n),bars=n*seq.bars,nm=`quad-deck-beat-${clock.bpm.toFixed(0)}bpm-${bars}bars`,url=URL.createObjectURL(encodeWAV(buf));
-    expOut.replaceChildren(h('audio',{controls:'',src:url}),h('a',{href:url,download:nm+'.wav'},'Save '+nm+'.wav'),h('span',{class:'hint',text:'Loop-exact WAV for any DJ app. A copy is in your Bin.'}));
+    expOut.replaceChildren(h('audio',{controls:'',src:url}),h('a',{href:url,download:nm+'.wav'},'Save '+nm+'.wav'),h('span',{class:'hint',text:'Loop-exact WAV for any DJ app. A copy is in Music.'}));
     addSample(buf,'My beat '+clock.bpm.toFixed(0)+' BPM · '+bars+' bars',{meta:{kind:'beat',bpm:clock.bpm,grid:0,loop:true,le:buf.duration}});},'',{title:'Make a WAV of the beat for DJ apps and players'});
   const expOut=h('div',{class:'expout'});
   const groups=[...new Set(BEATS.map(b=>b.g))];
@@ -1649,10 +1908,10 @@ function buildComposer(){
   const beatBody=h('div',{class:'sh-body composer-sheet'},h('p',{class:'hint',text:'Tap a style to load a ready-made beat with its tempo. Undo brings your own beat back.'}),undoBeat,
     ...groups.map(g=>h('div',{class:'pk-cat'},h('div',{class:'sfx-gname',text:g}),h('div',{class:'beatgrid'},...BEATS.map(b=>b.g===g?BTN(b.name,()=>{applyBeat(b);undoBeat.hidden=false;ui.beatName=b.name;},'sm',{title:b.bpm+' BPM'}):null).filter(Boolean)))));
   const patBody=h('div',{class:'sh-body composer-sheet'},h('div',{class:'shrow'},h('label',{class:'mini'},'Time signature',sig),h('label',{class:'mini'},'Length',bars),h('label',{class:'mini'},'Start',quant)),h('div',{class:'shrow'},swing.el,reset));
-  const expBody=h('div',{class:'sh-body composer-sheet'},h('p',{class:'hint',text:'Turn your beat into audio. Bounce keeps it in your Bin for the decks; Export makes a loop-exact WAV for any DJ app.'}),h('div',{class:'shrow'},bounceLib),h('div',{class:'shrow'},expLen,bounceWav),expOut);
+  const expBody=h('div',{class:'sh-body composer-sheet'},h('p',{class:'hint',text:'Turn your beat into audio. Bounce keeps it in Music for the decks; Export makes a loop-exact WAV for any DJ app.'}),h('div',{class:'shrow'},bounceLib),h('div',{class:'shrow'},expLen,bounceWav),expOut);
   const beatChip=chip('Beat',{help:'Ready-made beats in 26 styles.',onOpen:a=>openSheet(a,'Beat presets',beatBody)});
   const patChip=chip('Pattern',{help:'Time signature, length, start and swing.',onOpen:a=>openSheet(a,'Pattern',patBody)});
-  const expChip=chip('Export',{help:'Bounce the beat to your Bin or save it as a WAV.',onOpen:a=>openSheet(a,'Export',expBody)});
+  const expChip=chip('Export',{help:'Bounce the beat to Music or save it as a WAV.',onOpen:a=>openSheet(a,'Export',expBody)});
   ui.composerChips=()=>{beatChip.val(ui.beatName||'My beat');patChip.val(seq.bpb+'/4 · '+seq.bars+' bar'+(seq.bars>1?'s':'')+' · '+Math.round(50+seq.swing*25)+'%');expChip.val('WAV');};
   const head=h('div',{class:'c-head'},h('h2',{text:'Composer'}),h('div',{class:'tabs',role:'tablist'},...tabBtns),
     h('div',{class:'c-tools chips'},ui.cplay,beatChip,patChip,expChip));
@@ -1806,7 +2065,7 @@ function buildLibrary(){
   let sel=null,prevSrc=null;
   const listEl=h('div',{class:'slist'}),storEl=h('span',{class:'storage'});
   const file=h('input',{type:'file',accept:'audio/*,.wav,.mp3,.flac,.ogg,.m4a,.aif,.aiff',multiple:'',onchange:e=>{[...e.target.files].forEach(importFile);e.target.value='';}});
-  async function importFile(f){try{const ab=await f.arrayBuffer(),bytes=ab.slice(0);const buf=await ctx.decodeAudioData(ab);const s=addSample(buf,f.name.replace(/\.[^.]+$/,''),{bytes,mime:f.type});select(s);toast('Saved '+f.name+' in your Bin');}
+  async function importFile(f){try{const ab=await f.arrayBuffer(),bytes=ab.slice(0);const buf=await ctx.decodeAudioData(ab);const s=addSample(buf,f.name.replace(/\.[^.]+$/,''),{bytes,mime:f.type});if(s.kind==='sound'){s.kind=guessKind(s.name,999);saveMeta(s);}select(s);toast('Saved “'+s.name+'” in My songs');}
     catch(e){toast("Couldn't read "+f.name+". Try WAV, MP3, FLAC or OGG.");}}
   const nameIn=h('input',{id:'s-name',type:'text','aria-label':'Sample name',class:'s-name',oninput:e=>{if(sel){sel.name=e.target.value||'Untitled';render();refreshSampleSelects();saveMeta(sel);}}});
   const wave=h('canvas',{class:'swave lcd','aria-label':'Sample waveform. Drag the markers to trim and set the loop.'});
@@ -1814,7 +2073,7 @@ function buildLibrary(){
   const playB=BTN('▶ Preview',()=>{stopPrev();if(!sel)return;resume();prevSrc=playSample(ctx,previewDest(),sel,ctx.currentTime+.01,1,0,sel.loop?4:null);},'sm');
   const stopB=BTN('■',()=>stopPrev(),'sm',{'aria-label':'Stop preview'});
   const loopB=BTN('Loop',()=>{if(!sel)return;sel.loop=!sel.loop;loopB.classList.toggle('on',sel.loop);drawWave();saveMeta(sel);},'sm',{title:'Loop between the yellow markers when held or sent to a deck'});
-  const delB=BTN('Delete',()=>{if(!sel)return;if(sel.builtin){toast('Built-in sounds can\'t be deleted');return;}if(delB.dataset.arm!=='1'){delB.dataset.arm='1';delB.textContent='Tap again to delete';setTimeout(()=>{delB.dataset.arm='';delB.textContent='Delete';},2500);return;}delB.dataset.arm='';delB.textContent='Delete';const nm=sel.name;removeSample(sel);toast('Deleted '+nm);},'sm',{title:'Remove from the Bin and this device'});
+  const delB=BTN('Delete',()=>{if(!sel)return;if(sel.builtin){toast('Built-in sounds can\'t be deleted');return;}if(delB.dataset.arm!=='1'){delB.dataset.arm='1';delB.textContent='Tap again to delete';setTimeout(()=>{delB.dataset.arm='';delB.textContent='Delete';},2500);return;}delB.dataset.arm='';delB.textContent='Delete';const nm=sel.name;removeSample(sel);toast('Deleted '+nm);},'sm',{title:'Remove from Music and this device'});
   const normB=BTN('Normalize',()=>{if(!sel)return;let pk=0;for(let c=0;c<sel.buffer.numberOfChannels;c++){const d=sel.buffer.getChannelData(c);const a=Math.floor(sel.start*sel.buffer.sampleRate),b=Math.floor(sel.end*sel.buffer.sampleRate);for(let i=a;i<b;i++)pk=Math.max(pk,Math.abs(d[i]));}
     if(pk>0){const g=20*Math.log10(.95/pk);gainK.set(clamp(g,-24,24));}},'sm',{title:'Set gain so the trimmed part peaks just below full scale'});
   const tuneK=Knob({label:'Tune',min:-24,max:24,value:0,def:0,bipolar:true,small:true,onChange:v=>{if(sel){sel.tune=Math.round(v);saveMeta(sel);tuneK.label.textContent='Tune '+(sel.tune>0?'+':'')+sel.tune;}}});
@@ -1837,33 +2096,77 @@ function buildLibrary(){
   const sendChip=chip('Send to',{help:'Put this sound on a deck, a drum row, the piano roll or a Sound FX pad.',onOpen:a=>openSheet(a,'Send to',sendBody)});
   editChip.val('Tune · Gain');sendChip.val('Deck · Beat · Pad');
   const editor=h('div',{class:'seditor'},h('div',{class:'srow'},nameIn,playB,stopB,loopB),wave,info,h('div',{class:'chips'},editChip,sendChip));
-  const FILT=[['all','Everything'],['beat','Beats (no vocals)'],['vocal','With vocals'],['sound','Sounds & drops']];let filt='all',q='';
+  let mode='songs',filt='all',q='';
+  const FILT=[['all','All songs','Every song you added, with or without singing.'],['beat','Only beats','Just the music, nobody singing or rapping. Take one of these if you only want a beat.'],['vocal','With singing','Songs where someone sings or raps.']];
+  const KL={beat:'Only beat',vocal:'Singing',unknown:'Not sorted',sound:'Sound effect'};
+  const filtHint=h('p',{class:'hint fhint'});
   const tabsEl=h('div',{class:'mtabs',role:'tablist'},...FILT.map(([k,l])=>{const b=h('button',{class:'mtab'+(k==='all'?' on':''),type:'button','data-k':k},l);b.addEventListener('click',()=>{filt=k;[...tabsEl.children].forEach(x=>x.classList.toggle('on',x===b));render();});return b;}));
-  const search=h('input',{id:'m-search',type:'search',class:'bigin',placeholder:'Search my music','aria-label':'Search my music',oninput:e=>{q=e.target.value.toLowerCase();render();}});
-  const KL={beat:'Beat',vocal:'Vocals',sound:'Sound',unknown:'Vocals?'};
-  const kindSel=h('select',{id:'s-kind','aria-label':'What is it',onchange:e=>{if(sel){sel.kind=e.target.value;saveMeta(sel);render();}}},opt('beat','Beat or instrumental (no vocals)'),opt('vocal','Song with vocals'),opt('sound','Sound or drop'),opt('unknown','Not sure'));
+  const search=h('input',{id:'m-search',type:'search',class:'bigin',placeholder:'Search my songs','aria-label':'Search',oninput:e=>{q=e.target.value.toLowerCase();render();}});
+  const kindSel=h('select',{id:'s-kind','aria-label':'What is it',onchange:e=>{if(sel){sel.kind=e.target.value;saveMeta(sel);render();}}},opt('beat','A song: only the beat, no singing'),opt('vocal','A song: with singing or rapping'),opt('unknown','A song: not sure yet'),opt('sound','A sound effect (short sound, not a song)'));
   editor.prepend(h('label',{class:'biglab'},'What is it?',kindSel));
   function openEditor(sm){select(sm);kindSel.value=sm.kind||'unknown';const ov=h('div',{class:'fxscreen',style:'--dc:var(--e)'});const close=()=>{stopPrev();ov.remove();document.removeEventListener('keydown',esc);render();};
     const esc=e=>{if(e.key==='Escape'&&!openSheetRef)close();};document.addEventListener('keydown',esc);
-    ov.append(h('div',{class:'fxs-box'},h('div',{class:'fxs-head'},h('b',{text:'Edit'}),BTN('Done',close,'')),h('p',{class:'hint',text:'Drag S and E on the picture to cut the start and end. Loop marks a part that repeats.'}),editor));document.body.append(ov);requestAnimationFrame(drawWave);}
-  const root=h('section',{class:'panel library','aria-label':'My music'},
-    h('div',{class:'sfx-head'},h('h2',{text:'My music'}),storEl),
-    h('p',{class:'hint big',text:'All your songs and sounds, kept on this device. Tap A, B, C or D next to a song to play it on that deck.'}),
-    h('div',{class:'bigacts'},h('label',{class:'btn bigact primary'},'Add songs from this device',file),BTN('Find free music online',()=>openFinder(),'bigact'),BTN('Record a sound',()=>openSoundPicker(),'bigact')),
-    tabsEl,search,listEl);
+    ov.append(h('div',{class:'fxs-box'},h('div',{class:'fxs-head'},h('b',{text:'Edit'}),BTN('Done',close,'')),h('p',{class:'hint',text:'Change the name, or say what it is. To cut it shorter, drag the green S (start) and red E (end) on the picture.'}),editor));document.body.append(ov);requestAnimationFrame(drawWave);}
+  const ACT=(title,sub,cls,onclick,input)=>{const el=h(input?'label':'button',{class:'btn actcard'+(cls?' '+cls:''),...(input?{}:{type:'button'})},h('b',{text:title}),h('span',{text:sub}),input||null);if(onclick)el.addEventListener('click',onclick);return el;};
+  const sfile=h('input',{type:'file',accept:'audio/*',multiple:'',onchange:async e=>{for(const f of [...e.target.files]){const s=await importSound(f);if(s){addMine(s);toast('“'+s.name+'” saved as a sound effect');}}e.target.value='';render();}});
+  const modeBtns=[['songs','🎵 Songs','Full tracks you play on the decks and mix together'],['sounds','📣 Sound effects','Short sounds you tap over the music: horn, siren, your voice']].map(([k,t,sub])=>{const b=h('button',{class:'modebtn'+(k==='songs'?' on':''),type:'button','data-mode':k},h('b',{text:t}),h('span',{text:sub}));b.addEventListener('click',()=>setMode(k));return b;});
+  const songsPane=h('div',{class:'mpane','data-mode':'songs'},
+    h('p',{class:'hint big',text:'A song goes on a deck (A, B, C or D). Press Play on the deck, then slide the crossfader to blend one song into the next.'}),
+    h('div',{class:'bigacts'},ACT('Add songs from my device','Pick music files that are already on this phone or computer (MP3, WAV, M4A…). They stay saved in the app.','primary',null,file),
+      ACT('Find free songs online','Search free music on the internet and save it here. You need internet for this.','',()=>openFinder())),
+    h('div',{class:'sechead',text:'My songs'}),tabsEl,filtHint,search);
+  const soundsPane=h('div',{class:'mpane','data-mode':'sounds',hidden:''},
+    h('p',{class:'hint big',text:'A sound effect is a short sound (a few seconds) that plays on top of the music when you tap it. Like an air horn, a crowd cheering, or your own voice saying “one, two, three, let’s go!”. Tap A, B, C or D next to a sound to put a button for it under that deck’s Quick FX.'}),
+    h('div',{class:'bigacts'},ACT('Record my voice','Use the microphone to record a short shout-out or drop. Silence is cut off for you.','primary',()=>openRecorder()),
+      ACT('Add sound files from my device','Short sound files you already have on this phone or computer.','',null,sfile),
+      ACT('Find sound effects online','Search free sound effects on the internet. You need internet for this.','',()=>openSoundPicker())),
+    h('div',{class:'sechead',text:'My sound effects'}),
+    h('p',{class:'hint',text:'Every deck already has built-in DJ sounds (air horn, siren, scratch…) in its Quick FX. Your own sounds show up here.'}));
+  function setMode(k){mode=k;modeBtns.forEach(b=>b.classList.toggle('on',b.dataset.mode===k));songsPane.hidden=k!=='songs';soundsPane.hidden=k!=='sounds';render();}
+  function openRecorder(){openPicker('Record my voice',box=>{const t=h('div',{class:'rec-big',text:'0.0 s'});
+    const go=BTN('● Start recording',()=>{if(soundRec){soundRec.stop();return;}recordSound(src,ui);},'bigact primary rec');let src='mic';
+    const grab=BTN('Record what’s playing instead',()=>{src=src==='mic'?'mix':'mic';grab.textContent=src==='mic'?'Record what’s playing instead':'Use my microphone instead';go.textContent=src==='mic'?'● Start recording':'● Start recording the music';},'bigact');
+    const ui={start(){go.textContent='■ Stop';go.classList.add('on');grab.hidden=true;},stop(){go.textContent='● Record again';go.classList.remove('on');grab.hidden=false;render();},time(s){t.textContent=s.toFixed(1)+' s';}};
+    box._onClose=()=>{if(soundRec)soundRec.stop();};
+    box.append(h('ol',{class:'guide'},h('li',{},h('b',{text:'Tap Start recording'}),h('span',{text:'Your phone may ask to use the microphone. Tap Allow.'})),h('li',{},h('b',{text:'Say your sound'}),h('span',{text:'For example “one, two, three, let’s go!”. Keep it short.'})),h('li',{},h('b',{text:'Tap Stop'}),h('span',{text:'It is saved in My sound effects. Then tap A, B, C or D next to it to put it on a deck.'}))),
+      t,h('div',{class:'bigacts'},go,grab));});}
+  const root=h('section',{class:'panel library','aria-label':'Music'},
+    h('div',{class:'sfx-head'},h('h2',{text:'Music'}),storEl),
+    h('div',{class:'modesw'},...modeBtns),songsPane,soundsPane,listEl);
   listEl.className='mlist2';
   root.addEventListener('dragover',e=>{e.preventDefault();root.classList.add('drag');});root.addEventListener('dragleave',()=>root.classList.remove('drag'));
-  root.addEventListener('drop',e=>{e.preventDefault();root.classList.remove('drag');[...e.dataTransfer.files].filter(isAudio).forEach(importFile);});
+  root.addEventListener('drop',async e=>{e.preventDefault();root.classList.remove('drag');const fs=[...e.dataTransfer.files].filter(isAudio);if(mode==='sounds'){for(const f of fs){const s=await importSound(f);if(s)addMine(s);}render();}else fs.forEach(f=>importFile(f));});
   $('#library').replaceWith(root);
-  function row(sm){const k=sm.kind||'unknown';
-    const pv=BTN('▶',()=>{stopPrev();resume();prevSrc=playSample(ctx,previewDest(),sm,ctx.currentTime+.01,1,0,null);},'mplay',{'aria-label':'Listen to '+sm.name,title:'Listen'});
-    const kb=BTN(KL[k],()=>{const o=['beat','vocal','sound'];sm.kind=o[(o.indexOf(sm.kind)+1)%3];saveMeta(sm);render();},'sm kindpill k-'+k,{title:'Tap to change: Beat (no vocals), Vocals or Sound'});
-    const dk=[0,1,2,3].map(i=>BTN('ABCD'[i],()=>{decks[i].loadSample(sm);},'sm dkbtn',{style:'--dc:'+COLORS[i],title:'Put it on deck '+'ABCD'[i]}));
-    return h('div',{class:'mrow2'},pv,h('div',{class:'minfo'},h('b',{text:sm.name}),h('span',{text:[fmt(sm.end-sm.start).replace(/\.\d$/,''),sm.bpm?Math.round(sm.bpm)+' BPM':null].filter(Boolean).join(' · ')})),kb,
-      h('div',{class:'mbtns'},h('span',{class:'k-lab',text:'Deck'}),...dk,BTN('Edit',()=>openEditor(sm),'sm')));}
-  function render(){const all=userSamples(),items=all.filter(sm=>(filt==='all'||(sm.kind||'unknown')===filt)&&(!q||sm.name.toLowerCase().includes(q)));
-    listEl.replaceChildren(...(items.length?items.slice().reverse().map(row):[h('div',{class:'mempty'},h('b',{text:all.length?'Nothing here':'No music yet'}),
-      h('p',{text:all.length?'Try “Everything”, or another search word. Songs marked “Vocals?” are not sorted yet: tap the label to say what they are.':'Tap “Add songs from this device” to pick songs from your phone or computer, or “Find free music online”.'}))]));}
+  const pv={sm:null,src:null,g:null,t0:0,off:0};
+  function pvStop(keep){if(pv.src){const s=pv.src;pv.src=null;s.onended=null;try{s.stop();}catch(e){}}if(!keep){pv.off=0;}document.querySelectorAll('.mplay.on').forEach(b=>{b.classList.remove('on');b.textContent='▶';b.setAttribute('aria-label','Listen');});}
+  ui.stopPreview=()=>{pvStop();pv.sm=null;};
+  function pvToggle(sm,btn){resume();stopPrev();
+    if(pv.sm===sm&&pv.src){pv.off+=ctx.currentTime-pv.t0;pvStop(true);toast('Paused. Tap ▶ to continue.');return;}
+    pvStop(pv.sm===sm);if(pv.sm!==sm)pv.off=0;pv.sm=sm;
+    const len=sm.end-sm.start;if(pv.off>=len-.05)pv.off=0;
+    const src=ctx.createBufferSource();src.buffer=sm.buffer;const g=ctx.createGain();g.gain.value=Math.pow(10,(sm.gain||0)/20);src.connect(g);g.connect(previewDest());
+    src.start(ctx.currentTime+.01,sm.start+pv.off,len-pv.off);pv.src=src;pv.t0=ctx.currentTime+.01;
+    src.onended=()=>{if(pv.src===src){pv.src=null;pv.off=0;pvStop();}};
+    btn.classList.add('on');btn.textContent='❚❚';btn.setAttribute('aria-label','Pause');}
+  const listen=sm=>{const b=BTN(pv.sm===sm&&pv.src?'❚❚':'▶',()=>pvToggle(sm,b),'mplay'+(pv.sm===sm&&pv.src?' on':''),{'aria-label':'Listen to '+sm.name,title:'Listen / pause'});return b;};
+  function songRow(sm){const k=sm.kind||'unknown';
+    const kb=BTN(KL[k]+' ✎',()=>{sm.kind=k==='beat'?'vocal':'beat';saveMeta(sm);render();toast(sm.kind==='beat'?'Marked as only a beat (no singing)':'Marked as a song with singing');},'sm kindpill k-'+k,{title:'Tap to switch between “Only beat” and “Singing”'});
+    const dk=[0,1,2,3].map(i=>{const on=decks[i].sampleId===sm.id;return BTN('ABCD'[i],()=>{decks[i].loadSample(sm,{quiet:true});toast('“'+sm.name+'” is on deck '+'ABCD'[i]+'. Go to Decks and press Play.');render();},'sm dkbtn'+(on?' on':''),{style:'--dc:'+COLORS[i],title:'Put it on deck '+'ABCD'[i]});});
+    return h('div',{class:'mrow2'},listen(sm),h('div',{class:'minfo'},h('b',{text:sm.name}),h('span',{text:[fmt(sm.end-sm.start).replace(/\.\d$/,''),sm.bpm?Math.round(sm.bpm)+' BPM':null].filter(Boolean).join(' · ')})),kb,
+      h('div',{class:'mbtns'},h('span',{class:'k-lab',text:'Put on deck'}),...dk,BTN('Edit',()=>openEditor(sm),'sm')));}
+  function soundRow(sm){const id='snd:smp:'+sm.id;
+    const dk=[0,1,2,3].map(i=>{const on=decks[i].pads.includes(id);return BTN('ABCD'[i]+(on?' ✓':''),()=>{const d=decks[i];if(d.pads.includes(id)){d.pads=d.pads.filter(x=>x!==id);toast('Removed from deck '+d.id);}else{d.pads.push(id);toast('“'+sm.name+'” is now a button under deck '+d.id+' → Quick FX');}d.renderPads();render();},'sm dkbtn'+(on?' on':''),{style:'--dc:'+COLORS[i],title:'Add a button for it on deck '+'ABCD'[i]});});
+    return h('div',{class:'mrow2'},listen(sm),h('div',{class:'minfo'},h('b',{text:sm.name}),h('span',{text:(sm.end-sm.start).toFixed(1)+' seconds'})),
+      h('div',{class:'mbtns'},h('span',{class:'k-lab',text:'Button on deck'}),...dk,BTN('Edit',()=>openEditor(sm),'sm')));}
+  function render(){const all=userSamples();
+    if(mode==='sounds'){const items=all.filter(sm=>sm.kind==='sound');
+      listEl.replaceChildren(...(items.length?items.slice().reverse().map(soundRow):[h('div',{class:'mempty'},h('b',{text:'No sound effects of your own yet'}),h('p',{text:'Tap “Record my voice” to make one, or “Add sound files” if you already have some.'}))]));return;}
+    filtHint.textContent=FILT.find(f=>f[0]===filt)[2];
+    const songs=all.filter(sm=>sm.kind!=='sound'),items=songs.filter(sm=>(filt==='all'||(sm.kind||'unknown')===filt)&&(!q||sm.name.toLowerCase().includes(q)));
+    const unsorted=songs.filter(sm=>(sm.kind||'unknown')==='unknown').length;
+    listEl.replaceChildren(...(unsorted&&filt!=='all'?[h('p',{class:'hint note',text:unsorted+(unsorted===1?' song is':' songs are')+' not sorted yet. Look in “All songs” and tap “Not sorted ✎” to say if it has singing.'})]:[]),
+      ...(items.length?items.slice().reverse().map(songRow):[h('div',{class:'mempty'},h('b',{text:songs.length?'No songs here':'No songs yet'}),
+      h('p',{text:songs.length?(q?'Nothing matches “'+q+'”.':'None of your songs are in this group yet.'):'Tap “Add songs from my device” to pick songs from this phone or computer, or “Find free songs online”.'}))]));}
   function select(s){sel=s;stopPrev();nameIn.value=s.name;loopB.classList.toggle('on',s.loop);tuneK.set(s.tune,false);tuneK.label.textContent='Tune '+(s.tune>0?'+':'')+s.tune;gainK.set(s.gain,false);gainK.label.textContent='Gain '+(s.gain>0?'+':'')+s.gain.toFixed(1)+'dB';rootSel.value=s.root;s._pk=null;render();drawWave();}
   const MK=[['start','#4be08a','S'],['end','#ff5a5a','E'],['ls','#ffd24a','L'],['le','#ffd24a','L']];
   function drawWave(){const d=dpr(),W=Math.round(wave.clientWidth*d),H=Math.round(wave.clientHeight*d);if(!W||!sel)return;if(wave.width!==W){wave.width=W;wave.height=H;sel._pk=null;}
@@ -1889,7 +2192,7 @@ function buildLibrary(){
 /* ---------- sequencer channel strip ---------- */
 function buildSeqChannel(){seqCh=Object.create(Deck.prototype);seqCh.initChannel(4,'SEQ');
   seqCh.effBpm=()=>clock.bpm;seqCh.beatPhase=n=>frac((clock.beatAt(ctx.currentTime)-(seq.playing?seq.startBeat:0))/n);seqCh.bpm=0;
-  seqIn.connect(seqCh.trim);seqCh.buildStrip();seqCh.stripName.textContent='Sequencer';seqCh.slots.forEach(s=>s.refresh());
+  seqIn.connect(seqCh.trim);seqCh.buildStrip();seqCh.stripName.textContent='My beat';seqCh.slots.forEach(s=>s.refresh());
   return ()=>{drawMeter(seqCh.meter,[seqCh.an],seqCh,[seqCh.anBuf]);seqCh.stripChips();};}
 
 
@@ -1906,7 +2209,7 @@ const store=(()=>{let dbp=null;
     async get(st,key){try{return await tx(st,'readonly',s=>s.get(key));}catch(e){return null;}},
     async all(st){try{return (await tx(st,'readonly',s=>s.getAll()))||[];}catch(e){return [];}},
     async del(st,key){try{await tx(st,'readwrite',s=>s.delete(key));}catch(e){}}};})();
-const sampleMeta=s=>({kind:s.kind,name:s.name,start:s.start,end:s.end,ls:s.ls,le:s.le,loop:s.loop,tune:s.tune,gain:s.gain,root:s.root,bpm:s.bpm,grid:s.grid});
+const sampleMeta=s=>({av:s.av,kind:s.kind,name:s.name,start:s.start,end:s.end,ls:s.ls,le:s.le,loop:s.loop,tune:s.tune,gain:s.gain,root:s.root,bpm:s.bpm,grid:s.grid,bx:s.bx,gm:s.gm});
 async function saveSample(s,bytes,mime){try{if(!bytes){bytes=await encodeWAV(s.buffer).arrayBuffer();mime='audio/wav';}
   const ok=await store.put('samples',{id:s.id,name:s.name,bytes,mime:mime||'audio/wav',meta:sampleMeta(s),added:Date.now()});s.saved=ok;if(libUI)libUI.storage();}catch(e){}}
 const metaTimers={};
@@ -1927,7 +2230,7 @@ const patternData=()=>({bpb:seq.bpb,bars:seq.bars,swing:seq.swing,drums:stripJ(s
 function applyPattern(p){if(!p||!p.drums)return;if(seq.playing)seqStop();Object.assign(seq,{bpb:p.bpb||4,bars:p.bars||4,swing:p.swing||0,drums:p.drums.map(t=>({...t,cells:[...t.cells]})),mel:p.mel.map(t=>({...t,notes:t.notes.map(n=>({...n}))})),lanes:(p.lanes||[]).map(l=>({...l,vals:[...l.vals]}))});
   if(ui.rebuildComposer)ui.rebuildComposer();applyTrackGains();}
 function snapshot(){return {v:1,bpm:clock.bpm,leader:clock.leader,colorType,colorParam,xfSharp,
-  decks:decks.map(d=>({sample:d.sampleId||d.pendingSample||null,pos:d.pos(),tempo:d.tempo,range:d.range,cue:d.cue,hot:d.hot.slice(),assign:d.assign,kill:{...d.kill},sync:!!d.syncOn,repeat:!!d.repeat,pads:(d.pads||[]).slice(),fx:d.chainData(),hide:(d.hide||[]).slice(),
+  decks:decks.map(d=>({sample:d.sampleId||d.pendingSample||null,pos:d.pos(),tempo:d.tempo,range:d.range,cue:d.cue,hot:d.hot.slice(),assign:d.assign,kill:{...d.kill},sync:!!d.syncOn,repeat:!!d.repeat,kl:!!d.keyLock,key:d.key||0,pads:(d.pads||[]).slice(),fx:d.chainData(),hide:(d.hide||[]).slice(),
     loop:d.loop&&d.loop.beats!==undefined&&d.loop.beats!==-1?{...d.loop}:null,bpm:d.bpm,grid:d.grid})),
   seqCh:seqCh?{assign:seqCh.assign,kill:{...seqCh.kill}}:null,
   fx:Object.fromEntries(allSlots().map(([k,s])=>[k,{type:s.type,on:!!s.on}])),
@@ -1947,11 +2250,11 @@ async function applySnapshot(S,{positions=true,reset=false}={}){if(!S)return;
   if(S.pads)Object.entries(S.pads).forEach(([k,id])=>{whenSample(id).then(s=>setPadSample(k,s));});
   const jobs=(S.decks||[]).map(async(st,i)=>{const d=decks[i];if(!st)return;d.setAssign(st.assign||d.assign);d.setKills(st.kill||{});if(st.pads)d.setPads(st.pads);if(st.hide)d.setHide(st.hide);
     if(!st.sample){if(reset&&d.buffer){d.pause();}return;}
-    if(d.sampleId!==st.sample){d.pendingSample=st.sample;const s=await whenSample(st.sample);if(d.pendingSample!==st.sample)return;d.pendingSample=null;d.loadSample(s,{quiet:true});}
+    if(d.sampleId!==st.sample){if(st.sample.startsWith('drum:')&&!sampleById(st.sample)){const [,sid,vr,bp]=st.sample.split(':');try{await makeDrumSample(sid,vr,+bp);}catch(e){return;}}d.pendingSample=st.sample;const s=await whenSample(st.sample);if(d.pendingSample!==st.sample)return;d.pendingSample=null;d.loadSample(s,{quiet:true});}
     else d.pause();
     if(!d.buffer)return;if(st.bpm)d.bpm=st.bpm;if(st.grid!=null)d.grid=st.grid;d.cue=st.cue||0;d.hot=(st.hot||[null,null,null,null]).slice();
     if(st.range&&st.range!==d.range)d.setRange(st.range);d.setTempo(st.tempo||0);d.pitchF.set(st.tempo||0,false);
-    d.offset=clamp(positions?(st.pos||0):(st.cue||0),0,Math.max(0,d.dur-.01));d.loop=st.loop||null;d.syncOn=!!st.sync;d.repeat=!!st.repeat;d.updateMeta();});
+    d.offset=clamp(positions?(st.pos||0):(st.cue||0),0,Math.max(0,d.dur-.01));d.loop=st.loop||null;d.syncOn=!!st.sync;d.repeat=!!st.repeat;d.setKeyLock(!!st.kl);d.setKey(st.key||0);d.updateMeta();});
   return Promise.all(jobs);}
 let sessionReady=false;
 async function saveSession(){if(!sessionReady)return;try{await store.put('kv',snapshot(),'session');}catch(e){}}
@@ -2038,16 +2341,15 @@ const HELP=[
   K('.chip',null,el=>(el.closest('.chip').dataset.label||'Button'),el=>(el.closest('.chip').dataset.help||'')+' Tap it to open all its controls in a pop-up; tap again or Close to hide them.'),
   // header & transport
   K('#helpBtn',null,'Help','Turns help mode on and off. While it is on, tap anything to read what it does instead of using it.'),
-  K('.top label.btn',null,'Load up to 4 tracks','Pick up to four songs at once. They go onto decks A to D in order and are saved in your Bin on this device.'),
   K('.bpm-in',null,'Master tempo','The tempo of the whole session in beats per minute. Type a number, or use − and +. The sequencer, synced decks and tempo-based effects all follow it.'),
   K('.tempo-main .bpmrow .btn',null,'Tempo − / +','Slows down or speeds up the master tempo by 1 BPM.'),
   K('.bigtap',null,'Tap tempo','Tap this in time with the music, at least 3 times. The master tempo changes to match your taps.'),
   K('#clock-leader',null,'Clock leader','Internal clock runs at the tempo you set. Follow deck makes the master clock copy that deck: its tempo and beat position. Then everything else syncs to that song.'),
-  K('.leds',null,'Beat lights','Shows the beat inside the bar. The white light is the first beat of the bar.'),
-  K('.transport .seqplay',null,'Sequencer play','Starts or stops the beat maker and piano roll, locked to the master clock. It starts on the next bar so it lands on the beat. Space bar does the same.'),
+  K('.leds',null,'Beat lights','Counts the beats of the song that is playing: the first light is the “1” of the bar, and the number is bar.beat of that song (for example A 3.2 = deck A, bar 3, beat 2). It starts on the song’s first beat, and shows “stopped” when nothing plays.'),
+  K('.transport .seqplay',null,'My beat: play','Starts or stops the beat you made in the Beats tab (drums and piano roll), locked to the master clock. It starts on the next bar so it lands on the beat. Space bar does the same.'),
   K('.btn',/^Click$/,'Metronome','A click on every beat. If headphone cue is on, the click only goes to your headphones.'),
   K('.btn',/Sync decks/,'Sync decks','Turns on Sync for every playing deck so they all match the master tempo and beat.'),
-  K('.transport .btn',/Rec mix/,'Record mix','Records everything you hear. Press again to stop. You get a player and a WAV file, and the recording is saved in your Bin.'),
+  K('.recbig',null,'Record my mix','Opens the recording screen. Tap the big red button to start recording everything you hear, and again to stop. Then save it to your phone.'),
   // presets
   K('.pslot',null,'Set slot','Tap to load this set: songs on each deck, tempo, EQ, filters, effects, the beat and all knobs. Undo load brings back what you had.'),
   K('#p-name',null,'Set name','Type a name here before you save a new set.'),
@@ -2055,7 +2357,7 @@ const HELP=[
   K('.btn',/Delete a set/,'Delete set','Tap this, then tap a slot to empty it.'),
   K('.presets .btn',/Undo/,'Undo load','Goes back to how everything was before you loaded the last set.'),
   // decks
-  K('.deck-sheet label.btn',null,'Load','Pick a song for this deck. It is also saved in your Bin so it is still here next time.'),
+  K('.deck-sheet label.btn',null,'Load','Pick a song for this deck. It is also saved in Music so it is still here next time.'),
   K('.halfx',/½/,'Half BPM','If the detected BPM is double what it should be, tap this to halve it.'),
   K('.halfx',/×2/,'Double BPM','If the detected BPM is half what it should be, tap this to double it.'),
   K('.deck .wave-zoom',null,'Waveform','A close-up of the song around the playhead (white line). Faint lines are beats, bright lines start a bar. Drag it to nudge the song or to scrub while paused.'),
@@ -2065,14 +2367,21 @@ const HELP=[
   K('.pitch-col .fader',null,'Tempo fader','Changes the speed of this song. Moving it by hand turns Sync off.'),
   K('.pitch-col .btn',/±/,'Tempo range','How far the tempo fader goes: ±8%, ±16% or ±50%.'),
   K('.pitch-col .btn',/^0$/,'Reset tempo','Puts the song back to its original speed.'),
-  K('.deck .btn.cue',null,'Cue','While paused, sets the cue point where you are. While playing, jumps back to the cue point and stops.'),
-  K('.deck .btn.play',null,'Play / Pause','Starts or pauses this deck. Keys 1–4 do the same for decks A–D.'),
+  K('.deck .btn.cue',null,'Cue','Like on real DJ players. Paused: tap to set the cue point here. Hold it to listen from the cue point; let go and it jumps back and waits. Playing: tap to jump back to the cue point and stop. Tip: put the cue point on the first beat, then press Play exactly on the beat of the other song.'),
+  K('.klbtn',null,'Key lock (Master Tempo)','ON: changing the tempo keeps the song at its normal pitch. OFF: faster also sounds higher, like a vinyl record. Pro DJs usually keep it on for songs with singing.'),
+  K('.bpmin',null,'Exact BPM','Type the BPM you want this deck to play at and press Enter. The tempo fader moves for you.'),
+  K('.tp-tabs .mtab',null,'Where the song comes from','My songs: music you added. Online: search free music. Built-in drums: drum loops made in the app that match your song’s tempo.'),
+  K('.drumgrid .pk-item',null,'Drum loop','Loads this drum style on the deck at the same tempo as your playing song. It repeats forever. Press Play and it starts exactly in time with the other deck.'),
+  K('.chip-mix',null,'Volume & EQ','This deck’s volume, bass, middle, treble and filter. The same knobs as in the Mixer tab, right here on the deck.'),
+  K('.deck .btn.play',null,'Play / Pause','Starts or pauses this deck. With Sync on and another song playing, it shows “On the next bar…” and starts exactly on the other song’s bar. You can change this to next beat or right away in the Tempo pop-up. Keys 1–4 do the same for decks A–D.'),
+  K('.deck .btn.syncb',null,'Sync (beat sync)','Locks this deck to the other playing song: same tempo, and the beats and bars stay on top of each other. Small drifts are pulled back with a tiny, inaudible speed change; big ones are fixed with a clean jump on the next beat. Play waits for the boundary you chose under Quantize.'),
+  K('.qbtns .btn',null,'When Play starts','Next phrase: waits for the start of the other song’s next 4-bar phrase. Next bar: waits for its “1”. Next beat: waits for its next beat. Right away: starts now, and Sync lines it up on the next beat.'),
   K('.deck .btn',/^Sync$/,'Sync','Turns beat sync on or off. On: the deck matches the master tempo and keeps nudging itself to stay on the beat. If another deck is playing, the master clock follows that deck first. It is not perfect on every song; if it sounds off, fix the BPM with ½ or ×2, or use Tap.'),
-  K('.tempo-sheet .btn',/^Tap$/,'Tap BPM','Tap along with this song 4 or more times to tell the deck its correct BPM when the automatic one is wrong.'),
+  K('.tempo-sheet .btn',/^Tap$/,'Tap BPM','Tap along with this song 4 or more times to set its BPM when the automatic one is wrong or unsure. Tap 6 or more times while it plays, on the kick, and the beat grid lines up with your taps too.'),
   K('[data-h=hot] .btn',/^Del$/,'Delete hot cues','Turn this on, then tap a hot cue to clear it.'),
   K('[data-h=hot] .btn',null,'Hot cue','Empty: tap to save the current spot. Saved: tap to jump there and play.'),
   K('[data-h=jump] .btn',null,'Beat jump','Jumps 1, 4 or 16 beats back or forward without losing the beat.'),
-  K('.trackbtn',null,'Song','Shows the song on this deck. Tap it to load a different song from your phone or your Bin.'),
+  K('.trackbtn',null,'Song','Shows the song on this deck. Tap it to load a different song from your phone or Music.'),
   K('.beatgrid .btn',null,'Beat preset','Loads this style of beat: drums, bass, chords and its tempo.'),
   K('.tempo-sheet .btn',/Slower|Faster/,'Nudge','Hold to push the song a little slower or faster so its beats line up with the other deck. Let go and it goes back to normal speed.'),
   K('.loopsheet .btn',/Shorter|Longer|Exit/,'Loop size','Makes the loop half as long or twice as long, or leaves the loop so the song carries on.'),
@@ -2105,7 +2414,6 @@ const HELP=[
   K('.strip .btn',/Mic (on|off)/,'Microphone','Turns your microphone on. Only works in the installed app after you allow mic access. Use headphones to avoid feedback.'),
   K('.strip .btn',/Talkover/,'Talkover','When on, the music dips down automatically while you talk into the mic.'),
   K('.master .btn',/Limiter/,'Limiter','Stops the master output from clipping and distorting when the mix gets too loud. Leave it on.'),
-  K('.master .btn.rec',null,'Record','Records the whole mix. Same as Rec mix at the top.'),
   K('.isoband .btn',null,'Isolator kill','Cuts all of the highs, mids or bass of the entire mix at once.'),
   K('.isoband',null,'Master isolator','A strong EQ on the whole mix. Turn all the way left to remove that band completely.'),
   K('.cgrid:not(.three) .btn',null,'Sound Color FX type',el=>'Picks what every channel\'s big color knob does. '+(COLOR_HELP[el.closest('.btn').dataset.k]||'')),
@@ -2124,13 +2432,13 @@ const HELP=[
   K('#c-bars',null,'Pattern length','How many bars the piano roll pattern lasts before it repeats.'),
   K('#c-quant',null,'Start on','When you press Play, the beat waits for the next bar or beat so it starts in time.'),
   K('.composer-sheet:not(.rowsheet) .kwrap',/Swing/,'Swing','Pushes every second step a little late for a bouncy, human groove. 50% is straight.'),
-  K('.btn',/Bounce to Bin/,'Bounce to Bin','Turns your beat into an audio loop and saves it in the Bin. From there you can put it on a deck and mix it.'),
+  K('.btn',/Save beat to My songs/,'Save beat to My songs','Turns your beat into an audio loop and saves it in Music. From there you can put it on a deck and mix it.'),
   K('#c-exp',null,'Export length','How many times the pattern repeats in the exported file.'),
-  K('.btn',/Export beat/,'Export beat','Makes a WAV file of your beat with the BPM in the name, cut to exact loop length so DJ apps and players loop it cleanly. A copy is also saved in your Bin.'),
+  K('.btn',/Export beat/,'Export beat','Makes a WAV file of your beat with the BPM in the name, cut to exact loop length so DJ apps and players loop it cleanly. A copy is also saved in Music.'),
   K('.composer-sheet .btn',/^Reset$/,'Reset pattern','Replaces your beat with the example groove.'),
   K('.dhead .btn',/Accent|Normal|Ghost/,'Brush','How hard new steps hit. Accent is loud, Ghost is quiet.'),
   K('.dhead .btn',/\+ Track/,'Add track','Adds another drum row, up to 16.'),
-  K('.voicesel',null,'Drum sound','Pick a synth drum or any sound from your Bin for this row.'),
+  K('.voicesel',null,'Drum sound','Pick a synth drum or any sound from Music for this row.'),
   K('.drow .btn.mute',null,'Mute','Silences this row.'),
   K('.drow .btn.solo',null,'Solo','Plays only the rows with Solo on.'),
   K('.rowsheet .kwrap',/^Vol/,'Row volume','Volume of this drum row.'),
@@ -2140,7 +2448,7 @@ const HELP=[
   K('.delrow',null,'Remove row','Deletes this drum row.'),
   K('.dcells',null,'Steps grid','Tap or drag across steps to place hits. Tap a hit with the same brush to remove it. The white box shows where the beat is playing.'),
   K('.rtabs .btn',null,'Piano roll track','Switch between the Bass, Chords and Lead parts.'),
-  K('#r-inst',null,'Instrument','The sound for this part: one of the synths, or any sound from your Bin played at different pitches.'),
+  K('#r-inst',null,'Instrument','The sound for this part: one of the synths, or any sound from Music played at different pitches.'),
   K('.composer-sheet .btn',/^Mute$/,'Mute part','Silences this piano roll part.'),
   K('#r-snap',null,'Snap','Notes line up to this grid when you draw or move them.'),
   K('.composer .btn',/^Erase$/,'Erase mode','When on, tapping a note deletes it.'),
@@ -2155,12 +2463,12 @@ const HELP=[
   K('.dhead .btn',/\+ Lane/,'Add lane','Adds another automation lane, up to 8.'),
   // library / bin
   K('.library label.btn',null,'Upload','Add WAV, MP3, FLAC or OGG files. They stay saved on this device.'),
-  K('.sitem',null,'Sound in your Bin','Tap to open it in the editor.'),
+  K('.sitem',null,'Sound in Music','Tap to open it in the editor.'),
   K('#s-name',null,'Name','Rename this sound.'),
   K('.library .btn',/Preview/,'Preview','Plays the trimmed sound. With headphone cue on, it plays only in your headphones.'),
   K('.library .btn',/^Loop$/,'Loop','Turns on loop markers (yellow). Looped sounds repeat while a note is held and loop on a deck.'),
   K('.libsheet .btn',/Normalize/,'Normalize','Sets the gain so the sound is as loud as possible without clipping.'),
-  K('.libsheet .btn',/^Delete$/,'Delete','Removes this sound from the Bin and from this device.'),
+  K('.libsheet .btn',/^Delete$/,'Delete','Removes this sound from Music and from this device.'),
   K('.swave',null,'Trim and loop','Drag S and E to trim the start and end. With Loop on, drag the yellow L markers. Tap elsewhere to hear from that point.'),
   K('.libsheet .kwrap',/^Tune/,'Tune','Changes the pitch in semitones.'),
   K('.libsheet .kwrap',/^Gain/,'Gain','Makes the sound louder or quieter.'),
@@ -2180,8 +2488,8 @@ const HELP=[
   K('#mf-src',null,'Music service','Where to search. Audius and Internet Archive work without an account. Jamendo needs a free client ID.'),
   K('#mf-q',null,'Search','Type a song, artist or style, then press Search or Enter.'),
   K('.chips .btn',null,'Genre','Shows popular free songs in that style.'),
-  K('.mrow .mbtns .btn',/^[ABCD]$/,'Load on deck','Downloads the song, saves it in your Bin and puts it on that deck.'),
-  K('.mrow .btn',/Save/,'Save to Bin','Downloads the song into your Bin on this device without loading it.'),
+  K('.mrow .mbtns .btn',/^[ABCD]$/,'Load on deck','Downloads the song, saves it in Music and puts it on that deck.'),
+  K('.mrow .btn',/Save/,'Save to My songs','Downloads the song into Music on this device without loading it.'),
   K('.mrow .btn',/▶/,'Preview','Plays the song so you can hear it before loading it.'),
   K('.dtabs .pair',null,'Two decks','With your phone sideways you see two decks side by side: A and B, or C and D.'),
   K('.fxpad',null,'Quick FX pad',el=>{const it=perfItem(el.closest('.fxpad').dataset.id);return (it?it.desc+' ':'')+'Tap once and it runs by itself. Or hold it: sliders pop up and sliding up makes it stronger; let go and it goes back to normal.';}),
@@ -2193,13 +2501,20 @@ const HELP=[
   K('.padhead .btn',/Remove|Done/,'Remove effects','Tap, then tap any pad to take it off this deck. Tap Done when finished.'),
   K('.xf2 .fader',null,'Crossfader C–D','Blends between deck C and deck D. The small crossfader on the Decks screen controls this one when you are looking at C and D.'),
   K('.minixf',null,'Crossfader','Blends the two decks you are looking at: A and B, or C and D.'),
-  K('.addsnd',null,'Add sounds','Record your own drop with the mic, grab a piece of what is playing, upload files, pick sounds from your Bin, or search free sound libraries online.'),
+  K('.addsnd',null,'Add sounds','Record your own drop with the mic, grab a piece of what is playing, upload files, pick sounds from Music, or search free sound libraries online.'),
   K('.sfx-ctl .btn',/Remove pads|Done/,'Remove pads','Tap, then tap any pad to remove it. Removed built-in sounds can be brought back from + Add sounds.'),
-  K('.guideb',null,'How to start','Shows the six steps to your first mix.'),
-  K('.mtab',null,'Filter','Shows only beats without vocals, only songs with vocals, or only short sounds and drops.'),
-  K('.kindpill',null,'Type','What this is: Beat (no vocals), Vocals, or Sound. “Vocals?” means it isn’t sorted yet. Tap to change it.'),
-  K('.mrow2 .dkbtn',null,'Play on a deck','Puts this song on that deck, ready to play.'),
-  K('.mplay',null,'Listen','Plays the song or sound so you can hear it. With headphone cue on, only you hear it.'),
+  K('.guideb',null,'Learn','Lessons that walk you through real DJ mixes step by step, a quick tour, and DJ words explained simply.'),
+  K('.modebtn',/Songs/,'Songs','Full songs and beats. You put a song on a deck (A, B, C or D), press Play, and mix it with another song.'),
+  K('.modebtn',/Sound effects/,'Sound effects','Short sounds of a few seconds (air horn, your voice…). They don’t go on a deck as a song: they become a button under a deck’s Quick FX, and play on top of the music when you tap it.'),
+  K('.actcard',/Add songs/,'Add songs from my device','Opens your phone’s or computer’s files so you can pick songs you already have. They are copied into the app and stay here.'),
+  K('.actcard',/free songs/,'Find free songs online','Search free music on the internet (Audius, Internet Archive, Jamendo) and save it in My songs.'),
+  K('.actcard',/Record my voice/,'Record my voice','Record a short sound with the microphone, like “one, two, three, let’s go!”. It is saved as a sound effect, not as a song.'),
+  K('.actcard',/sound files/,'Add sound files','Pick short sound files you already have. They are saved as sound effects.'),
+  K('.actcard',/sound effects online/,'Find sound effects online','Search free sound effects on the internet and save them.'),
+  K('.mtab',null,'Song groups','All songs = everything. Only beats = no one singing, just the music. With singing = someone sings or raps.'),
+  K('.kindpill',null,'Beat or singing','Shows if this song is only a beat or has singing. The app guesses from the name. If it’s wrong, tap it to switch.'),
+  K('.mrow2 .dkbtn',null,'Deck button','For a song: puts it on that deck, ready to play. For a sound effect: adds a button for it under that deck’s Quick FX (tap again to remove).'),
+  K('.mplay',null,'Listen','Tap to listen. Tap again to pause, and once more to continue where it stopped. It stops by itself at the end. With headphone cue on, only you hear it.'),
   K('.setcard .btn',/Open/,'Open','Brings back everything from this saved setup: songs, tempo, effects and beat. Undo takes you back.'),
   K('.setcard .btn',/Delete/,'Delete','Removes this saved setup. Tap twice to be sure.'),
   K('.btn',/Save what I have now/,'Save','Saves everything you have right now under a name you choose.'),
@@ -2209,10 +2524,10 @@ const TOPICS={
   transport:['Master clock','The master clock keeps everything on the same tempo and beat: synced decks, the beat maker, the piano roll and tempo-based effects. Set the BPM, tap it, or let it follow a deck.'],
   sets:['Saved setups','A set is a snapshot of everything: which songs are on the decks, the tempo, every knob, EQ and effect, and the beat. Save up to 8. Your session also saves itself, so closing the app and coming back puts you right where you were.'],
   deck:['Deck','A deck plays one song. Load a song, press Play, and use Sync to lock it to the beat. Cue, hot cues, loops and Repeat are underneath. FX pads start empty: tap + Add to choose your own effects. Hold any pad for sliders.'],
-  mixer:['Mixer','Each column is a channel: trim, compressor, 3-band EQ with kills, a Sound Color FX knob, two effect slots, a volume fader, crossfader side and headphone cue. The master column has the main volume, limiter, recording, isolator, Color FX type and headphone settings.'],
+  mixer:['Mixer','Each column is one deck (A, B, C, D), your beat, or the microphone. Turn High, Mid and Low to change treble, middle and bass. Filter makes it sound muffled (left) or thin (right). The fader is the volume. Cue lets you hear it in headphones first. Master is the volume of everything. The crossfader is under the decks, and recording is the big red button at the bottom of Decks.'],
   composer:['Beat maker','Make beats with the drum machine, write bass and chords in the piano roll, and automate knobs. It always plays in time with the master clock. Export beat makes a WAV you can use in any DJ app.'],
-  library:['My music','Everything you upload is kept here on this device, even after you close the app. Trim it, loop it, tune it, then send it to a deck, a drum row, the piano roll or a pad.'],
-  finder:['Find music','Search free music services (Audius, Internet Archive, Jamendo) and load songs straight onto a deck. Everything you load is saved in your Bin. This needs the installed app and an internet connection. Songs belong to their artists; check the license before playing them in public.'],
+  library:['Music','Two separate parts. Songs: full tracks you play on the decks. Sound effects: short sounds you tap over the music. Everything here is kept on this device, even after you close the app.'],
+  finder:['Find music','Search free music services (Audius, Internet Archive, Jamendo) and load songs straight onto a deck. Everything you load is saved in Music. This needs the installed app and an internet connection. Songs belong to their artists; check the license before playing them in public.'],
   sfx:['Sound FX','29 classic DJ sounds. Tap to fire. You can replace any pad with your own sound.']};
 let helpMode=false;
 const helpPop=h('div',{class:'helppop',role:'dialog','aria-live':'polite',hidden:''});
@@ -2227,12 +2542,73 @@ function showGuide(){openPicker('How to start DJing',box=>{
     ['Get the next song ready','On Deck B, load another song and press ▶ Play.'],
     ['Press Sync on Deck B','Now both songs play at the same speed and on the same beat.'],
     ['Slide the crossfader','Move the slider at the bottom from A to B. The music blends from the first song into the second. That’s a mix!'],
-    ['Add effects when you want','Quick FX + Add gives one-tap effects like Echo out. The Effects button gives effects you control. Tap ? at the top, then any button, to learn what it does.']];
+    ['Add effects when you want','Quick FX gives one-tap effects like Echo out, and sound effects like an air horn. The Effects button gives effects you control with sliders.'],
+    ['Add your own music','Go to Music (bottom bar). Songs = full songs for the decks. Sound effects = short sounds, like your own voice. Tap ? at the top, then any button, to learn what it does.']];
   box.append(h('ol',{class:'guide'},...steps.map(([t,d])=>h('li',{},h('b',{text:t}),h('span',{text:d})))),
-    h('div',{class:'bigacts'},BTN('Take me to the decks',()=>{document.querySelector('.mnav button[data-view=decks]').click();document.querySelector('.overlay').remove();},'bigact primary')));});
+    h('div',{class:'bigacts'},BTN('Take me to the decks',()=>{document.querySelector('.mnav button[data-view=decks]').click();document.querySelector('.overlay').remove();},'bigact'),BTN('Start lesson 1: my first mix',()=>startLesson(LESSONS[0]),'bigact primary')));});
   try{localStorage.setItem('quaddeck.welcomed','1');}catch(e){}}
+/* ---------- Learn to mix: step-by-step lessons that check what you do ---------- */
+const deckVol=i=>{const c=AUTO.get(decks[i].id+' volume');return c?c.get():.8;};
+const midXf=()=>xfPos>.35&&xfPos<.65;
+const LESSONS=[
+  {id:'fade',name:'1 · Your first mix',sub:'Blend from one song into the next with the crossfader. The easiest way to mix.',steps:[
+    ['Start the first song','Go to Deck A (on a phone, tap “Deck A” at the top). Press ▶ Play. A demo song is already loaded; tap the song name if you want a different one.',()=>decks[0].playing,0],
+    ['Crossfader to A','The slider at the bottom of the decks is the crossfader. Slide it all the way to the A side. Now the crowd only hears Deck A.',()=>xfPos<.1,0],
+    ['Get the next song ready','Go to Deck B. Press Sync. Now Deck B will play at exactly the same speed as Deck A, and on the same beat.',()=>decks[1].syncOn,1],
+    ['Start Deck B','Press ▶ Play on Deck B. Because Sync is on, it waits a moment and starts exactly on the next bar of Deck A. (Pros start on bar 1 of a phrase: watch the counter in this box.) Nobody hears it yet, because the crossfader is on A.',()=>decks[1].playing,1],
+    ['Slide over to B','Slowly slide the crossfader from A to B. Take about 8 bars (around 15 seconds). Listen how the two songs blend.',()=>xfPos>.9,1],
+    ['Stop Deck A','Deck A is not heard any more. Go to Deck A and press Pause. That was your first mix!',()=>!decks[0].playing,0]]},
+  {id:'bass',name:'2 · Bass swap',sub:'What most club DJs do: never let two basslines play at full at the same time.',steps:[
+    ['Deck A playing, crossfader in the middle','Press ▶ Play on Deck A and put the crossfader in the middle. From now on, each deck’s Volume decides what you hear.',()=>decks[0].playing&&midXf(),0],
+    ['Prepare Deck B','Go to Deck B, tap “Volume & EQ”. Turn Bass all the way left and slide Volume all the way down.',()=>decks[1].eq.lo<-20&&deckVol(1)<.1,1],
+    ['Sync and start B','Press Sync on Deck B, then ▶ Play. It waits and starts exactly on the next bar of Deck A.',()=>decks[1].syncOn&&decks[1].playing,1],
+    ['Bring Deck B in','In Deck B’s “Volume & EQ”, slowly push Volume up to about 80% over 8 bars. Its bass is still off, so the two basslines don’t fight.',()=>deckVol(1)>.6,1],
+    ['Swap the bass','At the next bar 1, do this quickly: Deck A’s Bass all the way left, then Deck B’s Bass back to the middle. You just swapped the bass!',()=>decks[0].eq.lo<-20&&decks[1].eq.lo>-4,0],
+    ['Fade out Deck A','Turn Deck A’s Volume down over the next 8 bars, then press Pause on Deck A. Put its Bass back to the middle for next time.',()=>deckVol(0)<.1||!decks[0].playing,0]]},
+  {id:'filter',name:'3 · Filter fade',sub:'Make the old song thinner and thinner until it disappears.',steps:[
+    ['Deck A playing, crossfader in the middle','Press ▶ Play on Deck A and put the crossfader in the middle.',()=>decks[0].playing&&midXf(),0],
+    ['Start Deck B quietly','On Deck B: Volume & EQ → Volume all the way down. Press Sync, then ▶ Play when the counter shows bar 1.',()=>decks[1].playing&&deckVol(1)<.2,1],
+    ['Bring Deck B in','Push Deck B’s Volume up to about 80% over 8 bars.',()=>deckVol(1)>.6,1],
+    ['Filter out Deck A','On Deck A: Volume & EQ → turn Filter slowly to the right over 8 bars. Deck A gets thinner and thinner.',()=>decks[0].colorV>.6,0],
+    ['Close Deck A','Slide Deck A’s Volume down, turn its Filter back to the middle, and press Pause.',()=>deckVol(0)<.1&&Math.abs(decks[0].colorV)<.15,0]]},
+  {id:'echo',name:'4 · Echo out',sub:'The old song ends in echoes, then the new one drops in.',steps:[
+    ['Deck A playing, crossfader in the middle','Press ▶ Play on Deck A and put the crossfader in the middle.',()=>decks[0].playing&&midXf(),0],
+    ['Add “Echo out” to Deck A','On Deck A, under Quick FX, tap + Add and choose “Echo out”. Then close the list.',()=>decks[0].pads.includes('echoout'),0],
+    ['Get Deck B ready','Go to Deck B and press Sync. Don’t press Play yet.',()=>decks[1].syncOn,1],
+    ['Echo out on beat 4','Go to Deck A. When the counter reaches bar 8, beat 4 (the end of a phrase), tap “Echo out”. Deck A fades away in echoes.',null,0],
+    ['Drop Deck B on the “1”','Right away, go to Deck B and press ▶ Play on the next beat 1. Big moment!',()=>decks[1].playing,1]]}];
+let coachEl=null,coachIv=0;
+function startLesson(L){stopLesson();const ov=document.querySelector('.overlay');if(ov)ov.remove();if(ui.setView)ui.setView('decks');let k=0,okAt=0;
+  const tEl=h('b',{class:'co-t'}),dEl=h('p',{class:'co-d'}),nEl=h('span',{class:'co-n'}),ok=h('span',{class:'co-ok'});
+  const bars=h('div',{class:'co-bars'},...[...Array(8)].map((_,i)=>h('i',{text:i+1}))),dots=h('div',{class:'co-dots'},...[...Array(4)].map(()=>h('i'))),who=h('span',{class:'co-who'});
+  const back=BTN('◀ Back',()=>go(k-1),'sm'),next=BTN('Next ▶',()=>go(k+1),'sm'),small=BTN('–',()=>coachEl.classList.toggle('mini'),'sm',{title:'Make smaller'});
+  coachEl=h('div',{class:'coach',role:'region','aria-label':'Lesson'},h('div',{class:'co-head'},h('span',{class:'co-l',text:L.name}),nEl,small,BTN('✕',stopLesson,'sm',{'aria-label':'Stop lesson'})),
+    tEl,dEl,h('div',{class:'co-count'},who,bars,dots),h('div',{class:'co-foot'},ok,back,next));
+  document.body.append(coachEl);
+  function go(n){if(n<0)return;if(n>=L.steps.length){finish();return;}k=n;okAt=0;const [t,d,,dk]=L.steps[k];tEl.textContent=t;dEl.textContent=d;nEl.textContent='Step '+(k+1)+' of '+L.steps.length;ok.textContent='';back.disabled=k===0;next.textContent=k===L.steps.length-1?'Finish ✓':'Next ▶';
+    if(dk!=null&&ui.showDeck&&window.innerWidth<761)ui.showDeck(dk);}
+  function finish(){tEl.textContent='🎉 Well done!';dEl.textContent='You finished “'+L.name.replace(/^\d · /,'')+'”. Try it again with your own songs, or pick the next lesson from Learn at the top.';ok.textContent='';nEl.textContent='';next.textContent='Close';next.onclick=stopLesson;back.hidden=true;}
+  coachIv=setInterval(()=>{const lead=decks.find(d=>d.playing&&d.bpm&&!d.syncOn)||decks.find(d=>d.playing&&d.bpm);
+      if(lead){const b=Math.floor(lead.beatPos());const bar=b>=0?Math.floor(b/4)%8:-1,bt=b>=0?b%4:-1;who.textContent='Deck '+lead.id+' · bar '+(bar+1)+' · beat '+(bt+1);
+        [...bars.children].forEach((x,i)=>x.classList.toggle('on',i===bar));[...dots.children].forEach((x,i)=>x.classList.toggle('on',i===bt));}
+      else{who.textContent='Press Play on a deck to see the beat counter';[...bars.children,...dots.children].forEach(x=>x.classList.remove('on'));}
+      const st=L.steps[k];if(!st||!st[2])return;let done=false;try{done=st[2]();}catch(e){}
+      if(done){ok.textContent='✓ Done!';if(!okAt)okAt=performance.now();else if(performance.now()-okAt>1200)go(k+1);}else{ok.textContent='';okAt=0;}},200);
+  go(0);}
+function stopLesson(){clearInterval(coachIv);if(coachEl){coachEl.remove();coachEl=null;}}
+const GLOSSARY=[['Beat','One “boom” of the drum. Most dance music has 4 beats in a bar.'],['BPM','Beats per minute: how fast the song is. House is about 120–128, hip-hop 85–100.'],
+  ['Bar','4 beats: “1, 2, 3, 4”. The jog wheel shows bar.beat, like 3.2.'],['Phrase','8 bars (32 beats). Songs change on phrases, so DJs start the next song on the “1” of a phrase.'],
+  ['Cue point','The spot where a song is waiting, ready to start. Usually the first beat.'],['Sync','Makes a deck play at the same speed and on the same beat as the other one.'],
+  ['Beatmatching','Making two songs play at the same speed with their beats together. Sync does this for you; the tempo fader and jog wheel do it by hand.'],
+  ['EQ','Treble, Middle and Bass knobs. DJs turn the bass down on one song so two basslines don’t fight.'],['Crossfader','The side-to-side slider that blends Deck A and Deck B.'],['Key lock','Also called Master Tempo. Lets you change a song’s speed without it sounding higher or lower.'],['Key','How high or low a song sounds. Songs in the same or a close key sound good together.'],
+  ['Channel volume','Each deck’s own volume (in Volume & EQ or the Mixer).'],['Headphone cue','Listening to the next song in headphones before the crowd hears it.'],['Transition','Going from one song to the next.']];
+function openLearn(){openPicker('Learn to DJ',box=>{
+  box.append(h('p',{class:'hint big',text:'Pick a lesson. A box shows each step and a beat counter, and it goes to the next step by itself when you did it right.'}),
+    h('div',{class:'lessons'},BTN('Quick tour: what everything is',()=>{box.closest('.overlay').remove();showGuide();},'bigact'),
+      ...LESSONS.map(L=>{const b=h('button',{class:'lesson',type:'button'},h('b',{text:L.name}),h('span',{text:L.sub}));b.addEventListener('click',()=>startLesson(L));return b;})),
+    h('div',{class:'sechead',text:'DJ words, simply explained'}),h('dl',{class:'gloss'},...GLOSSARY.flatMap(([t,d])=>[h('dt',{text:t}),h('dd',{text:d})])));});}
 function initHelp(){document.body.append(helpPop);
-  const gb=h('button',{class:'btn guideb',type:'button',onclick:()=>showGuide()},'How to start');$('.top').append(gb);
+  const gb=h('button',{class:'btn guideb',type:'button',onclick:()=>openLearn()},'Learn');$('.top').append(gb);
   const hb=h('button',{class:'btn qmain',id:'helpBtn',type:'button','aria-label':'Help mode',title:'Help: tap, then tap anything to learn what it does'},'?');$('.top').append(hb);
   hb.addEventListener('click',()=>setHelpMode(!helpMode));
   const block=e=>{if(!helpMode)return;if(e.target.closest('.helppop,#helpBtn,.qbtn'))return;e.preventDefault();e.stopPropagation();
@@ -2242,6 +2618,31 @@ function initHelp(){document.body.append(helpPop);
   [['.transport','transport'],['.presets','sets'],['.finder','finder'],['.mixer','mixer'],['.composer','composer'],['.library','library'],['.sampler','sfx']].forEach(([s,t])=>{const el=$(s);if(el){el.dataset.topic=t;addQ(el.querySelector('.c-head,.mixer-head,.sfx-head,.tgroup'),t);}});
   document.querySelectorAll('.deck').forEach(d=>{d.dataset.topic='deck';addQ(d.querySelector('.deck-head'),'deck');});
 }
+
+const fmtT=s=>{s=Math.max(0,s|0);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');};
+let recAn=null;
+function openRecordScreen(){const canRec=typeof MediaRecorder!=='undefined'&&ctx.createMediaStreamDestination;
+  if(!recAn){recAn=ctx.createAnalyser();recAn.fftSize=1024;masterOut.connect(recAn);}
+  const ov=h('div',{class:'fxscreen recscreen',style:'--dc:var(--rec)'});let raf=0,iv=0;
+  const close=()=>{cancelAnimationFrame(raf);clearInterval(iv);ui.recUpdate=null;ov.remove();document.removeEventListener('keydown',esc);};const esc=e=>{if(e.key==='Escape')close();};document.addEventListener('keydown',esc);
+  const big=h('button',{class:'recgo',type:'button',disabled:canRec?null:'','aria-label':'Start or stop recording',onclick:()=>{resume();window.recBtnRef.click();}},h('span',{class:'rg-in'}));
+  const state=h('div',{class:'recstate'}),time=h('div',{class:'rectime',text:'0:00'}),meter=h('div',{class:'reclvl'},h('i'));const size=h('span',{class:'hint'});
+  const list=h('div',{class:'reclist'});
+  const stat=(k,v)=>h('div',{class:'recstat'},h('span',{text:k}),h('b',{text:v}));
+  function render(){const on=!!recorder;big.classList.toggle('on',on);
+    state.textContent=!canRec?'Recording doesn’t work in this browser. Install the app (or use Chrome or Safari) to record.':on?'● RECORDING — everything you hear is being recorded':'Ready. Tap the big red button to start.';state.classList.toggle('on',on);
+    list.replaceChildren(...(mixRecs.length?mixRecs.map((r,i)=>h('div',{class:'recitem'},h('div',{class:'ri-top'},h('b',{text:'Recording '+(mixRecs.length-i)}),h('span',{class:'hint',text:fmtT(r.dur)+' · '+(r.size/1048576).toFixed(1)+' MB · '+r.stamp.slice(11).replace('-',':')})),
+      h('audio',{controls:'',src:r.url,preload:'none'}),h('div',{class:'bigacts'},r.wurl?h('a',{class:'btn bigact primary',href:r.wurl,download:'my-mix-'+r.stamp+'.wav'},'Save to my device (WAV)'):h('span',{class:'btn bigact',text:'Making the WAV file…'}),
+        h('a',{class:'btn bigact',href:r.url,download:'my-mix-'+r.stamp+'.'+r.ext},'Save small file ('+r.ext.toUpperCase()+')')))):[h('p',{class:'hint',text:'Your recordings show up here. Each one is also saved in Music → Songs, so you can play it on a deck later.'})]));}
+  ui.recUpdate=render;
+  const g=new Float32Array(1024);const draw=()=>{recAn.getFloatTimeDomainData(g);let pk=0;for(const v of g)pk=Math.max(pk,Math.abs(v));meter.firstChild.style.width=Math.min(100,pk*100)+'%';meter.classList.toggle('hot',pk>.95);raf=requestAnimationFrame(draw);};draw();
+  iv=setInterval(()=>{if(recorder){const s=(performance.now()-recStart)/1000;time.textContent=fmtT(s);size.textContent='About '+Math.max(.1,s*0.016).toFixed(1)+' MB so far';}else{time.textContent='0:00';size.textContent='';}},250);
+  ov.append(h('div',{class:'fxs-box'},h('div',{class:'fxs-head'},h('b',{text:'Record my mix'}),BTN('Done',close,'')),
+    h('p',{class:'hint',text:'Records everything you hear: all decks, your beat, the microphone and sound effects. Keep mixing while it records. You can close this screen; it keeps recording.'}),
+    h('div',{class:'recmain'},big,state,time,size),
+    h('div',{class:'recstats'},h('span',{class:'k-lab',text:'Sound level'}),meter,h('span',{class:'hint',text:'If the bar turns red, turn the Master volume down a little in the Mixer.'})),
+    h('div',{class:'sechead',text:'My recordings'}),list));
+  document.body.append(ov);render();}
 
 /* =====================================================================
    PHONE LAYOUT: bottom navigation, one section at a time
@@ -2261,12 +2662,22 @@ function initMobile(){const app=$('.app');
   const eL=h('span',{class:'end',text:'A'}),eR=h('span',{class:'end',text:'B'});const mbar=h('div',{class:'minixf','data-v':'decks'},eL,mini.el,eR);
   ui.pairLabel=p=>{ui.miniPair=p;eL.textContent=p?'C':'A';eR.textContent=p?'D':'B';mbar.style.setProperty('--dc',p?'var(--c)':'var(--a)');mini.set(p?xf2Pos:xfPos,false);};
   $('#decks').before(dtabs);$('#decks').after(mbar);
+  const recBig=h('button',{class:'recbig',type:'button','data-v':'decks',onclick:()=>openRecordScreen()},h('span',{class:'rb-dot'}),h('span',{class:'rb-t'},h('b',{text:'Record my mix'}),h('small',{text:'Tap to open the recorder'})));
+  mbar.after(recBig);
+  const recTick=()=>{const on=!!recorder;recBig.classList.toggle('on',on);recBig.querySelector('b').textContent=on?'Recording… '+fmtT((performance.now()-recStart)/1000):'Record my mix';recBig.querySelector('small').textContent=on?'Tap to see it or stop':(mixRecs.length?mixRecs.length+' recording'+(mixRecs.length>1?'s':'')+' ready to save':'Tap to open the recorder');};
+  setInterval(recTick,500);recTick();
+  const INTRO={decks:'These are your 4 decks (like 4 turntables). Tap a deck’s song name to pick a song, press ▶ Play, then slide the crossfader at the bottom to move from one deck to the other. Quick FX = one-tap effects. Effects = effects you control with sliders.',
+    mixer:'The mixer decides how loud each deck is and how they blend. Push a deck’s fader up to hear it louder. The crossfader chooses which side you hear.',
+    beats:'Make your own beat here. Tap the squares to add drums, press ▶ to hear it. Tap “Beat” to start from a ready-made beat.'};
+  const introEls=Object.entries(INTRO).map(([v,txt])=>{let seen=false;try{seen=localStorage.getItem('quaddeck.intro.'+v)==='1';}catch(e){}if(seen)return null;
+    const el=h('div',{class:'tabintro-box','data-v':v},h('p',{class:'tabintro',text:txt}),BTN('Got it',()=>{el.remove();try{localStorage.setItem('quaddeck.intro.'+v,'1');}catch(e){}},'sm'));return [v,el];}).filter(Boolean);
+  introEls.forEach(([v,el])=>{const tgt=v==='decks'?dtabs:v==='mixer'?$('.mixer'):$('.composer');tgt.before(el);});
   function showDeck(i){$('#decks').dataset.deck=i;const pair=i<2?0:1;[...dtabs.querySelectorAll('.one')].forEach((b,j)=>b.classList.toggle('on',j===i));[...dtabs.querySelectorAll('.pair')].forEach((b,j)=>b.classList.toggle('on',j===pair));
     if(ui.pairLabel)ui.pairLabel(pair);try{localStorage.setItem('quaddeck.deck',i);}catch(e){}}
   function setView(v){app.dataset.view=v;nav.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.view===v));try{localStorage.setItem('quaddeck.view',v);}catch(e){}
-    window.scrollTo(0,0);if(v==='beats'&&ui.rebuildComposer)requestAnimationFrame(()=>window.dispatchEvent(new Event('resize')));if(v==='library'&&libUI)requestAnimationFrame(()=>libUI.redraw());}
+    if(v!=='library'&&ui.stopPreview)ui.stopPreview();window.scrollTo(0,0);if(v==='beats'&&ui.rebuildComposer)requestAnimationFrame(()=>window.dispatchEvent(new Event('resize')));if(v==='library'&&libUI)requestAnimationFrame(()=>libUI.redraw());}
   let v='decks',di=0;try{v=localStorage.getItem('quaddeck.view')||'decks';if(!VIEWS.some(x=>x[0]===v))v='decks';di=+(localStorage.getItem('quaddeck.deck')||0);}catch(e){}
-  setView(v);showDeck(di);}
+  ui.showDeck=showDeck;ui.setView=setView;setView(v);showDeck(di);}
 
 
 /* =====================================================================
@@ -2361,28 +2772,29 @@ function openFinder(){const ov=h('div',{class:'fxscreen',style:'--dc:var(--e)'})
 function buildFinder(){
   const instB=BTN('Only beats (no vocals): off',()=>{instOnly=!instOnly;instB.textContent='Only beats (no vocals): '+(instOnly?'on':'off');instB.classList.toggle('on',instOnly);},'bigact',{title:'Search only for music without singing'});
   let src='audius',genre='',results=[],audio=null;
-  const srcSel=h('select',{id:'mf-src','aria-label':'Music service',onchange:e=>{src=e.target.value;keyRow.hidden=!SOURCES[src].needsKey;note.textContent=SOURCES[src].note;}},...Object.entries(SOURCES).map(([k,s])=>opt(k,s.name,k===src)));
-  const q=h('input',{id:'mf-q',type:'search',class:'s-name',placeholder:'Search songs, artists or genres','aria-label':'Search music',onkeydown:e=>{if(e.key==='Enter')go();}});
-  const goB=BTN('Search',()=>go(),'sm');
-  const keyIn=h('input',{id:'mf-key',type:'text',class:'s-name',placeholder:'Jamendo client ID','aria-label':'Jamendo client ID',value:lsGet('quaddeck.jamendo'),onchange:e=>lsSet('quaddeck.jamendo',e.target.value.trim())});
-  const keyRow=h('div',{class:'srow',hidden:''},keyIn,h('a',{href:'https://devportal.jamendo.com/',target:'_blank',rel:'noopener'},'Get a free client ID'));
+  const srcSel=h('select',{id:'mf-src','aria-label':'Music service',class:'bigsel',onchange:e=>{src=e.target.value;note.textContent=SOURCES[src].note;srcUpd();}},...Object.entries(SOURCES).map(([k,s])=>opt(k,s.name+(s.needsKey?' (needs a free key)':' (no account needed)'),k===src)));
+  const q=h('input',{id:'mf-q',type:'search',class:'bigin',placeholder:'Search songs, artists or genres','aria-label':'Search music',onkeydown:e=>{if(e.key==='Enter')go();}});
+  const goB=BTN('Search',()=>go(),'bigact primary');
+  const jmGuide=keyGuide('jamendo',ok=>{if(src==='jamendo'){searchArea.hidden=!ok;}});jmGuide.el.hidden=true;
+  function srcUpd(){jmGuide.el.hidden=!SOURCES[src].needsKey;if(SOURCES[src].needsKey)jmGuide.render();else searchArea.hidden=false;list.replaceChildren();}
   const note=h('span',{class:'hint',text:SOURCES[src].note});
   const chips=h('div',{class:'chips'},...MUSIC_GENRES.map(g=>{const b=BTN(g,()=>{genre=genre===g?'':g;[...chips.children].forEach(c=>c.classList.toggle('on',c.textContent===genre));q.value='';go();},'sm');return b;}));
   const list=h('div',{class:'mlist'});const status=h('p',{class:'hint mstatus',text:'Pick a genre or search to find free music you can load onto a deck.'});
+  const searchArea=h('div',{class:'mpane'},h('div',{class:'srow bigsearch'},q,goB),instB,chips,status,list);
   async function go(){status.textContent='Searching '+SOURCES[src].name+'…';list.replaceChildren();
     try{results=await SOURCES[src].search(q.value.trim(),genre,instOnly);status.textContent=results.length?results.length+' songs from '+SOURCES[src].name+'. Songs belong to their artists; check the license before playing them in public.':'Nothing found. Try another word or genre.';render();}
     catch(e){status.textContent=e&&e.message&&/client ID|Jamendo/.test(e.message)?e.message:"Couldn't reach "+SOURCES[src].name+". Music search needs the installed app and an internet connection.";}}
   async function url(t){if(!t.url&&SOURCES[src].resolve)await SOURCES[src].resolve(t);return t.url;}
   async function fetchTrack(t,btn){const old=btn.textContent;btn.textContent='…';try{const u=await url(t);const res=await fetch(u);if(!res.ok)throw new Error('HTTP '+res.status);const ab=await res.arrayBuffer(),bytes=ab.slice(0);
-      const buf=await ctx.decodeAudioData(ab);const a=analyze(buf);return addSample(buf,(t.artist?t.artist+' – ':'')+t.title,{bytes,mime:res.headers.get('content-type')||'audio/mpeg',meta:{bpm:t.bpm||a.bpm,grid:a.grid,kind:instOnly?'beat':(t.kind||'unknown')}});}
+      const buf=await ctx.decodeAudioData(ab);const a=await BeatSync.analyzeBuffer(buf);return addSample(buf,(t.artist?t.artist+' – ':'')+t.title,{bytes,mime:res.headers.get('content-type')||'audio/mpeg',meta:{bpm:a.bpm,grid:a.grid,bx:bxOf(a),av:BeatSync.VERSION,kind:instOnly?'beat':(t.kind||'unknown')}});}
     catch(e){toast("Couldn't download that song. The service may block downloads, or you're offline.");return null;}finally{btn.textContent=old;}}
   function render(){list.replaceChildren(...results.map(t=>{const row=h('div',{class:'mrow'});const pv=BTN('▶',async()=>{try{if(audio&&audio._t===t){audio.pause();audio=null;pv.classList.remove('on');return;}if(audio)audio.pause();
         list.querySelectorAll('.mrow .on').forEach(b=>b.classList.remove('on'));audio=new Audio(await url(t));audio._t=t;audio.play().catch(()=>toast("Preview isn't available here"));pv.classList.add('on');}catch(e){toast("Preview isn't available here");}},'sm',{'aria-label':'Preview '+t.title});
       const dks=[0,1,2,3].map(i=>BTN('ABCD'[i],async e=>{const s=await fetchTrack(t,e.currentTarget);if(s)decks[i].loadSample(s);},'sm',{style:'--dc:'+COLORS[i],title:'Load on deck '+'ABCD'[i]}));
-      const bin=BTN('Save',async e=>{const s=await fetchTrack(t,e.currentTarget);if(s)toast('Saved “'+s.name+'” in your Bin');},'sm',{title:'Save to your Bin on this device'});
+      const bin=BTN('Save',async e=>{const s=await fetchTrack(t,e.currentTarget);if(s)toast('Saved “'+s.name+'” in Music');},'sm',{title:'Save to Music on this device'});
       row.append(pv,h('div',{class:'minfo'},h('b',{text:t.title||'Untitled'}),h('span',{text:[t.artist,t.genre,t.dur?fmt(t.dur).replace(/\.\d$/,''):null,t.bpm?Math.round(t.bpm)+' BPM':null].filter(Boolean).join(' · ')})),h('div',{class:'mbtns'},...dks,bin));return row;}));}
   const root=h('section',{class:'panel finder','data-v':'library','aria-label':'Find music'},
-    h('div',{class:'sfx-head'},h('h2',{text:'Find music'}),note),h('div',{class:'srow'},srcSel,q,goB),instB,keyRow,chips,status,list);
+    h('label',{class:'biglab'},'Where to search',srcSel),note,jmGuide.el,searchArea);
   ui.finderEl=root;
 }
 
@@ -2453,7 +2865,7 @@ Object.assign(Deck.prototype,{
   renderPads(){const g=this.padGrid;if(!g)return;g.replaceChildren(...this.pads.filter(id=>perfItem(id)).map(id=>this.padBtn(id)));this.padEmpty.hidden=!!this.pads.length;this.padEditBtn.hidden=!this.pads.length;if(!this.pads.length)this.setPadEdit(false);},
   stripChips(){if(!this.fxChip)return;if(this.i>=4){const on=this.slots.filter(s=>s.on&&s.fx).map(s=>FX[s.type][0]);this.fxChip.val(on.length?on.join(' + '):'Off');this.fxChip.classList.toggle('on',!!on.length);}
     const k=['hi','mid','lo'].filter(b=>this.kill[b]);this.chChip.val((this.assign==='T'?'Thru':'Side '+this.assign)+(k.length?' · kill':''));},
-  deckChips(){if(!this.tempoChip)return;if(this.fxChipD){const n=this.slots.filter(sl=>sl.type!=='none');this.fxChipD.val(n.length?n.map(sl=>FX[sl.type][0]+(sl.on?'':' (off)')).join(' · '):'None · tap to add');this.fxChipD.classList.toggle('on',n.some(sl=>sl.on));}this.tempoChip.val((this.tempo>=0?'+':'')+this.tempo.toFixed(2)+'%');
+  deckChips(){if(!this.tempoChip)return;if(this.bpmIn&&document.activeElement!==this.bpmIn&&this.bpm){const v=this.effBpm().toFixed(1);if(this.bpmIn.value!==v)this.bpmIn.value=v;}if(this.mixChip){const c=AUTO.get(this.id+' volume'),lo=this.eq?this.eq.lo:0;this.mixChip.val((c?Math.round(c.get()*100):80)+'%'+(this.kill.lo||lo<-20?' · bass off':lo<-6?' · less bass':''));}if(this.fxChipD){const n=this.slots.filter(sl=>sl.type!=='none');this.fxChipD.val(n.length?n.map(sl=>FX[sl.type][0]+(sl.on?'':' (off)')).join(' · '):'None · tap to add');this.fxChipD.classList.toggle('on',n.some(sl=>sl.on));}this.tempoChip.val((this.tempo>=0?'+':'')+this.tempo.toFixed(2)+'%'+(this.keyLock?' · 🔒':'')+(this.key?' · key '+(this.key>0?'+':'')+this.key:''));
     const L=this.loop;this.loopChip.val(L?(L.beats>0?(L.beats<1?'1/'+Math.round(1/L.beats):L.beats)+' beat'+(L.beats>1?'s':''):'Roll'):this.repeat?'Repeat':'Off');this.loopChip.classList.toggle('on',!!L||!!this.repeat);
     this.hotChip.val(this.hot.filter(x=>x!=null).length+'/4');
     if(this.tempoInfo){const t=this.bpm?'Song: '+this.bpm.toFixed(1)+' BPM → now '+this.effBpm().toFixed(1)+' BPM':'Load a song to see its BPM';if(this.tempoInfo.textContent!==t)this.tempoInfo.textContent=t;}},
@@ -2535,7 +2947,7 @@ function openPicker(title,build){const ov=h('div',{class:'overlay'});const box=h
 
 /* ---------- customize a deck: hide or show every part except Play ---------- */
 const DECK_PARTS=[
-  ['name','Song name (load button)','Shows which song is on the deck, how long it is and its BPM. Tap it to load a song from your phone or from your Bin. If you hide it, load songs with the Load up to 4 tracks button or from the Bin.'],
+  ['name','Song name (load button)','Shows which song is on the deck, how long it is and its BPM. Tap it to load a song from your phone or from Music. If you hide it, load songs from the Music tab or from Music.'],
   ['help','? button','Opens a short explanation of the deck. Hiding it doesn’t turn help off: the big ? at the top still explains every button.'],
   ['wave','Close-up waveform','A picture of the music right around the playhead (the white line). Thin lines are beats, bright lines start a bar. Drag it to push the song a little forward or back so its beats line up with the other deck. When paused, dragging scrubs.'],
   ['overview','Whole-song overview','A small picture of the entire song. The dark part is already played. Tap anywhere to jump there. Colored marks are hot cues, the orange mark is the cue point.'],
@@ -2544,8 +2956,9 @@ const DECK_PARTS=[
   ['tempo','Tempo button','Shows how much the song’s speed is changed. Tap it for the tempo pop-up: tempo fader, 0 reset, hold-to-nudge Slower/Faster, Tap to teach the right BPM, and ½ / ×2 when the BPM is detected wrong.'],
   ['loop','Loop button','Shows the loop that is playing. Tap it for the loop pop-up: loops from 1/4 to 16 beats, shorter/longer, exit, beat jumps of 1, 4 or 16 beats, and Repeat to play the whole song over and over.'],
   ['hot','Cues button','Shows how many hot cues are saved. Tap it for four memory buttons: tap an empty one to save the current spot, tap a saved one to jump back there. Del clears them.'],
-  ['cue','Cue button','While paused, tap Cue to remember this spot. While playing, tap Cue to jump back to it and stop. DJs use it to start the next song exactly on the first beat.'],
-  ['sync','Sync button','Makes this deck match the tempo and beat of the other playing song (or the master clock) and keeps it locked. Tap again to turn it off.'],
+  ['cue','Cue button','Works like on real DJ players. While paused, tap Cue to remember this spot (the cue point). Hold Cue to listen from there; let go and it jumps back and waits. While playing, tap Cue to jump back and stop. Holding Cue and then pressing Play keeps it playing.'],
+  ['sync','Sync button','Beat sync, like on Pioneer and Serato: this deck plays at the same tempo as the other song AND its beats and bars stay locked on top of it. With Sync on, press Play any time: it waits and starts exactly on the next bar. Tap again to turn it off.'],
+  ['mix','Volume & EQ button','Opens this deck’s volume, bass, middle, treble and filter. They are the same knobs as in the Mixer tab, so you can do a whole mix without leaving the deck.'],
   ['effects','Effects button','Opens the full-screen effects mixer for this deck. Add reverb, echo, flanger, filters and 30 more; each has an On switch, an Amount slider and its own setting. Add as many as you like.'],
   ['pads','Quick FX pads','Your own effect buttons. They start empty; + Add opens the effect library. Hold a pad to use it, slide up for more, let go to go back to normal.']];
 const DECK_LAYOUTS=[['Everything',[]],['Simple',['jog','hot','loop','pads','readouts','help']],['Performance',['jog','readouts']],
@@ -2677,7 +3090,30 @@ const SOUND_SOURCES={
       if(j.detail)throw new Error(j.detail);return (j.results||[]).map(r=>({title:r.name,artist:r.username,dur:r.duration,url:(r.previews||{})['preview-hq-mp3']}));}},
   archive:{name:'Internet Archive',note:'Free sound effect collections. No account needed.',
     async search(q){const r=await SOURCES.archive.search((q||'dj')+' sound effect','');return r;},resolve:t=>SOURCES.archive.resolve(t)}};
-function openSoundPicker(deck){window._sndDeck=deck&&deck.pads?deck:null;openPicker(deck&&deck.pads?'Make a sound drop':'Record or add a sound',(box)=>{
+const KEY_GUIDES={
+  freesound:{name:'Freesound',ls:'quaddeck.freesound',what:'API key',ph:'Paste your Freesound API key here',steps:[
+    ['Make a free Freesound account','Tap the button, then “Join” (or “Sign up”). Fill in email, username and password. Freesound sends you an email: open it and tap the link to confirm.',['Open Freesound','https://freesound.org/home/register/']],
+    ['Open the key page','Stay logged in and tap this button. It opens the page where you ask for a key.',['Open the key page','https://freesound.org/apiv2/apply']],
+    ['Fill in the short form','Name: Quad Deck. Description: DJ app for my own use. Tick the box to accept the terms, then tap “Request new access credentials”.',null],
+    ['Copy your key','Under the form you now see a table. Copy the long code in the column “Client secret/Api key”. (Not the short “Client id”.)',null],
+    ['Paste it below','Come back here, paste it in the box and tap Save key. You only do this once.',null]]},
+  jamendo:{name:'Jamendo',ls:'quaddeck.jamendo',what:'client ID',ph:'Paste your Jamendo client ID here',steps:[
+    ['Make a free developer account','Tap the button and sign up (or log in with a Jamendo account). Confirm your email if they ask.',['Open Jamendo developers','https://devportal.jamendo.com/']],
+    ['Create an app','Find “My apps” (or “Create an application”). Name: Quad Deck. Website: any link, for example https://example.com. Description: DJ app for my own use. Save it.',null],
+    ['Copy your Client ID','Your new app shows a “Client ID”: a short code of letters and numbers. Copy it.',null],
+    ['Paste it below','Come back here, paste it in the box and tap Save key. You only do this once.',null]]}};
+function keyGuide(k,onChange){const G=KEY_GUIDES[k];const el=h('div',{class:'keyguide'});
+  function render(){const have=!!lsGet(G.ls);
+    if(have&&!el._edit){el.replaceChildren(h('div',{class:'kg-ok'},h('span',{text:'✓ Your '+G.name+' '+G.what+' is saved. You can search.'}),BTN('Change key',()=>{el._edit=true;render();},'sm ghost')));onChange&&onChange(true);return;}
+    const inp=h('input',{type:'text',class:'bigin',placeholder:G.ph,'aria-label':G.name+' '+G.what,value:lsGet(G.ls),autocomplete:'off',autocapitalize:'off',spellcheck:'false'});
+    el.replaceChildren(h('div',{class:'kg-title',text:'First time only: get your free '+G.name+' '+G.what}),
+      h('p',{class:'hint',text:G.name+' is free, but it wants to know who is searching. So you make a free account and get a “'+G.what+'” (a secret code). It takes about 2 minutes. The buttons on their website may look a little different from these steps.'}),
+      h('ol',{class:'guide'},...G.steps.map(([t,d,l])=>h('li',{},h('b',{text:t}),h('span',{text:d}),l?h('a',{class:'btn kg-link',href:l[1],target:'_blank',rel:'noopener'},l[0]+' ↗'):null))),
+      inp,h('div',{class:'bigacts'},BTN('Save key',()=>{const v=inp.value.trim();if(v.length<8){toast('That doesn’t look like a key yet. Paste the whole code.');return;}lsSet(G.ls,v);el._edit=false;toast(G.name+' key saved');render();},'bigact primary'),
+        have?BTN('Cancel',()=>{el._edit=false;render();},'bigact'):null),
+      h('p',{class:'hint',text:'The key stays only on this device.'}));onChange&&onChange(false);}
+  render();return {el,render};}
+function openSoundPicker(deck){window._sndDeck=deck&&deck.pads?deck:null;openPicker(deck&&deck.pads?'Make a sound drop':'Find or add sound effects',(box)=>{
   const recTime=h('span',{class:'rec-time',text:''});
   const micB=BTN('● Record with mic',()=>soundRec?soundRec.stop():recordSound('mic',rui),'rec'),mixB=BTN('● Record what’s playing',()=>soundRec?soundRec.stop():recordSound('mix',rui),'rec');
   const rui={start(){micB.textContent='■ Stop';mixB.hidden=true;micB.classList.add('on');},stop(){micB.textContent='● Record with mic';mixB.hidden=false;micB.classList.remove('on');recTime.textContent='';renderBin();},time(s){recTime.textContent=s.toFixed(1)+'s';}};
@@ -2689,12 +3125,14 @@ function openSoundPicker(deck){window._sndDeck=deck&&deck.pads?deck:null;openPic
     const hid=SFX_GROUPS.flatMap(([,,items])=>items).filter(([,k])=>sfxLayout.hidden.includes(k));
     hidList.replaceChildren(...(hid.length?hid.map(([l,k])=>{const b=h('button',{class:'pk-item',type:'button'},h('span',{class:'pk-n',text:l}),h('span',{class:'pk-d',text:'Removed built-in sound'}),h('span',{class:'pk-st',text:'Bring back'}));
       b.addEventListener('click',()=>{sfxLayout.hidden=sfxLayout.hidden.filter(x=>x!==k);saveSfxLayout();renderSfxPads();renderBin();});return b;}):[h('p',{class:'hint',text:'All built-in sounds are on your pads.'})]));}
-  let src='archive';const srcSel=h('select',{id:'sf-src','aria-label':'Sound library',onchange:e=>{src=e.target.value;keyRow.hidden=src!=='freesound';note.textContent=SOUND_SOURCES[src].note;}},opt('archive','Internet Archive',true),opt('freesound','Freesound'));
+  let src='archive';const srcSel=h('select',{id:'sf-src',class:'bigsel','aria-label':'Sound library',onchange:e=>{src=e.target.value;note.textContent=SOUND_SOURCES[src].note;srcUpd();}},opt('archive','Internet Archive (no account needed)',true),opt('freesound','Freesound (more sounds, needs a free key)'));
+  const fsGuide=keyGuide('freesound',ok=>{if(src==='freesound')searchRow.hidden=!ok;});
   const note=h('span',{class:'hint',text:SOUND_SOURCES[src].note});
-  const keyIn=h('input',{id:'sf-key',type:'text',class:'s-name',placeholder:'Freesound API key',value:lsGet('quaddeck.freesound'),onchange:e=>lsSet('quaddeck.freesound',e.target.value.trim())});
-  const keyRow=h('div',{class:'srow',hidden:''},keyIn,h('a',{href:'https://freesound.org/apiv2/apply',target:'_blank',rel:'noopener'},'Get a free key'));
-  const q=h('input',{id:'sf-q',type:'search',class:'s-name',placeholder:'e.g. air horn, crowd, laser, vocal “let’s go”',onkeydown:e=>{if(e.key==='Enter')go();}});
+  const q=h('input',{id:'sf-q',type:'search',class:'bigin',placeholder:'e.g. air horn, crowd, laser, vocal “let’s go”',onkeydown:e=>{if(e.key==='Enter')go();}});
   const res=h('div',{class:'mlist'}),st=h('p',{class:'hint'});let audio=null;
+  const searchRow=h('div',{class:'srow bigsearch'},q,BTN('Search',()=>go(),'bigact primary'));
+  function srcUpd(){fsGuide.el.hidden=src!=='freesound';if(src==='freesound')fsGuide.render();else searchRow.hidden=false;res.replaceChildren();st.textContent='';}
+  fsGuide.el.hidden=true;
   async function go(){st.textContent='Searching…';res.replaceChildren();try{const r=await SOUND_SOURCES[src].search(q.value.trim());st.textContent=r.length?r.length+' sounds found. Sounds belong to their creators; check each license.':'Nothing found.';
       res.replaceChildren(...r.map(t=>{const pv=BTN('▶',async()=>{try{if(audio)audio.pause();if(!t.url&&SOUND_SOURCES[src].resolve)await SOUND_SOURCES[src].resolve(t);audio=new Audio(t.url);audio.play().catch(()=>{});}catch(e){toast("Preview isn't available here");}},'sm');
         const add=BTN('+ Add pad',async e=>{const btn=e.currentTarget;btn.textContent='…';try{if(!t.url&&SOUND_SOURCES[src].resolve)await SOUND_SOURCES[src].resolve(t);const r2=await fetch(t.url),ab=await r2.arrayBuffer(),bytes=ab.slice(0);const buf=await ctx.decodeAudioData(ab);
@@ -2704,8 +3142,8 @@ function openSoundPicker(deck){window._sndDeck=deck&&deck.pads?deck:null;openPic
   box.append(
     h('div',{class:'pk-cat'},h('div',{class:'sfx-gname',text:'Record a new sound'}),h('p',{class:'hint',text:'Say your drop (“one, two, three, let’s go!”) or grab a moment of what’s playing. Silence at the start and end is trimmed for you.'}),h('div',{class:'pk-row'},micB,mixB,recTime)),
     h('div',{class:'pk-cat'},h('div',{class:'sfx-gname',text:'Upload files'}),h('div',{class:'pk-row'},h('label',{class:'btn'},'Choose audio files',file),h('span',{class:'hint',text:'WAV, MP3, M4A, OGG or FLAC. You can also drop files on the Sound FX panel.'}))),
-    h('div',{class:'pk-cat'},h('div',{class:'sfx-gname',text:'Find sounds online'}),note,h('div',{class:'srow'},srcSel,q,BTN('Search',go,'sm')),keyRow,st,res),
-    h('div',{class:'pk-cat'},h('div',{class:'sfx-gname',text:'From your Bin'}),binList)  );
+    h('div',{class:'pk-cat'},h('div',{class:'sfx-gname',text:'Find sounds online'}),h('label',{class:'biglab'},'Where to search',srcSel),note,fsGuide.el,searchRow,st,res),
+    h('div',{class:'pk-cat'},h('div',{class:'sfx-gname',text:'My sound effects'}),binList)  );
   renderBin();});}
 
 /* ---------- boot ---------- */
@@ -2728,7 +3166,7 @@ setTimeout(()=>{let seen=false;try{seen=!!localStorage.getItem('quaddeck.welcome
 buildFinder();
 initMobile();
 initHelp();
-$('#multi').addEventListener('change',e=>{const f=[...e.target.files].slice(0,4);f.forEach((file,k)=>decks[k].loadFile(file));if(e.target.files.length>4)toast('Loaded the first 4 files');e.target.value='';});
+
 
 const ro=new ResizeObserver(es=>{for(const e of es){const c=e.target,r=c.getBoundingClientRect();c.width=Math.round(r.width*dpr());c.height=Math.round(r.height*dpr());}});
 document.querySelectorAll('.deck canvas, .strip canvas').forEach(c=>ro.observe(c));
