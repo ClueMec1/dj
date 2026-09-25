@@ -15,7 +15,7 @@
  */
 'use strict';
 const BeatSync = (() => {
-  const VERSION = 3;
+  const VERSION = 4;
 
   /* ------------------------------------------------------------------------------------
    * Causal kick detector. The same source runs in the AudioWorklet (live) and offline
@@ -295,6 +295,23 @@ const BeatSync = (() => {
       const nb = bt.length;
       if (nb < 8) return { v: VERSION, bpm: Math.round(60 / P * 100) / 100, grid: Math.max(0, t0), conf: 0.1, beats: null, bi: 0, phr: 0, bias: null, lc: null, lc0: 0, kickHz, stats: { few: true } };
 
+      /* ---- key: Krumhansl-Schmuckler profiles against the whole-track chroma (pitch class 0 = A) ---- */
+      /* high-resolution chroma (4096-point FFT, ~2.7 Hz bins) so low notes resolve to the right semitone */
+      const tot = new Float64Array(12);
+      { const KN = 4096, kf = makeFFT(KN), kr = new Float64Array(KN), ki = new Float64Array(KN), kw = new Float64Array(KN), kh = Math.round(0.1 * fs), kb = fs / KN;
+        for (let i = 0; i < KN; i++) kw[i] = 0.5 - 0.5 * Math.cos(2 * Math.PI * i / KN);
+        const kLo = Math.ceil(80 / kb), kHi = Math.floor(2000 / kb), kpc = new Int8Array(kHi + 1), kwt = new Float64Array(kHi + 1);
+        for (let k = kLo; k <= kHi; k++) { const m = 12 * Math.log2(k * kb / 440), r = Math.round(m); kpc[k] = ((r % 12) + 12) % 12; kwt[k] = Math.cos(Math.PI * (m - r)) ** 2; }
+        for (let o = 0; o + KN <= L; o += kh) {
+          for (let i = 0; i < KN; i++) { kr[i] = y[o + i] * kw[i]; ki[i] = 0; } kf(kr, ki);
+          for (let k = kLo; k <= kHi; k++) tot[kpc[k]] += kwt[k] * Math.log1p(100 * Math.hypot(kr[k], ki[k]) / KN);
+        } }
+      const KMAJ = [6.35, 2.23, 3.48, 2.33, 4.38, 4.09, 2.52, 5.19, 2.39, 3.66, 2.29, 2.88], KMIN = [6.33, 2.68, 3.52, 5.38, 2.6, 3.53, 2.54, 4.75, 3.98, 2.69, 3.34, 3.17];
+      const corr = (prof, r) => { let ma = 0, mb = 0; for (let k = 0; k < 12; k++) { ma += tot[(k + r) % 12]; mb += prof[k]; } ma /= 12; mb /= 12; let sab = 0, sa = 0, sb = 0; for (let k = 0; k < 12; k++) { const a = tot[(k + r) % 12] - ma, b = prof[k] - mb; sab += a * b; sa += a * a; sb += b * b; } return sab / (Math.sqrt(sa * sb) || 1); };
+      const keys = []; for (let r = 0; r < 12; r++) { keys.push({ root: r, minor: false, c: corr(KMAJ, r) }); keys.push({ root: r, minor: true, c: corr(KMIN, r) }); }
+      keys.sort((a, b) => b.c - a.c);
+      const key = { root: keys[0].root, minor: keys[0].minor, conf: Math.round(Math.max(0, Math.min(1, (keys[0].c - keys[1].c) * 4 + keys[0].c * 0.5)) * 100) / 100 };
+
       /* ---- beat-synchronous features ---- */
       const fIdx = t => Math.max(0, Math.min(M - 1, Math.round((t - N / 2 / fs) * fr)));
       const w3 = Math.max(1, Math.round(0.03 * fr));
@@ -367,7 +384,7 @@ const BeatSync = (() => {
       return {
         v: VERSION, bpm, grid, conf: Math.round(conf * 1000) / 1000,
         beats: variable ? Float64Array.from(bt) : null, bi: variable ? gi : 0, phr,
-        bias, lc, lc0: -gi, kickHz: Math.round(kickHz * 10) / 10,
+        bias, lc, lc0: -gi, kickHz: Math.round(kickHz * 10) / 10, key,
         stats: { acfBpm: acfCands.length ? 60 / acfCands[0].P : 0, ioiBpm: ioiCands.length ? 60 / ioiCands[0].P : 0, rmsMs: rms * 1000, hit: hitRatio, agree, markers: markers.length, variable }
       };
     }

@@ -10,6 +10,7 @@ Once installed it works offline, and the Rec button's "Save mix" link downloads 
 WHAT'S INSIDE
   index.html   the whole app (UI, audio engine, sequencer, piano roll, sample library)
   beatsync.js  beat analysis and sync engine (runs the heavy analysis in a background worker)
+  fxengine.js  builds and drops: risers, snare builds, impacts... rendered for the playing song
   sw.js        offline cache
   manifest.webmanifest, icon-*.png, icon.svg   install metadata
 
@@ -38,3 +39,16 @@ BEAT SYNC
     TAP    detection is unsure: tap along 6+ times on the kick while the song plays
     Δ      how far a synced deck is from the beat it follows, in milliseconds
   Quantize (in the tempo sheet): Play and Sync land on the next phrase, bar or beat of the other song.
+
+BUILDS AND DROPS (FX tab)
+  The FX tab renders its build-ups and drops for the song that is playing: exactly its tempo, a whole
+  number of bars long, with rhythmic parts on its grid and tonal parts in its key (the key is detected
+  when a song is analysed). Tap a build and it lands on the next phrase (or bar / beat, see Lands on);
+  if there is less time left than the build is long, it joins in part-way so it still lands on time.
+  Tap it again before the drop to call it off. Optional: the music slowly loses its bass during a build
+  and snaps back on the drop, a half-beat gap before the drop, and a short duck when an impact hits.
+  One-shots are rendered the same way: horns, sirens, whistle, cowbell, lasers and booms are tuned to
+  notes of the song's key, rhythms (horn triple, siren cycles, scratches, echoes) follow its tempo, and
+  they start on the next beat or 1/8 note. Rewind, Tape stop and Glitch work on the playing song itself:
+  they start from the exact sample the deck is playing, mute the music underneath and bring it back on
+  the next bar (or phrase / beat, per Lands on). Tap them again before they finish to call them off.
