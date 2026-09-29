@@ -52,3 +52,10 @@ BUILDS AND DROPS (FX tab)
   they start on the next beat or 1/8 note. Rewind, Tape stop and Glitch work on the playing song itself:
   they start from the exact sample the deck is playing, mute the music underneath and bring it back on
   the next bar (or phrase / beat, per Lands on). Tap them again before they finish to call them off.
+
+SPEED (button at the top)
+  Auto (default) picks Light on computers and phones with 4 cores or 4 GB of memory or less, Full otherwise.
+  Light draws the screen at 30 fps, without glow effects and at normal (not retina) sharpness, turns off
+  live kick listening (the beat grid from the analysis is still used) and uses bigger audio buffers after a
+  restart. Full is the smoothest. In every mode the app only draws what is on screen, slows its screen
+  updates to 10 fps when nothing plays and nobody touches it, and prepares FX sounds only on the FX tab.

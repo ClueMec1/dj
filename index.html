@@ -325,7 +325,7 @@ body.helpmode .app .btn:hover,body.helpmode .app .kwrap:hover,body.helpmode .app
 
 /* navigation on every screen size */
 .app{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
-.mnav{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));position:fixed;left:0;right:0;bottom:0;z-index:10;background:#12151af2;backdrop-filter:blur(6px);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px))}
+.mnav{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));position:fixed;left:0;right:0;bottom:0;z-index:10;background:#12151a;border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px))}
 .mnav button{background:none;border:0;color:var(--dim);font:600 9px var(--disp);letter-spacing:.08em;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 0;min-height:48px;justify-content:center;cursor:pointer;border-radius:8px}
 .mnav svg{width:22px;height:22px}.mnav button.on{color:var(--e)}.mnav button:hover{color:var(--ink)}
 @media (min-width:761px){.mnav{grid-template-columns:repeat(5,minmax(0,180px));justify-content:center}.mnav button{flex-direction:row;gap:8px;font-size:11px}}
@@ -352,6 +352,9 @@ body.helpmode .app .btn:hover,body.helpmode .app .kwrap:hover,body.helpmode .app
 .padempty{color:var(--dim);font-size:12px;margin:0}
 .btn.addpad,.btn.addsnd{--dc:var(--e);border-color:color-mix(in srgb,var(--e) 60%,#383e49)}
 .sfx{position:relative}.sfx-wrap{display:flex;flex-direction:column;gap:12px}
+.lite .dpad,.lite .sfx,.lite .dfx-c,.lite .dfx-strip,.lite .btn,.lite .knob,.lite .platter,.lite .dpad .dp{box-shadow:none!important;text-shadow:none!important}
+.lite .btn.play.waiting,.lite .btn.rec.on,.lite .recbig.on .rb-dot,.lite .recgo.on{animation:none!important}
+.perfb{font:600 11px var(--disp)}
 .sfx-pads>.hint{grid-column:1/-1;margin:6px 0}
 .sampler .sfx-wrap{padding:12px;border-radius:14px;border:1px solid var(--line);background:linear-gradient(180deg,#171a20,#111318)}
 .sampler .sfx-gname{text-transform:none;letter-spacing:0;font:600 13px var(--disp)}
@@ -622,7 +625,16 @@ let toastT;function toast(msg){let el=$('.toast');if(!el){el=h('div',{class:'toa
 
 /* ---------- audio core ---------- */
 const AC=window.AudioContext||window.webkitAudioContext;
-const ctx=new AC({latencyHint:'interactive'});
+/* performance: Auto picks Light on machines with 4 cores / 4 GB or less. Light = 30 fps screen,
+   sharp-but-1x canvases, no glow, no live kick listening, bigger audio buffers (fewer wake-ups). */
+const perf={mode:(()=>{try{return localStorage.getItem('quaddeck.perf')||'auto';}catch(e){return 'auto';}})(),lite:false,
+  low:(navigator.hardwareConcurrency||8)<=4||(navigator.deviceMemory||8)<=4};
+perf.lite=perf.mode==='light'||(perf.mode==='auto'&&perf.low);
+const ctx=new AC({latencyHint:perf.lite?'balanced':'interactive'});
+/* draw only what is on screen: every canvas we draw is observed once */
+const visIO=typeof IntersectionObserver!=='undefined'?new IntersectionObserver(es=>es.forEach(e=>{e.target.__vis=e.isIntersecting;})):null;
+const seen=el=>{if(!el)return false;if(!visIO)return true;if(!el.__obs){el.__obs=1;el.__vis=true;visIO.observe(el);}return el.__vis!==false;};
+const setT=(el,v)=>{if(el&&el.textContent!==v)el.textContent=v;};
 const resume=()=>{if(ctx.state!=='running')ctx.resume();};
 ['pointerdown','keydown','touchstart'].forEach(ev=>document.addEventListener(ev,resume,{capture:true,passive:true}));
 const bus=ctx.createGain();
@@ -950,7 +962,7 @@ function peaks(buf,n){
 /* ---------- decks ---------- */
 const COLORS=['var(--a)','var(--b)','var(--c)','var(--d)','var(--e)'];
 const HOTC=['#ff5a5a','#4be08a','#5a8cff','#ffd24a'];
-const dpr=()=>Math.min(2,window.devicePixelRatio||1);
+const dpr=()=>perf.lite?1:Math.min(2,window.devicePixelRatio||1);
 const decks=[];
 let xfPos=.5,xf2Pos=.5,xfSharp=false;let quantMode=(()=>{try{return localStorage.getItem('quaddeck.quant')||'bar';}catch(e){return 'bar';}})();
 function setQuant(m){quantMode=m;try{localStorage.setItem('quaddeck.quant',m);}catch(e){}document.querySelectorAll('.qbtns .btn').forEach(b=>b.classList.toggle('on',b.dataset.q===m));}
@@ -1053,7 +1065,7 @@ this.slots[0].out.connect(this.slots[1].inp);this.slots[1].out.connect(this.fxOu
   /* seamless re-position at context time `when`: the new source starts and the old one stops on the same sample frame */
   schedJump(when,to){if(!this.src||this.jump||this.rev||this.ramp||this.slip||this.loop||!this.buffer)return false;to=clamp(to,0,this.dur-.05);
     const old=this.src,s=this.makeSrc(this.srcRate);s.start(when,to);old.onended=null;try{old.stop(when);}catch(e){}this.src=s;this.jump={t:when,to,old};return true;}
-  attachKickTap(){if(this.kt||this._ktp||!this.kn)return;this._ktp=true;
+  attachKickTap(){if(perf.lite||this.kt||this._ktp||!this.kn)return;this._ktp=true;
     BeatSync.ensureWorklet(ctx).then(ok=>{if(!ok||this.kt)return;try{this.kt=BeatSync.createKickTap(ctx,t=>this.onKick(t));this.kn.input.connect(this.kt);}catch(e){}});}
   /* live layer: a kick heard at context time t -> residual against our grid */
   onKick(t){const x=this.bx;if(!x||x.bias==null||!this.bpm||!this.playing||this.rev||this.ramp||this.slip||this.jump||(this.kn&&this.kn.get()!==1))return;
@@ -1362,23 +1374,24 @@ this.slots[0].out.connect(this.slots[1].inp);this.slots[1].out.connect(this.fxOu
       h('div',{class:'chips col'},this.chChip),this.cueBtnEl());
     $('#strips').append(el);
   }
-  tick(){this.stripChips();
-    const p=this.pos(),dur=this.dur;
-    this.rEl.textContent=fmt(p);this.rRem.textContent='-'+fmt(dur-p);
-    this.rBpm.textContent=this.bpm?this.effBpm().toFixed(1):'—';
-    this.rPitch.textContent=(this.tempo>=0?'+':'')+this.tempo.toFixed(2)+'%';
-    this.spin.style.transform=`rotate(${(p*200)%360}deg)`;
+  tick(draw=true){this.holdTick();this.liveTick();this.syncTick();if(!draw)return;
+    this.stripChips();const p=this.pos(),dur=this.dur,now=performance.now();
+    setT(this.rEl,fmt(p));setT(this.rRem,'-'+fmt(dur-p));setT(this.rBpm,this.bpm?this.effBpm().toFixed(1):'—');setT(this.rPitch,(this.tempo>=0?'+':'')+this.tempo.toFixed(2)+'%');
+    const rot=Math.round((p*200)%360);if(rot!==this._rot&&seen(this.platter)){this._rot=rot;this.spin.style.transform=`rotate(${rot}deg)`;}
     this.platter.classList.toggle('playing',this.playing);
-    if(this.bpm){const b=Math.floor(this.beatAt(p));this.hub.textContent=b>=0?((Math.floor(b/4)+1)+'.'+(b%4+1)):this.id;}
-    const wt=this.waiting();this.playBtn.textContent=wt?'⏳ On the '+(QNAME[quantMode]||'next beat')+'…':this.playing&&!this.ramp?'Pause':'▶ Play';this.playBtn.classList.toggle('on',this.playing);this.playBtn.classList.toggle('waiting',wt);
+    if(this.bpm){const b=Math.floor(this.beatAt(p));setT(this.hub,b>=0?((Math.floor(b/4)+1)+'.'+(b%4+1)):this.id);}
+    const wt=this.waiting();setT(this.playBtn,wt?'⏳ On the '+(QNAME[quantMode]||'next beat')+'…':this.playing&&!this.ramp?'Pause':'▶ Play');this.playBtn.classList.toggle('on',this.playing);this.playBtn.classList.toggle('waiting',wt);
     this.cueBtn.classList.toggle('on',!this.playing&&!!this.buffer&&Math.abs(this.offset-this.cue)<.01);
     this.hotBtns.forEach((b,k)=>{b.classList.toggle('set',this.hot[k]!=null);});
     this.delBtn.classList.toggle('on',this.delMode);
     this.loopBtns.forEach(b=>b.classList.toggle('on',!!this.loop&&this.loop.beats===+b.dataset.b));this.deckChips();
-    this.holdTick();this.liveTick();this.syncTick();this.statusTick();this.syncBtn.classList.toggle('on',!!this.syncOn);this.repeatBtn.classList.toggle('on',!!this.repeat);
+    this.statusTick();this.syncBtn.classList.toggle('on',!!this.syncOn);this.repeatBtn.classList.toggle('on',!!this.repeat);
     this.revBtn.classList.toggle('on',this.rev&&!this.slip&&!this.ramp);
     this.brakeBtn.classList.toggle('on',(!!this.ramp&&this.trick==='brake')||!!this.bh);this.spinBtn.classList.toggle('on',!!this.ramp&&this.trick==='spin');
-    this.drawZoom(p);this.drawOver(p);drawMeter(this.meter,[this.an],this,[this.anBuf]);
+    /* a stopped deck only needs a redraw when something moved, or 4 times a second */
+    const still=!this.playing&&p===this._dp&&now-(this._dt||0)<250;
+    if(!still){this._dp=p;this._dt=now;if(seen(this.cvZ))this.drawZoom(p);if(seen(this.cvO))this.drawOver(p);}
+    if(this.playing||now-(this._mt||0)>100){this._mt=now;drawMeter(this.meter,[this.an],this,[this.anBuf]);}
   }
   statusTick(){const el=this.syncSt;if(!el)return;const now=performance.now();if(now-(this._stT||0)<150)return;this._stT=now;let t='',cls='syncst';
     if(this.buffer){if(this.analyzing&&!this.bpm)t='Analyzing beats…';else if(!this.bpm)t='No beat grid · tap along to set BPM';
@@ -1412,7 +1425,7 @@ this.slots[0].out.connect(this.slots[1].inp);this.slots[1].out.connect(this.fxOu
 }
 
 function resolveColor(i){return ['#35c8e0','#f2a33a','#e45b9a','#9bd650','#ff7a59'][i];}
-function drawMeter(cv,ans,state,bufs){const W=cv.width,H=cv.height;if(!W)return;const g=cv.getContext('2d');g.clearRect(0,0,W,H);
+function drawMeter(cv,ans,state,bufs){const W=cv.width,H=cv.height;if(!W||!seen(cv))return;const g=cv.getContext('2d');g.clearRect(0,0,W,H);
   state.mv=state.mv||ans.map(()=>0);const cw=W/ans.length;
   ans.forEach((an,k)=>{const b=bufs[k];an.getFloatTimeDomainData(b);let pk=0;for(let i=0;i<b.length;i++){const a=Math.abs(b[i]);if(a>pk)pk=a;}
     const lvl=clamp((20*Math.log10(pk+1e-6)+42)/45,0,1);state.mv[k]=Math.max(lvl,state.mv[k]-.018);
@@ -1570,7 +1583,7 @@ function musicNow(){const now=ctx.currentTime,L=fxLeader();
   if(L){const key=L.bx&&L.bx.key;if(key)dfx.lastKey=key;return {deck:L,bpm:L.beatRate()*60,b0:L.beatPos(),t0:now,phr:L.phrOff(),key};}
   if(typeof seq!=='undefined'&&seq.playing)return {deck:null,bpm:clock.bpm,b0:clock.beatAt(now)-seq.startBeat,t0:now,phr:0,key:null};
   return null;}
-function fxParams(){const m=musicNow(),k=(m&&m.key)||dfx.lastKey||{root:0,minor:true};return {bpm:Math.round((m?m.bpm:clock.bpm)*100)/100,bars:dfx.bars,root:k.root,minor:!!k.minor,sr:ctx.sampleRate};}
+function fxParams(){const m=musicNow(),k=(m&&m.key)||dfx.lastKey||{root:0,minor:true},base=m?(m.deck?m.deck.beatRate(true)*60:m.bpm):clock.bpm;return {bpm:Math.round(base*10)/10,bars:dfx.bars,root:k.root,minor:!!k.minor,sr:ctx.sampleRate};}
 /* one-shots (horns, hits...) start on the next 1/8 note while music plays, unless "Now" is chosen */
 function shotTime(){const now=ctx.currentTime+quantLead(),m=dfx.land==='free'?null:musicNow();if(!m)return 0;const b=m.b0+(now-m.t0)*m.bpm/60,k=Math.ceil(b*2-1e-6)/2;return m.t0+(k-m.b0)*60/m.bpm;}
 function musicFilter(Ts,Tl){const f=musHP.frequency;f.cancelScheduledValues(Ts);f.setValueAtTime(20,Ts);f.exponentialRampToValueAtTime(420,Math.max(Ts+.01,Tl-.005));f.setValueAtTime(20,Tl);}
@@ -1582,7 +1595,7 @@ function dfxCancel(k){const e=dfxLive.get(k);if(!e)return;dfxLive.delete(k);try{
 /* tricks on the playing song (rewind, tape stop, glitch): the sound starts on the exact sample the deck plays,
    the music fades out under it in 4 ms and comes back on the next bar (or phrase / beat) */
 async function fireDeckFx(k,R){const m=musicNow();if(!m||!m.deck){toast(R.name+' works on the song that is playing. Start a deck first.');return;}
-  const d=m.deck,now=ctx.currentTime,lead=quantLead()+.06,spb=60/m.bpm,D=R.beats*spb,mode=dfx.land,beatT=b=>m.t0+(b-m.b0)*spb,bn=m.b0+(now+lead-m.t0)/spb;
+  const d=m.deck,now=ctx.currentTime,lead=quantLead()+.12,spb=60/m.bpm,D=R.beats*spb,mode=dfx.land,beatT=b=>m.t0+(b-m.b0)*spb,bn=m.b0+(now+lead-m.t0)/spb;
   let Tb;if(mode==='free')Tb=now+lead+D;else{const Q=mode==='phrase'?16:mode==='beat'?1:4;let b=Math.ceil(bn+R.beats-1e-6);while(BeatSync.mod(b-(Q===16?m.phr:0),Q)!==0)b++;Tb=beatT(b);}
   const Ts=Tb-D,pos=d.posAt(Ts);if(pos==null||!d.buffer){toast(R.name+' needs the song to play normally (no loop, reverse or scratch).');return;}
   const b=d.buffer,chans=[b.getChannelData(0),b.numberOfChannels>1?b.getChannelData(1):b.getChannelData(0)];
@@ -2676,6 +2689,12 @@ function openLearn(){openPicker('Learn to DJ',box=>{
     h('div',{class:'sechead',text:'DJ words, simply explained'}),h('dl',{class:'gloss'},...GLOSSARY.flatMap(([t,d])=>[h('dt',{text:t}),h('dd',{text:d})])));});}
 function initHelp(){document.body.append(helpPop);
   const gb=h('button',{class:'btn guideb',type:'button',onclick:()=>openLearn()},'Learn');$('.top').append(gb);
+  const pb=h('button',{class:'btn sm perfb',type:'button',title:'Auto: Light on slower computers and phones, Full on fast ones. Light draws the screen at 30 fps without glow effects and switches off live kick listening, so the device stays cool. Full is the smoothest.'});
+  const plab=()=>{pb.textContent='Speed: '+(perf.mode==='auto'?'Auto ('+(perf.lite?'light':'full')+')':perf.mode==='light'?'Light':'Full');document.body.classList.toggle('lite',perf.lite);};
+  pb.addEventListener('click',()=>{perf.mode={auto:'light',light:'full',full:'auto'}[perf.mode];const was=perf.lite;perf.lite=perf.mode==='light'||(perf.mode==='auto'&&perf.low);
+    try{localStorage.setItem('quaddeck.perf',perf.mode);}catch(e){}plab();window.dispatchEvent(new Event('resize'));decks.forEach(d=>{d.overCache=null;d._dt=0;});
+    if(was!==perf.lite)toast(perf.lite?'Light mode: cooler and lighter. Restart the app for bigger audio buffers too.':'Full mode: smoothest screen. Restart the app for the lowest audio delay.');});
+  plab();$('.top').append(pb);
   const hb=h('button',{class:'btn qmain',id:'helpBtn',type:'button','aria-label':'Help mode',title:'Help: tap, then tap anything to learn what it does'},'?');$('.top').append(hb);
   hb.addEventListener('click',()=>setHelpMode(!helpMode));
   const block=e=>{if(!helpMode)return;if(e.target.closest('.helppop,#helpBtn,.qbtn'))return;e.preventDefault();e.stopPropagation();
@@ -3168,9 +3187,9 @@ function buildDropFX(){
     for(const k in padEls){if(!DropFX.isMusical(k)||pads[k])continue;const e=dfxLive.get(k),el=padEls[k];el.classList.toggle('on',!!(e&&!e.loading&&now>=e.Ts&&now<e.end));el.classList.toggle('armed',!!(e&&(e.loading||now<e.Ts)));}
     /* keep every pad rendered for the current tempo, key and length so a tap never waits */
     const pf=fxParams(),sig=[pf.bpm.toFixed(1),pf.bars,pf.root,pf.minor].join('|'),t=performance.now();
-    if(sig!==sigLast){sigLast=sig;sigT=t;}else if(t-sigT>700&&!warm&&(Object.values(pads).some(P=>P.sig!==sig)||shots.some(k=>shotSig[k]!==sig))){
+    if(sig!==sigLast){sigLast=sig;sigT=t;}else if(t-sigT>1500&&!warm&&(Object.values(pads).some(P=>P.sig!==sig)||(!perf.lite&&shots.some(k=>shotSig[k]!==sig)))){
       warm=(async()=>{for(const k in pads){const P=pads[k];if(P.sig===sig)continue;try{const r=await DropFX.render(k,fxParams());P.sig=sig;draw(P,r);}catch(e){}await new Promise(r=>setTimeout(r,30));}
-        for(const k of shots){if(shotSig[k]===sig)continue;try{await DropFX.render(k,fxParams());shotSig[k]=sig;}catch(e){}await new Promise(r=>setTimeout(r,40));}warm=null;})();}};
+        for(const k of perf.lite?[]:shots){if(shotSig[k]===sig)continue;try{await DropFX.render(k,fxParams());shotSig[k]=sig;}catch(e){}await new Promise(r=>setTimeout(r,40));}warm=null;})();}};
   return el;}
 function buildSampler(){
   const vol=Knob({label:'Level',auto:'Sound FX volume',min:0,max:1,value:.8,def:.8,small:true,onChange:v=>sfxVol.gain.setTargetAtTime(v,ctx.currentTime,.01)});
@@ -3307,7 +3326,11 @@ document.querySelectorAll('.deck canvas, .strip canvas').forEach(c=>ro.observe(c
   for(const k of Object.keys(SFX)){if(DropFX.isMusical(k))continue;await new Promise(r=>setTimeout(r,60));try{await getSfx(k);}catch(e){}}
 })();
 
-(function loop(){decks.forEach(d=>d.tick());tickSeq();tickMic();tickMaster();tickTransport();tickComposer();tickDropFX();requestAnimationFrame(loop);})();
+/* when nothing plays and nobody touches the screen, redraw 10 times a second instead of 60 */
+let frameN=0,lastInput=performance.now();['pointerdown','pointermove','keydown','wheel'].forEach(e=>document.addEventListener(e,()=>{lastInput=performance.now();},{capture:true,passive:true}));
+(function loop(){frameN++;const busy=decks.some(d=>d.playing)||(typeof seq!=='undefined'&&seq.playing)||dfxLive.size>0||performance.now()-lastInput<1500;
+  const draw=busy?(!perf.lite||frameN%2===0):frameN%6===0;decks.forEach(d=>d.tick(draw));tickMic();tickTransport();
+  if(draw){tickSeq();tickMaster();tickComposer();if(sfxRoot&&seen(sfxRoot))tickDropFX();}requestAnimationFrame(loop);})();
 
 /* keyboard: 1-4 play/pause decks when not typing in a control */
 document.addEventListener('keydown',e=>{if(e.target.closest&&e.target.closest('input,select,textarea,.knob,.fader,button,canvas'))return;if(e.key===' '){e.preventDefault();seq.playing?seqStop():seqStart();return;}const k='1234'.indexOf(e.key);if(k>=0&&!e.metaKey&&!e.ctrlKey){decks[k].toggle();}});

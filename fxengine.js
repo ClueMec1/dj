@@ -81,6 +81,75 @@ const DropFX = (() => {
   const midHz = p => { const f = noteHz(p, 0, 2); return f > 300 ? f / 2 : f; };
   const third = p => p.minor ? 3 : 4;
 
+  /* ---------------- DSP worker ----------------
+   * Sample-by-sample JavaScript (scratch hand moves, song tricks, 30 clappers, loudness, waveform
+   * peaks) runs here so a tap never stalls the screen. The browser's own audio rendering (the
+   * OfflineAudioContext graphs) already runs on its own thread and is not available in workers.
+   */
+  function dspFactory() {
+    let seed = 1; const rnd = () => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; };
+    const smooth = u => (1 - Math.cos(Math.PI * Math.min(1, Math.max(0, u)))) / 2;
+    const fade = (t, a, b, r = 0.004) => Math.min(1, Math.max(0, (t - a) / r), Math.max(0, (b - t) / r));
+    /* read src at a moving position; the playback speed and direction come from the hand move */
+    function scrub(chans, sr, len, posAt, gainAt) { const n = Math.ceil(len * sr), out = [0, 1].map(() => new Float32Array(n));
+      for (let i = 0; i < n; i++) { const t = i / sr, g = gainAt(t); if (g <= 0) continue; const x = posAt(t) * sr, j = Math.floor(x), f = x - j;
+        for (let c = 0; c < 2; c++) { const d = chans[c] || chans[0]; if (j >= 0 && j + 1 < d.length) out[c][i] = (d[j] * (1 - f) + d[j + 1] * f) * g; } }
+      return out; }
+    function path(s, D, velAt, gainAt) { const sr = s.sr, n = Math.ceil(D * sr), pth = new Float64Array(n); let x = s.pos;
+      for (let i = 0; i < n; i++) { pth[i] = x; x += velAt(i / sr) * s.rate / sr; }
+      return scrub(s.chans, sr, D, t => pth[Math.min(n - 1, Math.round(t * sr))], gainAt); }
+    function loudnorm(ch, sr, targetDb) { const W = Math.floor(0.4 * sr), n = ch[0].length; let best = 0, acc = 0;
+      const sq = i => { let v = 0; for (const d of ch) v += d[i] * d[i]; return v / ch.length; };
+      for (let i = 0; i < n; i++) { acc += sq(i); if (i >= W) acc -= sq(i - W); if (i >= W - 1 && acc > best) best = acc; }
+      const rms = Math.sqrt(best / Math.min(W, n)) || 1e-9, g = Math.pow(10, targetDb / 20) / rms;
+      for (const d of ch) for (let i = 0; i < n; i++) { const x = d[i] * g, a = Math.abs(x); d[i] = a <= 0.8 ? x : Math.sign(x) * (0.8 + 0.19 * Math.tanh((a - 0.8) / 0.19)); } }
+    function peaks(ch, n) { const c0 = ch[0], c1 = ch[1] || c0, out = new Float32Array(n), step = c0.length / n;
+      for (let i = 0; i < n; i++) { let m = 0; const a = Math.floor(i * step), b = Math.min(c0.length, Math.floor((i + 1) * step)); for (let j = a; j < b; j += 4) m = Math.max(m, Math.abs(c0[j]), Math.abs(c1[j])); out[i] = m; } return out; }
+    return {
+      finish({ chans, sr, db, bins }) { if (db != null) loudnorm(chans, sr, db); return { chans, peaks: bins ? peaks(chans, bins) : null }; },
+      scratch({ chans, sr, bpm, chop, seed: sd }) { seed = sd || 1; const spb = 60 / bpm, L = 2 * spb, st = spb / 4, A = 0.24, s0 = 0.03;
+        const pos = t => { const k = Math.floor(t / st), u = t / st - k; return s0 + A * (k % 2 ? 1 - smooth(u) : smooth(u)); };
+        const gain = t => { const k = Math.floor(t / st), u = t / st - k, e = Math.min(1, (L - t) / 0.01); if (!chop) return e; return (u < 0.55 ? fade(u * st, 0, 0.55 * st, 0.002) : 0) * e; };
+        const o = scrub(chans, sr, L, pos, gain); /* a little needle noise while the record moves */
+        for (let i = 0; i < o[0].length; i++) { const t = i / sr, u = t / st % 1, sp = Math.abs(Math.sin(Math.PI * u)), nz = (rnd() * 2 - 1) * 0.012 * sp * gain(t); o[0][i] += nz; o[1][i] += nz; }
+        return { chans: o }; },
+      rewind({ src, bpm }) { const D = 2 * 60 / bpm, g = 0.1;
+        return { chans: path(src, D, t => t < g ? 1 - 2 * t / g : -Math.min(4, 1 + 5 * Math.pow((t - g) / (D - g), 1.5)), t => Math.min(1, (D - t) / (0.3 * D))) }; },
+      tapestop({ src, bpm }) { const D = 2 * 60 / bpm, S = 0.75 * D;
+        return { chans: path(src, D, t => t < S ? Math.pow(1 - t / S, 1.3) : 0, t => Math.min(1, Math.max(0, (S - t) / (0.25 * S)))) }; },
+      glitch({ src, bpm }) { const spb = 60 / bpm, segs = []; let t0 = 0;
+        [[spb / 4, 2, 1], [spb / 8, 2, 1], [spb / 16, 4, 1.5]].forEach(([len, n, pitch]) => { for (let k = 0; k < n; k++) { segs.push([t0, len, pitch]); t0 += len; } });
+        const seg = t => segs.find(([a, l]) => t >= a && t < a + l) || segs[segs.length - 1];
+        return { chans: scrub(src.chans, src.sr, spb, t => { const [a, , pt] = seg(t); return src.pos + (t - a) * src.rate * pt; }, t => { const [a, l] = seg(t); return fade(t, a, a + l, 0.0015); }) }; },
+      /* applause: 30 people clapping at their own pace; each clap is 2-3 quick bursts through its own hand resonance */
+      applause({ sr, seed: sd }) { seed = sd || 1; const L = 4.6, n = Math.ceil(L * sr), out = [new Float32Array(n), new Float32Array(n)], buf = new Float32Array(n);
+        for (let c = 0; c < 30; c++) { buf.fill(0); const rate = 3.4 + rnd() * 2.2, start = rnd() * 0.45, stop = 3 + rnd() * 1.3, fc = 900 + rnd() * 1500, pan = rnd() * 1.6 - 0.8;
+          for (let t = start; t < stop; t += 1 / rate + (rnd() - 0.5) * 0.03) { const v = 0.5 + rnd() * 0.5, i0 = Math.floor(t * sr), bursts = 2 + (rnd() < 0.5 ? 1 : 0);
+            for (let b = 0; b < bursts; b++) { const o = i0 + Math.floor((b * (0.4 + rnd() * 0.8)) * sr / 1000), dec = (0.005 + rnd() * 0.004) * sr; for (let i = 0; i < dec * 5 && o + i < n; i++) buf[o + i] += (rnd() * 2 - 1) * v * Math.exp(-i / dec); } }
+          const w = 2 * Math.PI * fc / sr, al = Math.sin(w) / 2.4, a0 = 1 + al, b0 = al / a0, b2 = -al / a0, a1 = -2 * Math.cos(w) / a0, a2 = (1 - al) / a0; let x1 = 0, x2 = 0, y1 = 0, y2 = 0;
+          const gl = Math.cos((pan + 1) * Math.PI / 4), gr = Math.sin((pan + 1) * Math.PI / 4);
+          for (let i = 0; i < n; i++) { const x = buf[i], y = b0 * x + b2 * x2 - a1 * y1 - a2 * y2; x2 = x1; x1 = x; y2 = y1; y1 = y; out[0][i] += y * gl; out[1][i] += y * gr; } }
+        return { chans: out }; }
+    };
+  }
+  let dw = null, djid = 0, localDsp = null; const djobs = new Map();
+  function dspWorker() {
+    if (dw !== null) return dw;
+    try {
+      const src = `'use strict';const ops=(${dspFactory})();onmessage=e=>{const {id,op,args}=e.data;try{const r=ops[op](args),tr=r.chans.map(c=>c.buffer);if(r.peaks)tr.push(r.peaks.buffer);postMessage({id,r},tr);}catch(err){postMessage({id,err:String(err&&err.message||err)});}};`;
+      dw = new Worker(URL.createObjectURL(new Blob([src], { type: 'text/javascript' })));
+      dw.onmessage = e => { const j = djobs.get(e.data.id); if (!j) return; djobs.delete(e.data.id); e.data.err ? j.rej(new Error(e.data.err)) : j.res(e.data.r); };
+      dw.onerror = () => { const pend = [...djobs.values()]; djobs.clear(); dw.terminate(); dw = false; pend.forEach(j => j.rej(new Error('DSP worker stopped'))); };
+    } catch (e) { dw = false; }
+    return dw;
+  }
+  /* run a DSP job; `transfer` hands the listed buffers to the worker without copying them */
+  function dsp(op, args, transfer = []) {
+    const w = dspWorker();
+    if (!w) return new Promise((res, rej) => setTimeout(() => { try { localDsp = localDsp || dspFactory(); res(localDsp[op](args)); } catch (e) { rej(e); } }, 0));
+    return new Promise((res, rej) => { const id = ++djid; djobs.set(id, { res, rej }); w.postMessage({ id, op, args }, transfer); });
+  }
+
   /* ---------------- shared voices ---------------- */
   function supersaw(X, dest, { f, t0, dur, notes = [0, 7, 12], voices = 7, spread = 18, rise = 0, riseShape = 2.4, level = 0.055 }) {
     const sum = X.G(1); sum.connect(dest);
@@ -309,37 +378,22 @@ const DropFX = (() => {
       X.chain(sum, out, X.out); out.connect(room(X, X.out, 0.6, 0.12, { damp: 0.4 })); [o, vib, n].forEach(x => X.run(x, 0, 0.8)); });
     vowelCache.set(k, pr); return pr; }
   /* read src at a moving position; the playback speed and direction come from the hand move */
-  function scrub(chans, sr, len, posAt, gainAt, outSr = sr) { const n = Math.ceil(len * outSr), out = [0, 1].map(() => new Float32Array(n));
-    for (let i = 0; i < n; i++) { const t = i / outSr, g = gainAt(t); if (g <= 0) continue; const x = posAt(t) * sr, j = Math.floor(x), f = x - j;
-      for (let c = 0; c < 2; c++) { const d = chans[c] || chans[0]; if (j >= 0 && j + 1 < d.length) out[c][i] = (d[j] * (1 - f) + d[j + 1] * f) * g; } }
-    return out; }
   const toBuf = (chans, sr) => { const b = new AudioBuffer({ numberOfChannels: 2, length: chans[0].length, sampleRate: sr }); chans.forEach((d, c) => b.copyToChannel(d, c)); return b; };
-  const smooth = u => (1 - Math.cos(Math.PI * Math.min(1, Math.max(0, u)))) / 2;
-  const fade = (t, a, b, r = 0.004) => Math.min(1, Math.max(0, (t - a) / r), Math.max(0, (b - t) / r));
-  function scratch(p, chop) { const spb = 60 / p.bpm, L = 2 * spb, st = spb / 4, A = 0.24, s0 = 0.03;
-    return vowel(p).then(v => { const ch = [v.getChannelData(0), v.getChannelData(1)];
-      const pos = t => { const k = Math.floor(t / st), u = t / st - k; return s0 + A * (k % 2 ? 1 - smooth(u) : smooth(u)); };
-      const gain = t => { const k = Math.floor(t / st), u = t / st - k, e = Math.min(1, (L - t) / 0.01); if (!chop) return e; return (u < 0.55 ? fade(u * st, 0, 0.55 * st, 0.002) : 0) * e; };
-      const o = scrub(ch, v.sampleRate, L, pos, gain); /* a little needle noise while the record moves */
-      for (let i = 0; i < o[0].length; i++) { const t = i / v.sampleRate, u = t / st % 1, sp = Math.abs(Math.sin(Math.PI * u)); const nz = (rnd() * 2 - 1) * 0.012 * sp * gain(t); o[0][i] += nz; o[1][i] += nz; }
-      return { buf: toBuf(o, v.sampleRate), land: 0 }; }); }
+  const chansOf = b => [...Array(b.numberOfChannels)].map((_, c) => b.getChannelData(c).slice());
+  /* scratches: the vowel is rendered by the browser's audio engine, the hand moves run in the DSP worker */
+  const scratch = (p, chop) => vowel(p).then(v => { const ch = chansOf(v); return dsp('scratch', { chans: ch, sr: v.sampleRate, bpm: p.bpm, chop, seed }, ch.map(c => c.buffer)).then(r => ({ buf: toBuf(r.chans, v.sampleRate), land: 0 })); });
   R.baby = { name: 'Baby scratch', kind: 'shot', q: 'beat', lufs: -15, render: p => scratch(p, false) };
   R.chirp = { name: 'Chirp scratch', kind: 'shot', q: 'beat', lufs: -15, render: p => scratch(p, true) };
 
   /* ---- tricks on the playing song itself: the rendered sound starts from the exact sample the deck
-         is playing, the music is muted under it and comes back on the boundary (bar or phrase) ---- */
-  function deckRender(p, D, velAt, gainAt) { const s = p.src, sr = s.sr; let x = s.pos; const n = Math.ceil(D * sr), path = new Float64Array(n);
-    for (let i = 0; i < n; i++) { path[i] = x; x += velAt(i / sr) * s.rate / sr; }
-    const o = scrub(s.chans, sr, D, t => path[Math.min(n - 1, Math.round(t * sr))], gainAt); return Promise.resolve({ buf: toBuf(o, sr), land: 0 }); }
-  R.rewind = { name: 'Rewind', kind: 'shot', deck: true, beats: 2, lufs: null, render: p => { const D = 2 * 60 / p.bpm, g = 0.1;
-    return deckRender(p, D, t => t < g ? 1 - 2 * t / g : -Math.min(4, 1 + 5 * Math.pow((t - g) / (D - g), 1.5)), t => Math.min(1, (D - t) / (0.3 * D))); } };
-  R.tapestop = { name: 'Tape stop', kind: 'shot', deck: true, beats: 2, lufs: null, render: p => { const D = 2 * 60 / p.bpm, S = 0.75 * D;
-    return deckRender(p, D, t => t < S ? Math.pow(1 - t / S, 1.3) : 0, t => Math.min(1, Math.max(0, (S - t) / (0.25 * S)))); } };
-  R.glitch = { name: 'Glitch', kind: 'shot', deck: true, beats: 1, lufs: null, render: p => { const spb = 60 / p.bpm, s = p.src, segs = [];
-    let t0 = 0; [[spb / 4, 2, 1], [spb / 8, 2, 1], [spb / 16, 4, 1.5]].forEach(([len, n, pitch]) => { for (let k = 0; k < n; k++) { segs.push([t0, len, pitch]); t0 += len; } });
-    const seg = t => segs.find(([a, l]) => t >= a && t < a + l) || segs[segs.length - 1];
-    const o = scrub(s.chans, s.sr, spb, t => { const [a, , pt] = seg(t); return s.pos + (t - a) * s.rate * pt; }, t => { const [a, l] = seg(t); return fade(t, a, a + l, 0.0015); });
-    return Promise.resolve({ buf: toBuf(o, s.sr), land: 0 }); } };
+         is playing, the music is muted under it and comes back on the boundary (bar or phrase).
+         Only a 12-second window around the play position is copied to the worker, not the whole song. ---- */
+  const deckJob = (op, p) => { const s = p.src, a = Math.max(0, Math.floor((s.pos - 8) * s.sr)), b = Math.min(s.chans[0].length, Math.ceil((s.pos + 4) * s.sr));
+    const chans = [0, 1].map(c => (s.chans[c] || s.chans[0]).slice(a, b)), src = { chans, sr: s.sr, pos: s.pos - a / s.sr, rate: s.rate };
+    return dsp(op, { src, bpm: p.bpm }, chans.map(c => c.buffer)).then(r => ({ buf: toBuf(r.chans, s.sr), land: 0 })); };
+  R.rewind = { name: 'Rewind', kind: 'shot', deck: true, beats: 2, lufs: null, render: p => deckJob('rewind', p) };
+  R.tapestop = { name: 'Tape stop', kind: 'shot', deck: true, beats: 2, lufs: null, render: p => deckJob('tapestop', p) };
+  R.glitch = { name: 'Glitch', kind: 'shot', deck: true, beats: 1, lufs: null, render: p => deckJob('glitch', p) };
 
   /* ---- hits ---- */
   R.laser = { name: 'Laser', kind: 'shot', q: '8th', lufs: -16, render: p => { const spb = 60 / p.bpm, hi = near(p, 2400, [0, 7]), lo = near(p, 140, [0]);
@@ -399,14 +453,8 @@ const DropFX = (() => {
       g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(0.05, t + 0.05); g.gain.setValueAtTime(0.05, t + 0.8); g.gain.linearRampToValueAtTime(0, t + 1); X.chain(o, g, X.pan(rnd() - 0.5), bus); X.run(o, t, t + 1.1); }
   }).then(buf => ({ buf, land: 0 })) };
   /* applause: 30 people clapping at their own pace; each clap is 2-3 quick bursts through its own hand resonance */
-  R.applause = { name: 'Applause', kind: 'shot', q: '8th', lufs: -18, render: p => { const sr = p.sr, L = 4.6, n = Math.ceil(L * sr), out = [new Float32Array(n), new Float32Array(n)];
-    for (let c = 0; c < 30; c++) { const buf = new Float32Array(n), rate = 3.4 + rnd() * 2.2, start = rnd() * 0.45, stop = 3 + rnd() * 1.3, fc = 900 + rnd() * 1500, pan = rnd() * 1.6 - 0.8;
-      for (let t = start; t < stop; t += 1 / rate + (rnd() - 0.5) * 0.03) { const v = 0.5 + rnd() * 0.5, i0 = Math.floor(t * sr), bursts = 2 + (rnd() < 0.5 ? 1 : 0);
-        for (let b = 0; b < bursts; b++) { const o = i0 + Math.floor((b * (0.4 + rnd() * 0.8)) * sr / 1000), dec = (0.005 + rnd() * 0.004) * sr; for (let i = 0; i < dec * 5 && o + i < n; i++) buf[o + i] += (rnd() * 2 - 1) * v * Math.exp(-i / dec); } }
-      const w = 2 * Math.PI * fc / sr, al = Math.sin(w) / (2 * 1.2), a0 = 1 + al, b0 = al / a0, b2 = -al / a0, a1 = -2 * Math.cos(w) / a0, a2 = (1 - al) / a0; let x1 = 0, x2 = 0, y1 = 0, y2 = 0;
-      const gl = Math.cos((pan + 1) * Math.PI / 4), gr = Math.sin((pan + 1) * Math.PI / 4);
-      for (let i = 0; i < n; i++) { const x = buf[i], y = b0 * x + b2 * x2 - a1 * y1 - a2 * y2; x2 = x1; x1 = x; y2 = y1; y1 = y; out[0][i] += y * gl; out[1][i] += y * gr; } }
-    const dry = toBuf(out, sr); return offline(L, sr, X => { const s = X.oc.createBufferSource(); s.buffer = dry; s.connect(X.out); s.connect(room(X, X.out, 1.5, 0.35, { damp: 0.5, pre: 0.02 })); s.start(0); }).then(buf => ({ buf, land: 0 })); } };
+  R.applause = { name: 'Applause', kind: 'shot', q: '8th', lufs: -18, render: p => dsp('applause', { sr: p.sr, seed }).then(r => { const dry = toBuf(r.chans, p.sr);
+    return offline(4.6, p.sr, X => { const s = X.oc.createBufferSource(); s.buffer = dry; s.connect(X.out); s.connect(room(X, X.out, 1.5, 0.35, { damp: 0.5, pre: 0.02 })); s.start(0); }).then(buf => ({ buf, land: 0 })); }) };
 
   /* ---------------- loudness: short-term RMS target + soft ceiling ---------------- */
   function loudnorm(buf, targetDb) {
@@ -421,14 +469,15 @@ const DropFX = (() => {
     for (let i = 0; i < n; i++) { let m = 0; const a = Math.floor(i * step), b = Math.min(buf.length, Math.floor((i + 1) * step)); for (let j = a; j < b; j += 4) m = Math.max(m, Math.abs(c0[j]), Math.abs(c1[j])); out[i] = m; } return out; }
 
   /* ---------------- render cache (LRU) ---------------- */
-  const cache = new Map(), LIMIT = 28;
+  const cache = new Map(), LIMIT = 16; /* rendered FX stay in memory; 16 is enough for every launcher pad plus recent one-shots */
   const keyOf = (id, p) => [id, p.bpm.toFixed(2), R[id].kind === 'build' || id === 'subdrop' || id === 'downlifter' ? p.bars : 0, p.root, p.minor ? 1 : 0, p.sr].join('|');
   function render(id, p) {
     if (R[id].deck) { seed = (Math.random() * 1e9) | 0; return R[id].render(p).then(r => ({ ...r, bpm: p.bpm, id, peaks: null })); }
     const k = keyOf(id, p);
     if (cache.has(k)) { const v = cache.get(k); cache.delete(k); cache.set(k, v); return v; }
     seed = hash(k);
-    const pr = R[id].render(p).then(r => { if (R[id].lufs != null) loudnorm(r.buf, R[id].lufs); return { ...r, bpm: p.bpm, id, peaks: peaks(r.buf, 240) }; });
+    const pr = R[id].render(p).then(async r => { const ch = chansOf(r.buf), f = await dsp('finish', { chans: ch, sr: r.buf.sampleRate, db: R[id].lufs, bins: 240 }, ch.map(c => c.buffer));
+      f.chans.forEach((d, c) => r.buf.copyToChannel(d, c)); return { ...r, bpm: p.bpm, id, peaks: f.peaks }; });
     cache.set(k, pr); pr.catch(() => cache.delete(k));
     while (cache.size > LIMIT) cache.delete(cache.keys().next().value);
     return pr;

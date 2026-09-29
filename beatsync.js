@@ -33,27 +33,30 @@ const BeatSync = (() => {
       const aE = 1 - Math.exp(-1 / (0.004 * sr)), aS = 1 - Math.exp(-1 / (1.5 * sr));
       const D = Math.max(2, Math.round(0.012 * sr)), ring = new Float64Array(D);
       const REFR = Math.round(0.11 * sr), WIN = Math.round(0.02 * sr), TH = 1.2;
-      let ri = 0, env = 0, slow = 1e-9, prevD = 0, lastOn = -1e12, cand = null;
+      const ETH = Math.exp(TH); /* compare ratios, take a log only near an onset: ~20x cheaper per sample */
+      let ri = 0, env = 0, slow = 1e-9, prevR = 1, lastOn = -1e12, cand = null;
       return {
+        reset() { ring.fill(0); env = 0; slow = 1e-9; prevR = 1; cand = null; F.forEach(f => { f.z1 = f.z2 = 0; }); },
         /* x: one mono sample, n: its absolute sample index. Returns {i, s} or null. */
         push(x, n) {
           const y = run(F[2], run(F[1], run(F[0], x)));
           env += (y * y - env) * aE; slow += (env - slow) * aS;
           const old = ring[ri]; ring[ri] = env; ri = ri + 1 === D ? 0 : ri + 1;
-          const d = Math.log((env + 1e-12) / (old + 1e-12));
+          const r = (env + 1e-12) / (old + 1e-12);
           let out = null;
           if (cand) {
-            if (d > cand.y0) { cand.ym = prevD; cand.y0 = d; cand.n = n; cand.yp = null; }
+            const d = Math.log(r);
+            if (d > cand.y0) { cand.ym = Math.log(prevR); cand.y0 = d; cand.n = n; cand.yp = null; }
             else if (cand.yp === null) cand.yp = d;
             if (n - cand.n >= WIN || d < cand.y0 * 0.4) {
               const ym = cand.ym, y0 = cand.y0, yp = cand.yp === null ? d : cand.yp, den = ym - 2 * y0 + yp;
               const fr = den < 0 ? Math.max(-0.5, Math.min(0.5, 0.5 * (ym - yp) / den)) : 0;
               out = { i: cand.n + fr, s: y0 }; lastOn = cand.n; cand = null;
             }
-          } else if (d > TH && env > slow * 0.25 && n - lastOn > REFR) {
-            cand = { n, y0: d, ym: prevD, yp: null };
+          } else if (r > ETH && env > slow * 0.25 && n - lastOn > REFR) {
+            cand = { n, y0: Math.log(r), ym: Math.log(prevR), yp: null };
           }
-          prevD = d;
+          prevR = r;
           return out;
         }
       };
@@ -433,8 +436,9 @@ onmessage=e=>{const {id,x,sr}=e.data;try{const r=core.analyze(x,sr);postMessage(
     if (wl) return wl;
     if (!ctx.audioWorklet || typeof AudioWorkletNode === 'undefined') return (wl = Promise.resolve(false));
     const src = `const KickDetector=(${kickDetectorFactory})();
-class QDKickTap extends AudioWorkletProcessor{constructor(){super();this.d=KickDetector(sampleRate);}
-process(inputs){const inp=inputs[0];if(!inp||!inp.length)return true;const a=inp[0],b=inp[1]||a,f0=currentFrame;
+class QDKickTap extends AudioWorkletProcessor{constructor(){super();this.d=KickDetector(sampleRate);this.q=0;}
+process(inputs){const inp=inputs[0];if(!inp||!inp.length)return true;const a=inp[0],b=inp[1]||a,f0=currentFrame;let pk=0;for(let k=0;k<a.length;k+=4){const v=a[k]<0?-a[k]:a[k];if(v>pk)pk=v;}
+if(pk<1e-5){if(++this.q===100)this.d.reset();return true;}this.q=0;
 for(let k=0;k<a.length;k++){const o=this.d.push((a[k]+b[k])*.5,f0+k);if(o)this.port.postMessage({t:o.i/sampleRate,s:o.s});}return true;}}
 registerProcessor('qd-kick-tap',QDKickTap);`;
     wl = ctx.audioWorklet.addModule(URL.createObjectURL(new Blob([src], { type: 'application/javascript' }))).then(() => true, () => false);
